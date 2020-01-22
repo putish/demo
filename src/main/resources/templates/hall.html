@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link type="text/css" rel="styleSheet"  href="/css/hall.css" />
+    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--    <script type="text/javascript" src="/js/jquery.js"></script>-->
+    <!--    <script type="text/javascript" src="/js/index.js"></script>-->
+
+</head>
+<body>
+    <div id="loutinav">
+        <ul>
+            <!--<li class="active"><span>享品质</span> </li>-->
+            <li class="label"><span>首页</span> </li>
+            <li class="label"><span>饮食</span> </li>
+            <li class="label"><a href="movie.html"></a><span>影片</span> </li>
+            <li class="label"><span>播放厅</span> </li>
+            <li class="login"><span>登入</span> </li>
+            <li class="login"><span>注册</span> </li>
+
+        </ul>
+    </div>
+    <div id="dss">
+
+    </div>
+
+
+
+
+    <div >
+        <table id="movietable">
+            <tr>
+                <th>厅号</th>
+                <th>屏幕类型</th>
+                <th>行数</th>
+                <th>列数</th>
+                <th>座位数</th>
+                <th class="action">操作</th>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="action">
+                    <input type="button" value="时刻表">
+                    <input type="button" value="修改">
+                    <input type="text" value="删除">
+                </td>
+            </tr>
+
+            <tr class="alt">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="action">
+                    <input type="button" value="时刻表">
+                    <input type="button" value="修改">
+                    <input type="text" value="删除">
+                </td>
+            </tr>
+            <tr class="add">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>
+            </tr>
+
+
+
+
+
+        </table>
+
+        <!-- 模态框（Modal） -->
+
+    </div>
+    <div class="modal-fade"  id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        添加新影映厅
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+
+
+                    <div class="inputone">
+                        <span>厅号：</span>
+                        <input type="text">
+<!--                        <input type="submit" value="提交">-->
+                    </div>
+
+                    <div class="inputone">
+                        <span>类别：</span>
+                        <input type="text">
+<!--                        <input type="submit" value="提交">-->
+                    </div>
+                    <div class="inputone">
+                        <span>屏幕类型：</span>
+                        <input type="text">
+<!--                        <input type="submit" value="提交">-->
+                    </div>
+
+                    <div class="inputone">
+                        <span>行数：</span>
+                        <input type="text" id="row" >
+<!--                        <input type="submit" value="提交">-->
+                    </div>
+
+                    <div class="inputone">
+                        <span>列数：</span>
+                        <input type="text" id="col">
+<!--                        <input type="submit" value="提交">-->
+                    </div>
+
+                </div>
+                <div class="modal-footer" id="add-footer">
+                    <button  class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button data-toggle="modal"  onclick="createSeats()">座位表</button>
+
+                    <button  class="btn btn-primary">
+                        提交更改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal-fade"  id="seatModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" >
+                      座位表
+                    </h4>
+                </div>
+                <div class="modal-body" id="seats">
+
+                </div>
+                <div class="modal-footer" id="seat-footer">
+
+                    <button  class="btn btn-primary" onclick="closeSeat()">
+                        提交
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div id="footer">
+
+    </div>
+    <script type="text/javascript">
+        //$(ul).width = window.screen.width;
+
+
+        //定义座位二维数组
+        //0表示这个位置没有座位
+        //1可选表示空位
+        //2表示被别人占位
+        //3表示自己选中的座位
+
+        function closeSeat() {
+        var count=0;
+        for(var i=0;i<seatArray.length;i++){
+            for (var j=0;j<seatArray[i].length;j++){
+                if (seatArray[i][j]==1)
+                {
+                    count=count+1;
+                }
+            }
+        }
+        alert(count);
+        document.getElementById("seatModal").style.display = "none";
+        }
+        var seatArray = new Array();
+
+
+        function createSeats() {
+            var row=document.getElementById("row").value;
+            var col=document.getElementById("col").value;
+            var seat=document.getElementById("seats");
+            alert(row+" "+col );
+            if(!isNaN(row)&&!isNaN(col)) {
+                if (row > 10 || col > 10) {
+                    document.getElementById("seatModal").style.display = "none";
+                    alert("行数和列数不可以超过10");
+                    return;
+                } else {
+                    document.getElementById("seatModal").style.display = "block";
+                }
+
+                for (var i = 0; i < row; i++) {//一维数组长度为30
+                    seatArray[i] = new Array();
+                    for (var j = 0; j < col; j++) {//第二维长度为20
+                        seatArray[i][j] = 1;
+                    }
+                }
+                //设置空位
+                // seatArray[1][5]=0;
+                //设置被人占得位置
+                // seatArray[8][2]=2;
+
+                //添加30行li
+                // alert(col);
+                for (var v = 0; v < row; v++) {
+                    // $('#seats').append('');
+                    var string = "<ul name = \"chair\">";
+                    for (var i = 0; i < col; i++) {
+                        string = string + '<li ><img src=' + 'img/seat_selected.png ' + '/></li>';
+                    }
+                    string = string + '</ul>';
+                    $('#seats').append(string);
+                }
+                var lis = document.querySelectorAll('ul[name="chair"] li');
+                // alert("ssdsd");
+                for (var i = 0; i < lis.length; i++) {
+                    lis[i]._index = i;
+                    lis[i].onclick = function () {
+                        var indexCol = this._index % col;
+                        var indexRow = (this._index - indexCol) / col;
+
+                        //报行列号
+                        // alert(indexRow + " " + indexCol);
+                        // 如果可选则更新状态
+                        if (seatArray[indexRow][indexCol] == 1) {
+                                    $(this).replaceWith('<li><img src="img/seat_sale.png"/></li>');//更换图片
+                                    seatArray[indexRow][indexCol] = 0;//更新自己选定的数组位置状态
+                        }
+                        else if (seatArray[indexRow][indexCol] == 0) {
+                                    $(this).replaceWith('<li><img src="img/seat_selected.png"/></li>');//更换图片
+                                    seatArray[indexRow][indexCol] = 1;//更新自己选定的数组位置状态
+                        }
+                    }
+                }
+
+            }
+            else {
+                alert("行数和列数必需是数字");
+            }
+            seat.style.width=(col/2*80+10)+"px";
+
+        }
+
+    </script>
+
+
+</body>
+</html>

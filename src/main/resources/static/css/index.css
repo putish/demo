@@ -1,0 +1,321 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'microsoft yahei';
+}
+
+#loutinav {
+    width: 100%;
+    height:70px;
+    position: fixed;
+    background: darkslategrey;
+    z-index: 2;
+    /*top: 100px;*/
+    /*left: 50px;*/
+    /*border: 1px solid #ddd;*/
+    /*display: ;*/
+
+}
+
+
+#loutinav ul li {
+    width: 150px;
+    height: 50px;
+    border-bottom: 1px dotted #DDDDDD;
+    list-style: none;
+    font-size: 12px;
+    text-align: center;
+    position: relative;
+    /*float: left;*/
+    font-size: 15px;
+    line-height: 50px;
+    cursor: pointer;
+    padding: 10px 0;
+    /*background: midnightblue;*/
+    color: #fff;
+}
+#loutinav ul li a{
+    width: 150px;
+    height:71px ;
+}
+.login{
+    float: right;
+}
+.label{
+    float: left;
+}
+#loutinav ul li span {
+    width: 150px;
+    height: 50px;
+    padding: 10px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+
+}
+
+
+
+#loutinav ul li.last {
+    background: #5e4a4a;
+    color: #fff;
+    /*border-bottom: 1px solid #ddd;*/
+}
+
+/*#loutinav ul li.active span {
+    background: #c00;
+    color: #fff;
+    display: block;
+}*/
+
+#loutinav ul li:hover span {
+    background: #c00;
+    color: #fff;
+    display: block;
+    /*z-index: 2;*/
+}
+
+#adv {
+    width: 1100px;
+    height: 400px;
+    background: #cc6633;
+    margin: 0 auto;
+    font-size: 50px;line-height: 1000px;text-align: center;
+    color: #000;
+}
+#dss{
+    width: 200px;
+    height: 100px;
+}
+#search{
+    width: 400px;
+    height: 40px;
+    margin: 0 auto;
+    /*border-radius: 10px;*/
+    /*border: 1px solid #9142ff;*/
+    /*margin-top: 150px;*/
+    /*position: absolute;*/
+}
+#search input{
+    width: 400px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid rgba(162, 162, 162, 0.8);
+    /*margin-top: 150px;*/
+    position: absolute;
+    z-index: 0;
+    /*display: none;*/
+    background: rgba(206, 206, 206, 0.2);
+}
+#searchpic{
+    width: 45px;
+    height: 32px;
+    /*position: absolute;*/
+    float: right;
+    background-repeat: no-repeat;
+    z-index: 1;
+    /*background: black;*/
+    /*background: url("/static/img/search1.jpg");*/
+}
+#searchpic img{
+    margin-top: 2px;
+    width: 40px;
+    height: 40px;
+}
+
+.concent { margin:50px auto; width:100%; max-width:1200px; min-width:380px;height: 450px; }
+.title{
+    width: 100%;
+    height: 50px;
+    margin-bottom: 20px;
+}
+.title p{
+    width: 100px;
+    /*margin: 0px 0px;*/
+    float: left;
+    font-size: 16px;
+}
+#insidetitle{
+    width: 200px;
+    height: 50px;
+    margin: 0 auto;
+}
+#hotshow{
+    font-size: 23px;
+    /*margin-right: 400px;*/
+
+}
+.show { margin:0 35px;white-space:nowrap; overflow-x:auto; height: 450px;}
+.show::-webkit-scrollbar{ width:0; height:0; /*display: none;*/ }
+#noshow{display: none;}
+#nowshow{display: block;}
+#slide{
+    width: 100%;
+    height: 50px;
+    max-width:1200px; min-width:320px;
+    margin-top:100px;
+    /*top: 15px;*/
+    /*background: rgba(0,0,0,0);*/
+    float: left;
+    position: absolute;
+    z-index: 1;
+
+}
+.movie { /* 一个电源框架*/
+    list-style:none;
+    display:inline-block;
+    width:170px;
+    line-height:30px;
+    margin-right:36px;
+    height: 360px;
+    text-align:center;
+}
+.movie button{
+    height: 28px;
+    margin-top: 15px;
+    text-align: center;
+    width: 100px;
+    background: #85bfff;
+    border-radius: 15px;
+
+}
+.movie h3{
+    margin-top: 286px;
+}
+/*封面*/
+.cover {
+    width:170px;
+    height:256px;
+    margin-left: 17px;
+    z-index: 1;
+    position: absolute;
+    border: 1px solid black;
+
+    /*background:pink;*/
+}
+.cover img{
+    width: 100%;
+}
+.text-desc{
+    position: absolute;
+    width: 204px;
+    height:200px;
+    margin-top: 50px;
+    display: none;
+    z-index: 2;
+    background: white;
+    border-top: 1px solid black;
+    /*border-bottom: 1px solid black;*/
+    border-left: 1px solid black;
+}
+
+.text-desc p{
+    text-align: left;
+}
+.movie_name{
+    width: 100%;
+    height: 50px;
+    font-size: 24px;
+    line-height: 50px;
+}
+.movie_duration{
+    width:40% ;
+    float: right;
+    height: 30px;
+
+}
+.insideblock{
+
+    width: 100%;
+    height: 30px;
+}
+.movie_lable{
+    width: 60%;
+    float: left;
+    height: 30px;
+}
+.movie_actor{
+    width: 100%;
+    height: 30px;
+    float: none;
+}
+.movie_description{
+    width: 100px;
+    height: 40px;
+    text-overflow:ellipsis;
+}
+.movie_price{
+    width: 100%;
+    height: 50px;
+    border-top: black 1px;
+}
+.movie:hover .cover{
+    /*z-index:-1 ;*/
+    transform: scale(1.2);
+
+}
+/*.effect-1:hover .image-box*/
+.movie:hover .text-desc{
+    display: block;
+}
+
+/*.cover :hover .text-desc{
+    display: block;
+
+}*/
+/*.show h3{
+    margin-top: 10px;
+}*/
+/*.show button{
+    height: 28px;
+    margin-top: 15px;
+    text-align: center;
+    width: 100px;
+    background: #85bfff;
+    border-radius: 15px;
+}*/
+.show div:last-child { margin:0; }
+#slide button{
+    /*margin-top: 15px;*/
+    border: 0px;
+    width: 25px;
+    height: 50px;
+    background: rgba(2, 2, 5, 0.1);
+
+}
+#left{
+
+    float: left;
+    /*background: rgba(128,128,128,0.3);*/
+}
+#right{
+    float: right;
+}
+#main {
+    width: 1000px;
+    background: #66ff66;
+    margin: 0 auto;
+}
+
+#main .louti {
+    height: 600px;
+    width: 1000px;
+    font-size: 50px;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    line-height: 600px;
+}
+/*.login{
+	float: right;
+}*/
+
+#footer {
+    width: 100%;
+    height: 200px;
+    background: #2f4f4f;
+    margin: 0 auto;
+    font-size: 50px;line-height: 400px;text-align: center;
+    /*color: #000;*/
+}

@@ -1,0 +1,207 @@
+
+
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link type="text/css" rel="styleSheet"  href="/css/index.css" />
+    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+
+    <!--    <script type="text/javascript" src="/js/jquery.js"></script>-->
+    <!--    <script type="text/javascript" src="/js/index.js"></script>-->
+
+</head>
+<body>
+    <div id="loutinav">
+        <ul>
+            <!--<li class="active"><span>享品质</span> </li>-->
+            <li class="label"><span>首页</span> </li>
+            <li class="label"><span>饮食</span> </li>
+            <li class="label"><a href="movie.html"></a><span>影片</span> </li>
+            <li class="label"><span>播放厅</span> </li>
+            <li class="login"><span>登入</span> </li>
+            <li class="login"><span>注册</span> </li>
+
+        </ul>
+    </div>
+    <div id="dss">
+
+    </div>
+    <div id="search">
+        <input type="text" name="keyword" autocomplete="on" placeholder=""/>
+        <span id="searchpic"><img src="/img/search1.jpg" alt=""></span>
+
+    </div>
+    <div class="concent">
+
+        <!--    <div class="concent" th:each="showmovie,showmoviestate:${showmovies} " th:each="noshmovie,noshmoviestate: ${noshmovies}">-->
+        <div class="title">
+            <p id="hotshow">院线热映</p>
+            <div id="insidetitle">
+                <p id="nows" >正在热映</p>
+                <p id="nos">即将上映</p>
+            </div>
+
+            <!--            <p id="nows" th:text=“院线热映"+"$(showmoviestate.size)” ></p>-->
+            <!--            <p id="nos" th:text=“即将上映"+"$(noshmoviestate.size)” ></p>-->
+        </div>
+        <div id="slide">
+            <button id="right"></button>
+            <button id="left"></button>
+        </div>
+        <div class="show" id="nowshow">
+
+            <div class="movie">
+                <div class="cover">
+                    <img src="img/prod4.jpg" alt="">
+                </div>
+                <div class="text-desc">
+                    <p class="movie_name" >name</p>
+                    <div class="insideblock">
+                        <p class="movie_lable" >lable</p>
+                        <p class="movie_duration" >dur分钟</p>
+                    </div>
+
+                    <p class="movie_actor" >演员：actor</p>
+
+                    <p class="movie_description" >description</p>
+                    <p class="movie_price" >price$</p>
+                </div>
+                <h3 >name</h3>
+                <button  >选座购票</button>
+            </div>
+
+            <div class="movie">
+                <div class="cover">
+                    <img src="img/prod4.jpg" alt="">
+                </div>
+                <div class="text-desc">
+                    <p class="movie_name" >name</p>
+                    <div class="insideblock">
+                        <p class="movie_lable" >lable</p>
+                        <p class="movie_duration" >dur分钟</p>
+                    </div>
+
+                    <p class="movie_actor" >演员：actor</p>
+
+                    <p class="movie_description" >description</p>
+                    <p class="movie_price">price$</p>
+                </div>
+                <h3 >name</h3>
+                <button >选座购票</button>
+            </div>
+
+        </div>
+
+        <div class="show" id="noshow">
+            <div class="movie">
+                <div class="cover">
+                    <img src="img/prod4.jpg" alt="">
+                </div>
+                <div class="text-desc">
+                    <p class="movie_name" >name</p>
+                    <div class="insideblock">
+                        <p class="movie_lable" >lable</p>
+                        <p class="movie_duration" >dur分钟</p>
+                    </div>
+
+                    <p class="movie_actor" >演员：actor</p>
+
+                    <p class="movie_description" >description</p>
+                    <p class="movie_price">price$</p>
+                </div>
+                <h3 >name</h3>
+                <button  >选座购票</button>
+            </div>
+            <!--            <div>-->
+            <!--                <p></p><h3>17</h3><button>选座购票</button>-->
+            <!--            </div>-->
+        </div>
+    </div>
+    <div id="footer">
+
+    </div>
+
+    <script type="text/javascript">
+
+        // window.οnlοad=function(){
+        var nos=document.getElementById("nos");
+        var noshow=document.getElementById("noshow");
+        var nowshow=document.getElementById("nowshow");
+        var nows=document.getElementById("nows");
+        var oBox = $('.show');
+        var oBoxWidth = $('.show').width();
+        var thediv= oBox.find('div');
+        var thisWidth = thediv.width();
+        var moveLeft = thediv.offset().left;
+        var right=$('#right');
+        var left=$('#left');
+        var cover=document.getElementsByClassName("cover");
+        // }
+        function showtext(){
+            var text_d=document.getElementsByClassName("text-desc");
+            for (var i=0;i<text_d.length;i++){
+                text_d[i].style.display="block";
+            }
+
+        };
+        function dishow(){
+            var text_d=document.getElementsByClassName("text-desc");
+            for (var i=0;i<text_d.length;i++){
+                text_d[i].style.display="none";
+            }
+
+        };
+        // cover.onmouseover=function(){
+        //     for (var i=0;i<cover.length;i++){
+        //         text_d[i].style.display="block";
+        //     }
+        //     cover[i].style.display="none";
+        //     cover[i].style.zIndex="0";
+        //     cover[i].style.width="105%";
+        //     cover[i].style.height="105%";
+        // };
+        nows.onmouseover = function(){
+            nows.style.fontSize="20px";
+            nowshow.style.display="block";
+            noshow.style.display="none";
+            nos.style.fontSize="16px";
+            nows.style.color="red";
+            nos.style.color="black";
+
+        };
+        document.getElementById("nos").onmouseover= function(){
+            nos.style.fontSize="20px";
+            noshow.style.display="block";
+            nowshow.style.display="none";
+            nows.style.fontSize="16px";
+            nos.style.color="red";
+            nows.style.color="black";
+
+        };
+
+
+
+
+
+        $('#right').on('click',function(){
+            // alert(moveLeft);
+            oBox.animate({scrollLeft:100});
+        });
+        $('#left').on('click',function(){
+            oBox.animate({scrollRight:100});
+
+        });
+        //	}
+
+
+    </script>
+
+</body>
+</html>
+
+
+
+

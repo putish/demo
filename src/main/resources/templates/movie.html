@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link type="text/css" rel="styleSheet"  href="/css/movie.css" />
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+    <div id="loutinav">
+        <ul>
+            <!--<li class="active"><span>享品质</span> </li>-->
+            <li class="label"><a href="index.html"></a><span>首页</span> </li>
+            <li class="label"><span>饮食</span> </li>
+            <li class="label"><span>影片</span> </li>
+            <li class="label"><span>播放厅</span> </li>
+            <li class="login"><span>登入</span> </li>
+            <li class="login"><span>注册</span> </li>
+
+        </ul>
+    </div>
+    <div id="dss">
+    </div>
+    <div >
+        <table id="movietable">
+            <tr>
+                <th>名称</th>
+                <th>屏幕类型</th>
+                <th>排片率</th>
+                <th>价格</th>
+                <th>上映时间</th>
+                <th>类别</th>
+                <th class="action">操作</th>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="action">
+                    <input type="button" value="修改">
+                    <input type="text" value="删除">
+                </td>
+            </tr>
+
+            <tr class="alt">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="action">
+                    <div><input type="button" value="修改">
+                        <input type="text" value="删除"></div>
+
+                </td>
+            </tr>
+            <tr class="add">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>
+            </tr>
+
+
+
+
+
+        </table>
+
+        <!-- 模态框（Modal） -->
+
+    </div>
+    <div class="modal-fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        模态框（Modal）标题
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form" method="POST" enctype="multipart/form-data" action="upload" onsubmit="return check();">
+                        <div id="img">
+                        <img id="preview">
+
+
+
+                        <input  type="file" accept="image/*" name="file" id="file"/>
+                        <input id="formSub" type="submit" value="提交"/>
+
+
+                    </div>
+
+                        <div class="inputone">
+                            <span>名称：</span>
+                            <input type="text">
+
+                        </div>
+
+                        <div class="inputone">
+                            <span>类别：</span>
+                            <input type="text">
+
+                        </div>
+                        <div class="inputone">
+                            <span>屏幕类型：</span>
+                            <input type="text">
+
+                        </div>
+
+                        <div class="inputone">
+                            <span>时长：</span>
+                            <input type="text">
+
+                        </div>
+
+                        <div class="inputone">
+                            <span>演员：</span>
+                            <input type="text">
+
+                        </div>
+
+                        <div class="inputone">
+                            <span>简介：</span>
+                            <input type="text">
+
+                        </div>
+
+                        <div class="inputone">
+                            <span>价格：</span>
+                            <input type="text">
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                        提交更改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div id="footer"></div>
+    <script>
+        var fileDom = document.getElementById("file");
+        var previewDom = document.getElementById("preview");
+        fileDom.addEventListener("change", function () {
+            var file = fileDom.files[0];
+            // check if input contains a valid image file
+            if (!file || file.type.indexOf("image/") < 0) {
+                fileDom.value = "";
+                previewDom.src = "";
+                return;
+            }
+
+            // use FileReader to load image and show preview of the image
+            var fileReader = new FileReader();
+            fileReader.onload = function(e){
+                previewDom.src = e.target.result;
+            };
+            fileReader.readAsDataURL(file);
+        });
+
+        var formDom = document.getElementById("form");
+        function check() {
+            var file = fileDom.files[0];
+            // check if input contains a valid image file
+            if (!file || file.type.indexOf("image/") < 0) {
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+
+</body>
+</html>
