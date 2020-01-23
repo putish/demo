@@ -1,16 +1,25 @@
 package com.test.demo.bean;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Users {
     @Id
     private String uId;
-    private String sName;
+//    用户名
+    private String uName;
+//    密码
     private String pwd;
-    private Integer vip;
+//    VIP标志
+    private Boolean isvip;
 }

@@ -26,9 +26,9 @@ public class MovieController {
 
         return "movie";
     }
-    @RequestMapping(value = "/add", method=RequestMethod.POST)
+    @PostMapping("/add")
     public String save(@ModelAttribute(value="movie") Movie movie) {
-        movieService.save(movie);
+        movieService.add(movie);
         return "";
     }
 
