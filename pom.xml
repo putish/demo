@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>cn.zucc</groupId>
-	<artifactId>etakeout</artifactId>
+	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>etakeout</name>
+	<name>demo</name>
 	<description>Takeout project with Spring Boot</description>
 
 	<properties>
@@ -37,8 +37,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.2</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -46,7 +44,10 @@
 			<artifactId>weixin-java-mp</artifactId>
 			<version>2.7.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -98,7 +99,11 @@
             <artifactId>java-jwt</artifactId>
             <version>3.3.0</version>
         </dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
@@ -116,7 +121,12 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+				<!--fork :  如果没有该项配置，肯定devtools不会起作用，即应用不会restart -->
+				<fork>true</fork>
+			</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 

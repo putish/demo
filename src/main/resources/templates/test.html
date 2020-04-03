@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+
+</head>
+<body>
+    <h1>this is the hello. in templates</h1>
+    <form   >
+        <span th:text="${key}" id="two"></span>
+        <input type="text" id="one" ></input>
+        <span th:text="${two}"></span>
+        <input type="submit" id="test" onclick="adddd()"/>
+
+    </form>
+    <script type="text/javascript">
+        function adddd(){
+            var one =document.getElementById("one");
+            one.style.display="none";
+            $.ajax({
+                type: "get",
+                url: "/hi",    //向后端请求数据的url
+                data: one,
+                success: function (data) {
+                }
+            });
+        };
+    </script>
+</body>
+
+</html>

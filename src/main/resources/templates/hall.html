@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+<!--    <link type="text/css" rel="styleSheet"  href="/css/hall.css" />-->
+    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/avalon.js/2.2.7/avalon.js"></script>
+    <script src="/js/hall.js"></script>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'microsoft yahei';
+        }
+
+        #loutinav {
+            width: 100%;
+            height:70px;
+            position: fixed;
+            background: darkslategrey;
+            z-index: 2;
+            /*top: 100px;*/
+            /*left: 50px;*/
+            /*border: 1px solid #ddd;*/
+            /*display: ;*/
+
+        }
+
+
+        #loutinav ul li {
+            width: 150px;
+            height: 50px;
+            border-bottom: 1px dotted #DDDDDD;
+            list-style: none;
+            font-size: 12px;
+            text-align: center;
+            position: relative;
+            /*float: left;*/
+            font-size: 15px;
+            line-height: 50px;
+            cursor: pointer;
+            padding: 10px 0;
+            /*background: midnightblue;*/
+            color: #fff;
+        }
+        .login{
+            float: right;
+        }
+        .label{
+            float: left;
+        }
+        #loutinav ul li span {
+            width: 150px;
+            height: 50px;
+            padding: 10px 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            text-align: center;
+
+        }
+
+
+
+        #loutinav ul li.last {
+            background: #5e4a4a;
+            color: #fff;
+            /*border-bottom: 1px solid #ddd;*/
+        }
+
+        /*#loutinav ul li.active span {
+            background: #c00;
+            color: #fff;
+            display: block;
+        }*/
+
+        #loutinav ul li:hover span {
+            background: #c00;
+            color: #fff;
+            display: block;
+            /*z-index: 2;*/
+        }
+        #dss{
+            width: 200px;
+            height: 100px;
+        }
+        #footer {
+
+            width: 100%;
+            height: 200px;
+            background: #2f4f4f;
+            margin: 0 auto;
+            font-size: 50px;line-height: 400px;text-align: center;
+            /*color: #000;*/
+        }
+
+        #movietable
+        {
+            /*font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;*/
+            width:890px;
+            border-collapse:collapse;
+            margin: 10px auto ;
+            margin-bottom: 100px;
+
+        }
+
+        #movietable td, #movietable th
+        {
+            font-size: 16px;
+            border:1px solid #497474;
+            padding:3px 7px 2px 7px;
+            height: 50px;
+        }
+
+        #movietable th
+        {
+            font-size: 19px;
+            text-align:center;
+            padding-top:5px;
+            padding-bottom:4px;
+            background-color: #6db1b1;
+            color:#ffffff;
+        }
+
+        #movietable tr.alt td
+        {
+            color:#000000;
+            background-color: rgba(145, 234, 234, 0.13);
+        }
+        #movietable tr.add td{
+            /*width:890px;*/
+            /*float: right;*/
+            border: none;
+            /*border-right:1px solid #497474;*/
+            /*border-left: 1px solid #497474;*/
+            border-bottom: 1px solid #497474;;
+            /*margin-top: 6px;*/
+        }
+        .add{
+            border-right:1px solid #497474;
+            border-left: 1px solid #497474;
+            /*border-bottom: 1px solid #497474;;*/
+        }
+        .add.action{
+            border-right:1px solid #497474;
+
+        }
+        #filter{
+            width:890px;
+            /*float: left;*/
+            line-height:50px ;
+            text-align: center;
+            margin:0px auto ;
+            margin-top: 100px;
+
+
+        }
+        #filter span{
+            margin-left: 15px;
+        }
+        #filter input{
+            width: 100px;
+        }
+        #filter button{
+            width: 80px;
+            height: 30px;
+            margin-left: 15px;
+            background-color: cornflowerblue;
+            font-size: 16px;
+            color: white;
+        }
+        #movietable tr td.action,th.action{
+            width: 230px;
+            /*float: left;*/
+            line-height:50px ;
+            text-align: center;
+
+        }
+        #movietable input{
+            width: 60px;
+            height:35px;
+            padding: 5px;
+            box-sizing: border-box;
+            margin: 6px 6px;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            background-color: cornflowerblue;
+        }
+
+        .modal-fade{
+            position: fixed;
+            /*z-index: 5000;*/
+            /*width: 400px;*/
+            height: auto;
+            border:  1px solid #4e17ff;
+            /*max-width: 300px;*/
+            /*min-height: 300px;*/
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            text-align: center;
+            display: none;
+            background: #dbd9d5;
+        }
+        #addModal{
+            width: 400px;
+            /*background: #dbd9d5;*/
+        }
+        #addbody{
+            margin-top: 20px;
+        }
+        .modal-header{
+            width: 100%;
+            height: 40px;
+            font-size: 8px;
+            line-height: 40px;
+            /*transform: translate(-50%, -50%);*/
+            background: cornflowerblue;
+
+        }
+
+        .modal-header h4{
+            margin-left: 10px;
+            color: white;
+        }
+        .close{
+            width: 40px;
+            height: 40px;
+            background: none;
+            float: right;
+            font-size: 15px;
+            color: white;
+        }
+        .modal-title{
+            float: left;
+        }
+        .modal-body{
+            width: 100%;
+            height: 260px;
+            background:white ;
+        }
+
+        .inputone{
+            width:100%;
+            height: 50px;
+            float: right;
+        }
+        .inputone span {
+            color: black;
+            margin-top: 20px;
+            float: left;
+            margin-left: 20px;
+        }
+        .inputone input{
+            margin-top: 20px;
+            margin-left: 30px;
+            margin-right: 80px;
+            float: right;
+        }
+        #add-footer{
+            height: 30px;
+            width: 260px;
+            margin: 40px auto 20px;
+            /*padding-top: 15px;*/
+        }
+        #add-footer button{
+            margin-right: 40px;
+            float: left;
+        }
+        #seatModal{
+            width: auto;
+
+        }
+        #seats{
+            margin: 15px auto;
+            padding: 10px 0px;
+            width: auto;
+            height: auto;
+            border: 1px solid rgba(0, 0, 255, 0.16);
+            /*background: #dbd9d5;*/
+        }
+        #seat-footer{
+            margin: 10px auto;
+        }
+        #seats ul {
+            width: auto;
+            height: 24px;
+            padding:5px 0;
+            list-style: none;/*去掉ul样式*/
+        }
+        #seats ul li {
+            float:left;/*使li水平平铺*/
+        }
+
+        /*为奇数的li*/
+        /*ul li:nth-child(odd) {*/
+        /*}*/
+        /*椅子的样式*/
+
+        #seats ul[name = "chair"] li img {
+            height: 23px;/*位置宽高*/
+            width: 23px;
+            /*background: url("/static/img/seat_sale.png");*/
+        }
+        /*每行第一个椅子*/
+        #seats ul[name = "chair"] li:first-child img {
+            margin-left:40px;
+        }
+        #seats ul[name = "chair"] li:last-child img {
+            margin-right:40px;
+        }
+        /*奇数椅子*/
+        #seats ul[name = "chair"] li:nth-child(2n+3) img {
+            margin-left:15px;/*异桌椅子之间的距离*/
+        }
+        /*偶数椅子*/
+        #seats ul[name = "chair"] li:nth-child(even) img {
+            margin-left:15px;/*同桌椅子之间的距离*/
+        }
+        /*ul[name="chair"] li{*/
+        /*    background: black;*/
+        /*}*/
+
+
+    </style>
+
+    <!--    <script type="text/javascript" src="/js/jquery.js"></script>-->
+    <!--    <script type="text/javascript" src="/js/index.js"></script>-->
+
+</head>
+<body ms-controller="hallmodal">
+    <div id="loutinav">
+        <ul>
+            <!--<li class="active"><span>享品质</span> </li>-->
+            <li class="label"><span>首页</span> </li>
+            <li class="label"><span>饮食</span> </li>
+            <li class="label"><a href="movie.html"></a><span>影片</span> </li>
+            <li class="label"><span>播放厅</span> </li>
+            <li class="login"><span>登入</span> </li>
+            <li class="login"><span>注册</span> </li>
+
+        </ul>
+    </div>
+    <div id="dss">
+
+    </div>
+
+
+
+
+    <div ms-controller="listmodal">
+        <form id="filter" >
+                <span >
+					使用状态：
+				</span>
+        <input type="leixing" list="l_list" name="classing" id="useState" value="" />
+        <datalist id="l_list">
+            <option value="使用中"></option>
+            <option value="闲置中"></option>
+            <option value="已过期"></option>
+            <option value="故障中"></option>
+
+        </datalist>
+        <span>
+					屏幕类型：
+				</span>
+        <input type="biaoqian" list="b_list" name="label" id="screenCate"  value="" />
+        <datalist id="b_list">
+            <option value="2D"></option>
+            <option value="3D"></option>
+            <option value="MAX"></option>
+        </datalist>
+        <span>
+					座位大小:
+				</span>
+        <input type="text" name="keyword" autocomplete="on" placeholder="" id="startCount"/>
+        <span>
+					-
+				</span>
+        <input type="text" name="keyword" autocomplete="on" placeholder="" id="endCount" />
+        <button onclick="sort()">搜索</button>
+    </form>
+        <table id="movietable">
+
+            <tr>
+                <th>厅号</th>
+                <th>屏幕类型</th>
+                <th>行数</th>
+                <th>列数</th>
+                <th>座位数</th>
+                <th class="action">操作</th>
+            </tr>
+
+            <tr ms-for="el in @datalist">
+                <td>{{el.hName}}</td>
+                <td>{{el.seatCount}}</td>
+                <td>{{el.rows}}</td>
+                <td>{{el.cols}}</td>
+                <td>{{el.seatCount}}</td>
+                <td class="action">
+                    <input type="button" value="时刻表" />
+                    <input type="button" value="修改" />
+                    <input type="text" value="删除" ms-click="@deleteone($index)"/>
+                </td>
+            </tr>
+<!--            <tr th:each="hall:${list}">-->
+<!--                <td th:text="${hall.hName}"></td>-->
+<!--                <td th:text="${hall.seatCount}"></td>-->
+<!--                <td th:text="${hall.rows}"></td>-->
+<!--                <td th:text="${hall.cols}"></td>-->
+<!--                <td th:text="${hall.seatCount}"></td>-->
+<!--                <td class="action">-->
+<!--                    <input type="button" value="时刻表"/>-->
+<!--                    <input type="button" value="修改"/>-->
+<!--                    <input type="text" value="删除"/>-->
+<!--                </td>-->
+<!--            </tr>-->
+
+            <tr class="add">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>
+            </tr>
+
+
+
+
+
+        </table>
+
+        <!-- 模态框（Modal） -->
+
+    </div>
+    <div class="modal-fade"  id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="addModalClose" aria-hidden="true">
+                        &times;
+                    </button >
+                    <h4 class="modal-title">
+                        添加新影映厅
+                    </h4>
+                </div>
+                <div ms-controller="addmodal" class="modal-body" id="addbody">
+                    <form  ms-click="@add">
+
+                        <div class="inputone">
+                            <span>厅号：</span>
+                            <input type="text"  value="" id="addhname"/>
+                        </div>
+
+
+                        <div class="inputone">
+                            <span>屏幕类型：</span>
+                            <input type="text"  value="" id="addcate"/>
+                        </div>
+
+                        <div class="inputone">
+                            <span>行数：</span>
+                            <input type="text" id="col" value="" />
+                        </div>
+
+                        <div class="inputone">
+                            <span>列数：</span>
+                            <input type="text" id="row"  value=""/>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer" id="add-footer">
+                    <button  class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button data-toggle="modal"  onclick="createSeats()">座位表</button>
+
+                    <button  class="btn btn-primary">
+                        提交更改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal-fade"  id="seatModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="seatModalclose" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" >
+                      座位表
+                    </h4>
+                </div>
+                <div class="modal-body" id="seats">
+
+                </div>
+                <div class="modal-footer" id="seat-footer">
+
+                    <button  class="btn btn-primary" onclick="closeSeat()">
+                        提交
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div id="footer">
+
+    </div>
+    <script type="text/javascript">
+
+    </script>
+
+</body>
+</html>

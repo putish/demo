@@ -1,3 +1,19 @@
+
 spring:
-  profiles:
-    active: dev
+  thymeleaf:
+    cache: false
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: a64478590
+    url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+devtools:
+  restart:
+  #热部署生效
+  enabled: true
+  #设置重启的目录
+  additional-paths: resources/**,static/**,templates/**
+  #该目录下的内容修改不重启
+  exclude: data/**

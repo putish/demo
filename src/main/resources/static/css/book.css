@@ -1,0 +1,238 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'microsoft yahei';
+}
+
+#loutinav {
+    width: 100%;
+    height:70px;
+    position: fixed;
+    background: darkslategrey;
+    z-index: 2;
+    /*top: 100px;*/
+    /*left: 50px;*/
+    /*border: 1px solid #ddd;*/
+    /*display: ;*/
+
+}
+
+
+#loutinav ul li {
+    width: 150px;
+    height: 50px;
+    border-bottom: 1px dotted #DDDDDD;
+    list-style: none;
+    font-size: 12px;
+    text-align: center;
+    position: relative;
+    /*float: left;*/
+    font-size: 15px;
+    line-height: 50px;
+    cursor: pointer;
+    padding: 10px 0;
+    /*background: midnightblue;*/
+    color: #fff;
+}
+.login{
+    float: right;
+}
+.label{
+    float: left;
+}
+#loutinav ul li span {
+    width: 150px;
+    height: 50px;
+    padding: 10px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+
+}
+
+
+
+#loutinav ul li.last {
+    background: #5e4a4a;
+    color: #fff;
+    /*border-bottom: 1px solid #ddd;*/
+}
+
+/*#loutinav ul li.active span {
+    background: #c00;
+    color: #fff;
+    display: block;
+}*/
+
+#loutinav ul li:hover span {
+    background: #c00;
+    color: #fff;
+    display: block;
+    /*z-index: 2;*/
+}
+#dss{
+    width: 200px;
+    height: 100px;
+}
+#footer {
+
+    width: 100%;
+    height: 200px;
+    background: #2f4f4f;
+    margin: 0 auto;
+    font-size: 50px;line-height: 400px;text-align: center;
+    /*color: #000;*/
+}
+.text-desc p{
+    text-align: left;
+}
+
+#bigblock{
+    width: 800px;
+    height: 400px;
+    margin: 40px auto;
+
+}
+.name{
+     width: 800px;
+     padding-left: 20px;
+     padding-bottom: 10px;
+     border-bottom: 1px solid #85bfff;
+ }
+#poster{
+    width: 220px;
+    height: 280px;
+    z-index: 0;
+    border: 1px solid #dbd9d5;
+}
+
+#ads{
+    float: left;
+}
+.text-desc{
+    float: right;
+    /*position: absolute;*/
+    width: 300px;
+    height:200px;
+    margin-top: 50px;
+    margin-right: 100px;
+
+}
+.movie_name{
+    width: 100%;
+    height: 50px;
+    font-size: 24px;
+    line-height: 50px;
+}
+.movie_duration{
+    width:40% ;
+    float: right;
+    height: 50px;
+
+}
+.insideblock{
+
+    width: 100%;
+    height: 50px;
+}
+.movie_lable{
+    width: 60%;
+    float: left;
+    height: 50px;
+}
+.movie_actor{
+    width: 100%;
+    height: 50px;
+    float: none;
+}
+.movie_description{
+    width: 100px;
+    height: 50px;
+    text-overflow:ellipsis;
+}
+.movie_price{
+    width: 100%;
+    height: 50px;
+    border-top: black 1px;
+}
+#insidetitle{
+    width: 800px;
+    height: 60px;
+    margin: 20px auto;
+    /*border-bottom: 1px solid black;*/
+}
+#insidetitle div{
+    width:220px ;
+    margin: 0 auto;
+    border-bottom: none;
+
+}
+#insidetitle p{
+    float: left;
+    color:black ;
+    font-size: 25px;
+    margin: 8px 10px;
+
+}
+.schedule{
+    width: 800px;
+    height: auto;
+    margin: 0px auto 150px;
+}
+
+.scene{
+    width: 100%;
+    height: 50px;
+    border-bottom: 1px solid #85bfff;
+}
+.scene div{
+     float: left;
+     padding-bottom: 5px;
+     margin-left: 20px;
+ }
+.time{
+    color: #555555;
+    font-size: 20px;
+}
+.location{
+    padding-left: 40px;
+    font-size: 15px;
+    color: #a7a5a1;
+}
+.price{
+    color: red;
+    font-size: 22px;
+
+}
+.action{
+    width: 40px;
+   padding-left:250px ;
+}
+.book{
+    width: 120px;
+    /*margin-top: 80px;*/
+    height: 50px;
+    /*background: rgba(2, 5, 14, 0.37);*/
+}
+.book button{
+    width: 120px;
+    height: 40px;
+    line-height: 40px;
+    /*margin: 20px 50px;*/
+    background: #85bfff;
+    border: none;
+    font-size: 16px;
+    border-radius: 10px;
+    color: white;
+
+}
+.book button :hover{
+    background: red;
+}
+#tmsche{
+    display: none;
+}
+#aftche{
+    display: none;
+}
