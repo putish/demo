@@ -1,6 +1,5 @@
 package cn.zucc.demo.vo;
 
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +21,6 @@ public class SeatVo {
 //  列
     private int yAxis;
 //    删除标志
-    private int deleteFlag;
+    private Integer useState;
 
 }

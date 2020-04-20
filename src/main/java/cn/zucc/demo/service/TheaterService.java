@@ -1,5 +1,6 @@
-package cn.zucc.demo.service.impl;
+package cn.zucc.demo.service;
 
+import cn.zucc.demo.bean.Theater;
 import cn.zucc.demo.form.AddTheaterRequest;
 
 /**
@@ -22,5 +23,8 @@ public interface TheaterService {
      */
     boolean deleteTheater(Long tId);
 
+    boolean creatSchedule();
+
+    Theater findByTName(String tName);
 //    List<>
 }

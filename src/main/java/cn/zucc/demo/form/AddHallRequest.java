@@ -35,7 +35,6 @@ public class AddHallRequest {
     //    座位表
     private List<SeatAddVo> seatVos;
 
-    private Long tId;
 
     public static void main(String args[]) throws JsonProcessingException {
         AddHallRequest request=new AddHallRequest();

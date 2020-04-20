@@ -1,11 +1,10 @@
 package cn.zucc.demo.vo;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -16,21 +15,26 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ScreenListVo {
 //    播放场次id
     private Long sId;
     //    影片名称
     private String mName;
-//    播放厅名称
+
+    private Long hId;
+
+    //    播放厅名称
     private String hName;
     //      票数
     private Integer ticketCount;
+    //    票价
+    private BigDecimal price;
     //    放映时间
     private Date startTime;
     //    散场时间
     private Date endTime;
-    //    影院id
-    private Long tId;
     //    上映状态
     private Integer showState;
 }

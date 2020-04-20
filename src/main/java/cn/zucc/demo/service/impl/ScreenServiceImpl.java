@@ -15,10 +15,12 @@ import cn.zucc.demo.mapping.ResultMapping;
 import cn.zucc.demo.service.ScreenService;
 import cn.zucc.demo.util.DateUtil;
 import cn.zucc.demo.vo.ScreenListVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class ScreenServiceImpl implements ScreenService {
     @Override
     @Transactional
     public boolean addScreen(Long mId, Long hId, Date startTime, Long tId) {
-        if(startTime.after(new Date())) {
+        if(!startTime.after(new Date())) {
             Screen screen = new Screen();
             screen.setDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
             screen.setStartTime(startTime);
@@ -103,7 +105,7 @@ public class ScreenServiceImpl implements ScreenService {
             throw new TheaterException(ResultMapping.NO_SCREEN);
         }
         if (screen.getTicketCount() == 0) {
-            if (startTime.after(new Date())) {
+            if (!startTime.after(new Date())) {
                 screen.setHId(hId);
                 screen.setMId(mId);
                 Movie movie = movieDao.findOne(mId);
@@ -135,7 +137,7 @@ public class ScreenServiceImpl implements ScreenService {
         if (screen.getDeleteFlag()==DeleteFlagEnum.UN_DELETE.getValue()){
             Movie movie=movieDao.findOne(screen.getMId());
             Hall hall=hallDao.findOne(screen.getHId());
-            ScreenListVo listVo=ScreenListVo.builder().mName(movie.getMName())
+            ScreenListVo listVo=ScreenListVo.builder()
                     .hName(hall.getHName())
                     .ticketCount(screen.getTicketCount())
                     .startTime(screen.getStartTime())
@@ -151,6 +153,17 @@ public class ScreenServiceImpl implements ScreenService {
 
     @Override
     public List<ScreenListVo> screenList(Long mId, Long hId, Integer showState, Date startTime, Date endTime, Long tId) {
-        return screenDao.findList(mId, hId, tId, showState, startTime, endTime);
+        List<Screen> screens=screenDao.findList(mId, hId, tId, showState, startTime, endTime);
+        List<ScreenListVo> list=new ArrayList<>();
+        for (Screen screen:screens){
+            ScreenListVo vo=new ScreenListVo();
+            BeanUtils.copyProperties(screen,vo);
+            Movie movie=movieDao.findOne(screen.getMId());
+            vo.setMName(movie.getMName());
+            vo.setPrice(movie.getPrice());
+            vo.setHName(hallDao.findOne(screen.getHId()).getHName());
+            list.add(vo);
+        }
+        return list;
     }
 }

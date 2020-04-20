@@ -6,6 +6,7 @@ import cn.zucc.demo.enums.DeleteFlagEnum;
 import cn.zucc.demo.exception.TheaterException;
 import cn.zucc.demo.form.AddTheaterRequest;
 import cn.zucc.demo.mapping.ResultMapping;
+import cn.zucc.demo.service.TheaterService;
 import cn.zucc.demo.util.ValueUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,18 @@ public class TheaterServiceImpl implements TheaterService {
     @Override
     public boolean deleteTheater(Long tId) {
         return false;
+    }
+
+    @Override
+    public boolean creatSchedule() {
+        Date now =new Date();
+
+        return false;
+    }
+
+    @Override
+    public Theater findByTName(String tName) {
+        return theaterDao.findByTName(tName);
     }
 }
 

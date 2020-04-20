@@ -57,16 +57,59 @@ function closeSeat() {
         traditiona: true,
         contentType:"application/json;charset=utf-8",
         data: JSON.stringify(json),
-
         success: function (data) {
-
-
             viewmodel.text = "数据请求成功，已渲染";
         }
     });
     var seatVos=new Array();
 
 }
+function sort() {
+    var useState = $('#useState').val();
+    var screenCate = $('#screenCate').val();
+    var startCount = $('#startCount').val();
+    var endCount = $('#endCount').val();
+
+    if (useState=="使用中") {useState=1;}
+    else if (useState=="闲置中") {useState=2;}
+    else if (useState=="已过期") {useState=3;}
+    else if (useState=="故障中") {useState=4;}
+    alert(useState);
+    // var json={
+    //     useState:useState,
+    //     screenCate:screenCate,
+    //     startCount:startCount,
+    //     endCount:endCount
+    // }
+    var data=new FormData();
+    data.append("useState",useState);
+    data.append("screenCate",screenCate);
+    data.append("startCount",startCount);
+    data.append("endCount",endCount);
+    $.ajax({
+        type: "get",
+        url: "/hall/list",    //向后端请求数据的url
+        data: {
+            useState:useState,
+            screenCate:screenCate,
+            startCount:startCount,
+            endCount:endCount
+        },
+        cache:false,
+        // traditiona: true,
+        // contentType:"application/json;charset=utf-8",
+        // dataType:'json',
+        success: function (data) {
+
+            viewmodel.datalist = data;
+            alert("成功")
+            viewmodel.text = "数据请求成功，已渲染";
+        }
+    });
+
+}
+
+
 function createSeats()  {
     row = $('#row').val();
     col =  $('#col').val();
@@ -134,52 +177,51 @@ function createSeats()  {
 
 }
 
-function sort() {
-    var useState = $('#useState').val();
-    var screenCate = $('#screenCate').val();
-    var startCount = $('#startCount').val();
-    var endCount = $('#endCount').val();
 
-    if (useState=="使用中") {useState=1;}
-    else if (useState=="闲置中") {useState=2;}
-    else if (useState=="已过期") {useState=3;}
-    else if (useState=="故障中") {useState=4;}
-    alert(useState);
+function deleteone() {
+    var hId=$("#hId").text();
     var json={
-        useState:useState,
-        screenCate:screenCate,
-        startCount:startCount,
-        endCount:endCount
+        hId:hId,
     }
-
     $.ajax({
-        type: "get",
-        url: "/hall/list",    //向后端请求数据的url
-        data: JSON.stringify(json),
-        traditiona: true,
-        contentType:"application/json;charset=utf-8",
         dataType:'json',
+        type: "post",
+        url: "/hall/delete",    //向后端请求数据的url
+        data:{hId:hId},
         success: function (data) {
 
-            viewmodel.datalist = data;
-            alert("成功")
             viewmodel.text = "数据请求成功，已渲染";
         }
     });
 
 }
-
-function deleteone(index) {
+function edit(){
+    var hId=$("#hId").text();
+    var addmodel=document.getElementById("addModal");
     $.ajax({
-        type: "post",
-        url: "/hall/delete",    //向后端请求数据的url
-        data: index,
+        type : 'GET',
+        dataType : 'json',
+        url: "/hall/hallDetail",
+        data:{hId:hId},
         success: function (data) {
+            var hallDetail=data.data;
+            alert(hallDetail)
+            alert(hallDetail.hname)
+            var hName=document.getElementById('addhname');
+            var cate=document.getElementById('addcate');
+            var row=document.getElementById('row');
+            var col=document.getElementById('col');
+            var seatModal= document.getElementById('seatModal');
+            var seats =document.getElementById('seats');
+            hName.value=hallDetail["hname"];
+            cate.value=hallDetail["screenCate"];
+            row.value=hallDetail["rows"];
+            col.value=hallDetail["cols"];
+            addmodel.style.display="block";
 
-            viewmodel.text = "数据请求成功，已渲染";
+
         }
     });
-
 }
 window.onload=function(){
     document.getElementById("addModalClose").onclick=function () {

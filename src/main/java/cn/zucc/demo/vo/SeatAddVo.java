@@ -1,6 +1,5 @@
 package cn.zucc.demo.vo;
 
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

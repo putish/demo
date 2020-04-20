@@ -1,6 +1,7 @@
 package cn.zucc.demo.service;
 
 import cn.zucc.demo.dao.OrderDetailDao;
+import cn.zucc.demo.form.AddOrderDetailRequest;
 import cn.zucc.demo.form.AddOrdersRequest;
 import cn.zucc.demo.vo.OrdersDetailVo;
 import cn.zucc.demo.vo.OrdersListVo;
@@ -11,11 +12,11 @@ public interface OrdersService {
 
     /**
      * 添加订单
-     * @param addOrdersRequest
+     * @param requests
      * @param tId
      * @return
      */
-    boolean addOrders(AddOrdersRequest addOrdersRequest, Long tId);
+    boolean addOrders(List<AddOrderDetailRequest> requests, Long tId);
 
     /**
      * 支付订单

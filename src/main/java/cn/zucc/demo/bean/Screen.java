@@ -37,6 +37,7 @@ public class Screen {
     private Date endTime;
     //    影院id
     private Long tId;
+
 //    上映状态
     private Integer showState;
 //    删除标志

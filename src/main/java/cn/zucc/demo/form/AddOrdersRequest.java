@@ -15,11 +15,6 @@ import java.util.List;
 @Setter
 public class AddOrdersRequest {
     //    用户id
-    private Long uId;
-    //    折扣id
-    private Long coId;
-    //    价格
-    private BigDecimal price;
-//    订单详情
-    private List<AddOrderDetailRequest> list;
+
+    private List<Long> list;
 }

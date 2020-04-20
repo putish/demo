@@ -1,5 +1,8 @@
 package cn.zucc.demo.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @description: 上映状态
  * @author: hjj
@@ -27,4 +30,18 @@ public enum ShowStateEnum implements BaseEnum<Integer,ShowStateEnum>{
     public String getContent() {
         return this.content;
     }
+
+    public static String getContentByValue(Integer value){
+        List<ShowStateEnum> list= Arrays.asList(ShowStateEnum.class.getEnumConstants());
+        for (ShowStateEnum stateEnum:list){
+            if (stateEnum.getValue()==value){
+                return stateEnum.getContent();
+            }
+        }
+        return "";
+    }
+    public static void main(String[] args){
+        System.out.println(ShowStateEnum.getContentByValue(1));
+    }
+
 }

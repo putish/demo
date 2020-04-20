@@ -11,7 +11,8 @@ public interface CatergoryDao extends JpaRepository<Catergory, Long> {
 
     List<Catergory> findByCIdEqualsAndTIdEquals(Long cId,Long tId);
 
-    List<Catergory> findCatergoryByTIdEqualsAndDeleteFlagEquals(Integer deleteFlag,Long tId);
+    List<Catergory> findCatergoryByTIdEqualsAndDeleteFlagEquals(Long tId,Integer deleteFlag);
 
+    Catergory findByCId(Long cId);
 
 }

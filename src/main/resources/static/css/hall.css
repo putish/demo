@@ -1,96 +1,10 @@
-* {
-    margin: 0;
-    padding: 0;
-    font-family: 'microsoft yahei';
-}
-
-#loutinav {
-    width: 100%;
-    height:70px;
-    position: fixed;
-    background: darkslategrey;
-    z-index: 2;
-    /*top: 100px;*/
-    /*left: 50px;*/
-    /*border: 1px solid #ddd;*/
-    /*display: ;*/
-
-}
-
-
-#loutinav ul li {
-    width: 150px;
-    height: 50px;
-    border-bottom: 1px dotted #DDDDDD;
-    list-style: none;
-    font-size: 12px;
-    text-align: center;
-    position: relative;
-    /*float: left;*/
-    font-size: 15px;
-    line-height: 50px;
-    cursor: pointer;
-    padding: 10px 0;
-    /*background: midnightblue;*/
-    color: #fff;
-}
-.login{
-    float: right;
-}
-.label{
-    float: left;
-}
-#loutinav ul li span {
-    width: 150px;
-    height: 50px;
-    padding: 10px 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    text-align: center;
-
-}
-
-
-
-#loutinav ul li.last {
-    background: #5e4a4a;
-    color: #fff;
-    /*border-bottom: 1px solid #ddd;*/
-}
-
-/*#loutinav ul li.active span {
-    background: #c00;
-    color: #fff;
-    display: block;
-}*/
-
-#loutinav ul li:hover span {
-    background: #c00;
-    color: #fff;
-    display: block;
-    /*z-index: 2;*/
-}
-#dss{
-    width: 200px;
-    height: 100px;
-}
-#footer {
-
-    width: 100%;
-    height: 200px;
-    background: #2f4f4f;
-    margin: 0 auto;
-    font-size: 50px;line-height: 400px;text-align: center;
-    /*color: #000;*/
-}
-
 #movietable
 {
     /*font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;*/
     width:890px;
     border-collapse:collapse;
-    margin: 100px auto ;
+    margin: 10px auto ;
+    margin-bottom: 100px;
 
 }
 
@@ -135,10 +49,14 @@
     border-right:1px solid #497474;
 
 }
+
 #movietable tr td.action,th.action{
     width: 230px;
     /*float: left;*/
     line-height:50px ;
+    text-align: center;
+}
+#movietable td,th{
     text-align: center;
 }
 #movietable input{
@@ -168,11 +86,13 @@
     background-color: #ffffff;
     text-align: center;
     display: none;
-    background: #dbd9d5;
 }
 #addModal{
     width: 400px;
     /*background: #dbd9d5;*/
+}
+#addbody{
+    margin-top: 20px;
 }
 .modal-header{
     width: 100%;
@@ -180,7 +100,7 @@
     font-size: 8px;
     line-height: 40px;
     /*transform: translate(-50%, -50%);*/
-    background: #5d8484;
+    background: cornflowerblue;
 
 }
 
@@ -202,24 +122,25 @@
 .modal-body{
     width: 100%;
     height: 260px;
+    background:white ;
 }
 
-#file{
-    float: left;
-    width: 170px;
-    /*float: right;*/
-}
-#formSub{
-    float: right;
-}
 .inputone{
     width:100%;
     height: 50px;
     float: right;
 }
+.inputone span {
+    color: black;
+    margin-top: 20px;
+    float: left;
+    margin-left: 20px;
+}
 .inputone input{
     margin-top: 20px;
     margin-left: 30px;
+    margin-right: 80px;
+    float: right;
 }
 #add-footer{
     height: 30px;
@@ -262,26 +183,50 @@
 /*椅子的样式*/
 
 #seats ul[name = "chair"] li img {
-    height: 18px;/*位置宽高*/
-    width: 18px;
+    height: 23px;/*位置宽高*/
+    width: 23px;
     /*background: url("/static/img/seat_sale.png");*/
 }
 /*每行第一个椅子*/
 #seats ul[name = "chair"] li:first-child img {
-    margin-left:20px;
+    margin-left:40px;
 }
 #seats ul[name = "chair"] li:last-child img {
-    margin-left:20px;
+    margin-right:40px;
 }
 /*奇数椅子*/
 #seats ul[name = "chair"] li:nth-child(2n+3) img {
-    margin-left:10px;/*异桌椅子之间的距离*/
+    margin-left:15px;/*异桌椅子之间的距离*/
 }
 /*偶数椅子*/
 #seats ul[name = "chair"] li:nth-child(even) img {
-    margin-left:10px;/*同桌椅子之间的距离*/
+    margin-left:15px;/*同桌椅子之间的距离*/
 }
 /*ul[name="chair"] li{*/
 /*    background: black;*/
 /*}*/
+#timeTableModal .modal-body{
+    width: 500px;
+}
+#timeTableModal table{
+    width: 100%;
+    height: auto;
+    border-collapse:collapse;
+
+}
+#timeTableModal th{
+    /*width: 125px;*/
+    font-size: 19px;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 4px;
+    background-color: #6db1b1;
+    color: #ffffff;
+}
+#timeTableModal td{
+    font-size: 16px;
+    border: 1px solid #497474;
+    padding: 3px 7px 2px 7px;
+    height: 50px;
+}
 

@@ -32,10 +32,9 @@ public class Movie {
     private String poster;
 //    导演
     private String director;
-
-//    屏幕类型
-    private String screenCate;
-//    票价
+    //    演员
+    private String actor;
+    //    票价
     private BigDecimal price;
 //    时长
     private Integer duration;
@@ -43,8 +42,8 @@ public class Movie {
     private Long ficId;
     private Long secId;
     private Long thcId;
-//    上座率
-    private BigDecimal rating;
+    //屏幕类型
+    private String screenCate;
 //    简介
     private String description;
     @CreatedDate

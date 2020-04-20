@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+<!--    <link type="text/css" rel="styleSheet"  href="/css/index.css" />-->
+    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="/js/index.js"></script>
+    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
+    <link type="text/css" rel="styleSheet"  href="/css/movielist.css" />
+
+</head>
+<body>
+    <div id="loutinav" th:include="commom::commonNav"></div>
+
+    <div id="dss"/>
+    <form id="search" th:action="@{/movie/list}" method="get">
+        <input type="text" name="mName" autocomplete="on" placeholder=""/>
+        <span id="searchpic"><img src="/img/search1.jpg" alt=""/></span>
+    </form>
+    <div id="listul">
+        <ul>
+            <li style="list-style-type:none;" th:each="movie:${list.list}">
+<!--                <div>-->
+                    <div class="cover">
+                        <img  th:src="${movie.poster}" alt=""/>
+                    </div>
+                    <div class="text-desc">
+                        <h3 class="movie_name"  th:text="${movie.mName}"></h3>
+                        <div class="insideblock">
+                            <p class="movie_lable" th:text="${movie.catergory}"></p>
+                            <p class="movie_duration" th:text="${movie.duration}+' 分钟'"></p>
+                        </div>
+
+                        <p class="movie_actor" th:text="${movie.actor}"></p>
+
+                        <p class="movie_description"><textarea rows="4" th:text="${movie.description}" readonly="readonly"></textarea></p>
+                        <p class="movie_price" th:text="${movie.price}+' ￥'">￥</p>
+                        <button><a th:href="'/screen/book?mId='+${movie.mId}"></a>选座购票</button>
+                    </div>
+
+<!--                </div>-->
+            </li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <ul class="pagination pull-right no-margin">
+
+            <!-- 首页 -->
+            <li>
+                <a th:href="'/movie/list?pageNum=0'">首页</a>
+            </li>
+
+            <!-- 上一页 -->
+            <li th:if="${list.isHasPreviousPage()}">
+                <a th:href="'/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>
+            </li>
+
+            <!-- 中间页 -->
+
+            <!-- 下一页 -->
+            <li th:if="${list.isHasNextPage()}">
+                <a th:href="'/movie/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>
+            </li>
+
+            <!-- 尾页 -->
+            <li>
+                <a th:href="'/movie/list?pageNum=' + ${list.getTotal() - 1}">尾页</a>
+            </li>
+
+        </ul>
+    </div>
+</body>
+</html>

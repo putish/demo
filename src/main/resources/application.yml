@@ -2,13 +2,23 @@
 spring:
   thymeleaf:
     cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+    content-type: text/html
   jackson:
     default-property-inclusion: non_null
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
+
     username: root
     password: a64478590
-    url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull
+  jpa:
+      show-sql: true
+      properties:
+        hibernate:
+          format_sql=true:
 devtools:
   restart:
   #热部署生效
@@ -17,3 +27,26 @@ devtools:
   additional-paths: resources/**,static/**,templates/**
   #该目录下的内容修改不重启
   exclude: data/**
+logging:
+#    org.springframework.web: error
+#    org.hibernate.SQL: debug
+#    org.hibernate.engine.QueryParameters: debug
+#    org.hibernate.engine.query.HQLQueryPlan: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trac
+
+
+
+
+security:
+  ignored: true
+  basic:
+    enabled: false
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  row-bounds-with-count: true
+  params:
+    count: countSql
+
+

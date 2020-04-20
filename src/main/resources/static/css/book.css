@@ -90,14 +90,16 @@
 
 #bigblock{
     width: 800px;
-    height: 400px;
+    height: 460px;
     margin: 40px auto;
 
 }
-.name{
+.bigname{
      width: 800px;
      padding-left: 20px;
      padding-bottom: 10px;
+     font-size: 30px;
+
      border-bottom: 1px solid #85bfff;
  }
 #poster{
@@ -113,7 +115,7 @@
 .text-desc{
     float: right;
     /*position: absolute;*/
-    width: 300px;
+    width: 380px;
     height:200px;
     margin-top: 50px;
     margin-right: 100px;
@@ -147,9 +149,16 @@
     float: none;
 }
 .movie_description{
-    width: 100px;
+    width: 90%;
     height: 50px;
     text-overflow:ellipsis;
+}
+.movie_description textarea{
+    width: 100%;
+    height: 80px;
+    border: none;
+    text-indent:25px;
+    font-size: 16px;
 }
 .movie_price{
     width: 100%;
@@ -185,31 +194,37 @@
     width: 100%;
     height: 50px;
     border-bottom: 1px solid #85bfff;
+    margin-bottom: 20px;
 }
 .scene div{
-     float: left;
-     padding-bottom: 5px;
-     margin-left: 20px;
- }
+    /*float: left;*/
+    padding-bottom: 5px;
+    margin-left: 20px;
+    font-size: 20px;
+}
 .time{
     color: #555555;
     font-size: 20px;
+    float: left;
 }
 .location{
     padding-left: 40px;
-    font-size: 15px;
+    font-size: 20px;
     color: #a7a5a1;
+    float: left;
+    /*float: right;*/
+}
+.name{
+    float: left;
 }
 .price{
     color: red;
     font-size: 22px;
+    float: right;
+}
 
-}
-.action{
-    width: 40px;
-   padding-left:250px ;
-}
 .book{
+    float: right;
     width: 120px;
     /*margin-top: 80px;*/
     height: 50px;
@@ -225,7 +240,6 @@
     font-size: 16px;
     border-radius: 10px;
     color: white;
-
 }
 .book button :hover{
     background: red;
@@ -235,4 +249,94 @@
 }
 #aftche{
     display: none;
+}
+#seatModal{
+    width: auto;
+    display: none;
+
+}
+.modal-fade{
+    position: fixed;
+    /*z-index: 5000;*/
+    /*width: 400px;*/
+    height: auto;
+    border:  1px solid #4e17ff;
+    /*max-width: 300px;*/
+    /*min-height: 300px;*/
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    text-align: center;
+    display: none;
+}
+.modal-header{
+    width: 100%;
+    height: 40px;
+    font-size: 8px;
+    line-height: 40px;
+    /*transform: translate(-50%, -50%);*/
+    background: cornflowerblue;
+
+}
+.modal-header h4{
+    margin-left: 10px;
+    color: white;
+}
+.close{
+    width: 40px;
+    height: 40px;
+    background: none;
+    float: right;
+    font-size: 15px;
+    color: white;
+}
+.modal-body{
+    background: rgba(131, 186, 255, 0.47);
+}
+#seats{
+    margin: 15px auto;
+    padding: 10px 0px;
+    width: auto;
+    height: auto;
+    border: 1px solid rgba(0, 0, 255, 0.16);
+    /*background: #dbd9d5;*/
+}
+#seat-footer{
+    margin: 10px auto;
+}
+#seats ul {
+    width: auto;
+    height: 24px;
+    padding:5px 0;
+    list-style: none;/*去掉ul样式*/
+}
+#seats ul li {
+    float:left;/*使li水平平铺*/
+}
+
+/*为奇数的li*/
+/*ul li:nth-child(odd) {*/
+/*}*/
+/*椅子的样式*/
+
+#seats ul[name = "chair"] li img {
+    height: 23px;/*位置宽高*/
+    width: 23px;
+    /*background: url("/static/img/seat_sale.png");*/
+}
+/*每行第一个椅子*/
+#seats ul[name = "chair"] li:first-child img {
+    margin-left:40px;
+}
+#seats ul[name = "chair"] li:last-child img {
+    margin-right:40px;
+}
+/*奇数椅子*/
+#seats ul[name = "chair"] li:nth-child(2n+3) img {
+    margin-left:15px;/*异桌椅子之间的距离*/
+}
+/*偶数椅子*/
+#seats ul[name = "chair"] li:nth-child(even) img {
+    margin-left:15px;/*同桌椅子之间的距离*/
 }

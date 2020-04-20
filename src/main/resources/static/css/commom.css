@@ -1,0 +1,133 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'microsoft yahei';
+}
+
+#loutinav {
+    width: 100%;
+    height:70px;
+    position: fixed;
+    background: darkslategrey;
+    z-index: 2;
+    /*top: 100px;*/
+    /*left: 50px;*/
+    /*border: 1px solid #ddd;*/
+    /*display: ;*/
+
+}
+
+
+#loutinav ul li {
+    width: 150px;
+    height: 50px;
+    border-bottom: 1px dotted #DDDDDD;
+    list-style: none;
+    font-size: 12px;
+    text-align: center;
+    position: relative;
+    /*float: left;*/
+    font-size: 15px;
+    line-height: 50px;
+    cursor: pointer;
+    padding: 10px 0;
+    /*background: midnightblue;*/
+    color: #fff;
+}
+.login{
+    float: right;
+}
+.label{
+    float: left;
+}
+#loutinav ul li span {
+    width: 150px;
+    height: 50px;
+    padding: 10px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+
+}
+#loutinav ul li a {
+    width: 100%;
+    height: 100%;
+    padding: 10px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+
+}
+
+
+#loutinav ul li.last {
+    background: #5e4a4a;
+    color: #fff;
+    /*border-bottom: 1px solid #ddd;*/
+}
+
+/*#loutinav ul li.active span {
+    background: #c00;
+    color: #fff;
+    display: block;
+}*/
+
+#loutinav ul li:hover span {
+    background: #c00;
+    color: #fff;
+    display: block;
+    /*z-index: 2;*/
+}
+#dss{
+    width: 200px;
+    height: 100px;
+}
+#footer {
+
+    width: 100%;
+    height: 200px;
+    background: #2f4f4f;
+    margin: 0 auto;
+    font-size: 50px;line-height: 400px;text-align: center;
+    /*color: #000;*/
+}
+#filter{
+    width:890px;
+    /*float: left;*/
+    line-height:50px ;
+    text-align: center;
+    margin:0px auto ;
+    margin-top: 100px;
+
+
+}
+#filter span{
+    margin-left: 15px;
+}
+#filter input ,select{
+    width: 100px;
+}
+#filter button{
+    width: 80px;
+    height: 30px;
+    margin-left: 15px;
+    background-color: cornflowerblue;
+    font-size: 16px;
+    color: white;
+}
+#filter button a{
+    width: 80px;
+    height: 30px;
+}
+.page-footer{
+    width: 800px;
+    height: 40px;
+    margin: 20px 40px;
+}
+.page-footer li{
+    float: left;
+    margin-left: 40px ;
+    list-style-type:none;
+}

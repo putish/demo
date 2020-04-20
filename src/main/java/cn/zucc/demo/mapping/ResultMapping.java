@@ -21,6 +21,7 @@ public enum  ResultMapping {
     NO_SEAT(8,"座位已经被预定"),
     NO_USER(9,"没有该用户"),
     PHONE_FALUT(10,"手机号格式错误"),
+    FAULT_PWD(11,"密码错误"),
     OUT_OF_RANGE(2,"超出范围");
     private Integer code;
 

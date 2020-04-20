@@ -2,10 +2,7 @@ package cn.zucc.demo.service;
 
 import cn.zucc.demo.bean.Hall;
 import cn.zucc.demo.form.AddHallRequest;
-import cn.zucc.demo.vo.HallOptionVo;
-import cn.zucc.demo.vo.HallTimeTableVo;
-import cn.zucc.demo.vo.SeatAddVo;
-import cn.zucc.demo.vo.SeatVo;
+import cn.zucc.demo.vo.*;
 
 import java.util.Date;
 import java.util.List;
@@ -17,7 +14,7 @@ public interface HallService {
      * @param addHallRequest 添加播放厅请求
      * @return
      */
-    boolean addHall( AddHallRequest addHallRequest);
+    boolean addHall( AddHallRequest addHallRequest,Long tId);
 
     /**
      *删除播放厅
@@ -36,7 +33,7 @@ public interface HallService {
      * @param endCount 查询座位数结束
      * @return
      */
-    List<Hall> findList(Integer useState,String screenCate,Integer startCount,Integer endCount,Long tId);
+    List<HallListVo> findList(Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId);
     /**
      * 影片下拉列表
      * @param tId
@@ -49,7 +46,7 @@ public interface HallService {
      * @param tId
      * @return
      */
-    Hall hallDetail(Long hId,Long tId);
+    HallDetailVo hallDetail(Long hId,Long tId);
 
     /**
      *编辑播放厅
@@ -69,4 +66,11 @@ public interface HallService {
      * @param tId
      */
     List<HallTimeTableVo> hallTimeTable(Long hId, Date startTime, Date endTime, Long tId);
+
+    /**
+     * 获得座位表
+     * @param hId
+     * @return
+     */
+    List<SeatVo> getSeat(Long hId,Long tId);
 }

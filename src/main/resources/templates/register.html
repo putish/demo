@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>注册</title>
+    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
+    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/avalon.js/2.2.7/avalon.js"></script>
+    <style type="text/css">
+        #theatherRegister{
+            width: 550px;
+            height: 420px;
+            margin: 20px auto;
+            display: none;
+        }
+        #userRegister{
+            width: 550px;
+            height: 140px;
+            margin: 20px auto;
+        }
+        button{
+            width: 80px;
+            height: 30px;
+            background-color: cornflowerblue;
+            font-size: 16px;
+            color: white;
+        }
+        .inputone{
+            width:100%;
+            height: 40px;
+            float: right;
+        }
+        .inputone span {
+            color: black;
+            margin-top: 10px;
+            float: left;
+            margin-left: 50px;
+        }
+        .inputone input{
+            margin-top: 20px;
+            margin-left: 30px;
+            margin-right: 80px;
+            width: 250px;
+            height: 20px;
+            float: right;
+        }
+        #registerbutton {
+            width: 200px;
+            height: 30px;
+            margin: 0px auto;
+        }
+        #registerbutton button{
+             width: 80px;
+             height: 30px;
+             margin: 0px auto;
+             float: left;
+         }
+        #registerbutton select{
+            width: 70px;
+            height: 30px;
+            margin: 0px auto;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div id="loutinav" >
+        <ul>
+            <!--<li class="active"><span>享品质</span> </li>-->
+            <li class="label"><a th:href="@{/movie/}" ></a><span>首页</span> </li>
+            <li class="label"><a th:href="@{/movie/}"  ></a><span>影片</span> </li>
+            <li class="label"><a th:href="@{/hall/}" ></a><span>播放厅</span> </li>
+            <li class="login"><a th:href="@{/theater/}" ></a><span>登入</span> </li>
+            <li class="login"><a th:href="@{/theater/register}" ></a><span>注册</span> </li>
+
+        </ul>
+    </div>
+
+    <div id="dss"/>
+    <form id="userRegister">
+        <div class="inputone">
+            <span>用户名</span>
+            <input type="text"  value="" name="tName" id="uName"/>
+        </div>
+        <div class="inputone">
+            <span>密码</span>
+            <input type="password"  value="" name="pwd" id="upwd"/>
+        </div>
+        <div class="inputone">
+            <span>重复密码</span>
+            <input type="password"  value="" name="repeatpwd" id="urepeatpwd"/>
+        </div>
+    </form>
+    <form  id="theatherRegister">
+
+        <div class="inputone">
+            <span>用户名</span>
+            <input type="text"  value="" name="tName" id="tName"/>
+        </div>
+        <div class="inputone">
+            <span>影院联系人名称</span>
+            <input type="text"  value="" name="tLegalName" id="tLegalName"/>
+        </div>
+        <div class="inputone">
+            <span>影院联系人电话</span>
+            <input type="text"  value="" name="tLegalPhone" id="tLegalPhone"/>
+        </div>
+        <div class="inputone">
+            <span>影院法人名称</span>
+            <input type="text"  value="" name="tContactName" id="tContactName"/>
+        </div>
+        <div class="inputone">
+            <span>影院法人电话</span>
+            <input type="text"  value="" name="tContactPhone" id="tContactPhone"/>
+        </div>
+        <div class="inputone">
+            <span>影院地址</span>
+            <input type="text"  value="" name="tAddress" id="tAddress"/>
+        </div>
+
+        <div class="inputone">
+            <span>社会统一信用代码</span>
+            <input type="text"  value="" name="tCreditCode" id="tCreditCode"/>
+        </div>
+        <div class="inputone">
+            <span>间隔时间</span>
+            <input type="text"  value="" name="intervalTime" id="intervalTime"/>
+        </div>
+        <div class="inputone">
+            <span>密码</span>
+            <input type="password"  value="" name="pwd" id="tpwd"/>
+        </div>
+        <div class="inputone">
+            <span>重复密码</span>
+            <input type="password"  value="" name="repeatpwd" id="trepeatpwd"/>
+        </div>
+    </form>
+    <div id="registerbutton">
+        <button onclick="register()">注册</button>
+        <select name="type" class="selected" id="type" onchange="gradeChange(this.options[this.options.selectedIndex].text)">
+            <option value="0">用户</option>
+            <option value="1">影院</option>
+        </select>
+    </div>
+</body>
+<script type="text/javascript">
+    function gradeChange(tx) {
+        var theather = document.getElementById("theatherRegister");
+        var user = document.getElementById("userRegister");
+        if(tx=="影院"){
+            theather.style.display="block";
+            user.style.display="none";
+        }else {
+            theather.style.display="none";
+            user.style.display="block";
+        }
+    }
+    function register() {
+        var type = document.getElementById("type");
+        alert(type.value)
+        if(type.value==1) {
+            alert("影院");
+            var tName = $('#tName').val();
+            var tLegalName = $('#tLegalName').val();
+            var tLegalPhone = $('#tLegalPhone').val();
+            var tContactName = $('#tContactName').val();
+            var tContactPhone = $('#tContactPhone').val();
+            var tAddress = $('#tAddress').val();
+            var tCreditCode = $('#tCreditCode').val();
+            var intervalTime = $('#intervalTime').val();
+            var pwd = $('#pwd').val();
+            var repeatpwd = $('#repeatpwd').val();
+
+            if (repeatpwd != pwd) {
+                alert("密码重复错误");
+            } else {
+                var json = {
+                    intervalTime: intervalTime,
+                    tName: tName,
+                    tLegalName: tLegalName,
+                    tLegalPhone: tLegalPhone,
+                    tContactName: tContactName,
+                    tContactPhone: tContactPhone,
+                    tAddress: tAddress,
+                    tCreditCode: tCreditCode,
+                    pwd: pwd
+                };
+                $.ajax({
+                    dataType: 'json',
+                    type: "post",
+                    url: "/theater/toregister",//向后端请求数据的url
+                    traditiona: true,
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function (data) {
+
+                    }
+                });
+            }
+        }else {
+            alert("用户");
+            var uName = $('#uName').val();
+            var upwd = $('#upwd').val();
+            var urepeatpwd = $('#urepeatpwd').val();
+
+            if (urepeatpwd != upwd) {
+                alert("密码重复错误");
+            } else {
+
+                var json = {
+                    uName: uName,
+                    pwd: upwd
+                };
+                $.ajax({
+                    dataType: 'json',
+                    type: "post",
+                    url: "/users/toregister",//向后端请求数据的url
+                    data: {
+                        uName: uName,
+                        pwd: upwd
+                    },
+                    success: function (data) {
+
+                    }
+                });
+            }
+        }
+    }
+</script>
+</html>

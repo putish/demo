@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>登入</title>
+    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
+    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/avalon.js/2.2.7/avalon.js"></script>
+    <style type="text/css">
+        #login{
+            width: 550px;
+            height: 80px;
+            margin: 100px auto ;
+            margin-bottom: 50px;
+        }
+         button{
+            width: 80px;
+            height: 30px;
+            margin-top: 30px;
+            margin-left: 100px;
+            background-color: cornflowerblue;
+            font-size: 16px;
+            color: white;
+
+        }
+         select{
+             height: 30px;
+             float: right;
+             margin-top: 30px;
+             margin-right: 100px;
+         }
+        .inputone{
+            width:100%;
+            height: 50px;
+            float: right;
+        }
+        .inputone span {
+            color: black;
+            margin-top: 20px;
+            float: left;
+            margin-left: 50px;
+        }
+        .inputone input{
+            margin-top: 20px;
+            margin-left: 30px;
+            margin-right: 80px;
+            width: 250px;
+            height: 30px;
+            float: right;
+        }
+        #registerbutton {
+            width: 200px;
+            height:50px;
+            margin:45px auto;
+        }
+        #registerbutton button{
+            width: 80px;
+            height: 30px;
+            margin: 0px auto;
+            float: left;
+        }
+        #registerbutton select{
+            width: 70px;
+            height: 30px;
+            margin: 0px auto;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div id="loutinav" th:include="commom::commonNav"></div>
+
+    <div id="dss"/>
+    <form  id="login" th:action="@{/theater/inlogin}" method="get">
+
+        <div class="inputone">
+            <span>用户名</span>
+            <input type="text"  value="" name="tName" id="tName"/>
+        </div>
+
+
+        <div class="inputone">
+            <span>密码</span>
+            <input type="password"  value="" name="pwd" id="pwd"/>
+        </div>
+
+        <input type="button"><button>登入</button></input>
+        <select name="type" class="selected" id="type" >
+        <option value="0">用户</option>
+        <option value="1">影院</option>
+    </select>
+    </form>
+    <div id="registerbutton">
+
+
+    </div>
+
+</body>
+</html>

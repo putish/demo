@@ -1,5 +1,8 @@
 package cn.zucc.demo.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @description: 使用状态
  * @author: hjj
@@ -26,5 +29,18 @@ public enum UseStateEnum implements BaseEnum<Integer,UseStateEnum>{
     @Override
     public String getContent() {
         return this.content;
+    }
+
+    public static String getContentByValue(Integer value){
+        List<UseStateEnum> list= Arrays.asList(UseStateEnum.class.getEnumConstants());
+        for (UseStateEnum stateEnum:list){
+            if (stateEnum.getValue()==value){
+                return stateEnum.content;
+            }
+        }
+        return "";
+    }
+    public static void main(String[] args){
+        System.out.println(UseStateEnum.getContentByValue(1));
     }
 }

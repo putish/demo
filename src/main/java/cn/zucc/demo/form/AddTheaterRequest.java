@@ -1,6 +1,8 @@
 package cn.zucc.demo.form;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -12,6 +14,8 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddTheaterRequest {
     //    影院名称
     private String tName;
@@ -31,4 +35,6 @@ public class AddTheaterRequest {
     private Integer intervalTime;
     //    vip折扣力度
     private BigDecimal vipDiscount;
+
+    private String pwd;
 }

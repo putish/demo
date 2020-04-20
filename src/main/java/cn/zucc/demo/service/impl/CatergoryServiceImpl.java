@@ -27,7 +27,7 @@ public class CatergoryServiceImpl implements CatergoryService {
      */
     @Override
     public List<Catergory> findList(Long tId) {
-        List<Catergory> list=catergoryDao.findCatergoryByTIdEqualsAndDeleteFlagEquals(0,tId);
+        List<Catergory> list=catergoryDao.findCatergoryByTIdEqualsAndDeleteFlagEquals(tId,1);
         return list;
     }
 

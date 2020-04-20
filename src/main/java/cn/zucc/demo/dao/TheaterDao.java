@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @create: 2020-02-28 22:30
  */
 public interface TheaterDao extends JpaRepository<Theater,Long> {
+    Theater findByTName(String tName);
 }

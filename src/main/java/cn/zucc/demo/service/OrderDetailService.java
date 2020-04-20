@@ -13,7 +13,7 @@ public interface OrderDetailService {
      * @param addOrderDetailRequest
      * @return
      */
-    OrderDetail addOrderDetail(AddOrderDetailRequest addOrderDetailRequest);
+    OrderDetail addOrderDetail(AddOrderDetailRequest addOrderDetailRequest,Long oId);
 
     /**
      * 删除订单详情

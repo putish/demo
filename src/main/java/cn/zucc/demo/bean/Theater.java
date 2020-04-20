@@ -53,4 +53,7 @@ public class Theater {
     private BigDecimal vipDiscount;
     //    删除标志
     private Integer deleteFlag;
+//    密码
+    private String pwd;
+
 }

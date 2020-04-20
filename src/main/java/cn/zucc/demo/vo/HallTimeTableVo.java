@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @description: 播放厅时刻表
@@ -23,4 +25,14 @@ public class HallTimeTableVo {
     private Date startTime;
 //    播放结束时间
     private Date endTime;
+
+    public static HallTimeTableVo ObjectToVO(Map<String,Object> object){
+        HallTimeTableVo vo=new HallTimeTableVo();
+        vo.setHId((Long) object.get("hId"));
+        vo.setHName((String) object.get("hName"));
+        vo.setMName((String) object.get("mName"));
+        vo.setStartTime((Date) object.get("startTime"));
+        vo.setEndTime((Date) object.get("endTime"));
+        return vo;
+    }
 }

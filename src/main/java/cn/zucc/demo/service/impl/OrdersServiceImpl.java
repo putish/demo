@@ -51,34 +51,35 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     @Transactional
-    public boolean addOrders(AddOrdersRequest addOrdersRequest, Long tId) {
+    public boolean addOrders(List<AddOrderDetailRequest> requests, Long tId) {
         Orders orders=new Orders();
         BigDecimal prices=BigDecimal.ZERO;
-        if (addOrdersRequest.getCoId()!=null) {
-            orders.setCoId(addOrdersRequest.getCoId());
-            Coupon coupon=couponDao.findOne(orders.getCoId());
-            if (prices.compareTo(BigDecimal.valueOf(coupon.getConditions()))==1){
-                prices.subtract(BigDecimal.valueOf(coupon.getQutoa()));
-                coupon.setUseState(UseStateEnum.IN_USE.getValue());
-            }
-        }
+//        if (addOrdersRequest.getCoId()!=null) {
+//            orders.setCoId(addOrdersRequest.getCoId());
+//            Coupon coupon=couponDao.findOne(orders.getCoId());
+//            if (prices.compareTo(BigDecimal.valueOf(coupon.getConditions()))==1){
+//                prices.subtract(BigDecimal.valueOf(coupon.getQutoa()));
+//                coupon.setUseState(UseStateEnum.IN_USE.getValue());
+//            }
+//        }
         orders.setOStatus(OStatusEnum.YU_DINGH.getValue());
         orders.setStartTime(new Date());
-        orders.setUId(addOrdersRequest.getUId());
+        orders.setUId(Long.valueOf(1));
         orders.setTId(tId);
-
-        for(AddOrderDetailRequest request:addOrdersRequest.getList()){//添加订单详情
-            OrderDetail orderDetail=orderDetailService.addOrderDetail(request);
+        orders=ordersDao.save(orders);
+        for(AddOrderDetailRequest request:requests){//添加订单详情
+            OrderDetail orderDetail=orderDetailService.addOrderDetail(request,orders.getOId());
             prices.add(orderDetail.getPrice());
         }
 
 
-        Users users=usersDao.findOne(addOrdersRequest.getUId());
-        if (users.getIsvip()==1){
-            Theater theater=theaterDao.findOne(tId);
-            prices.multiply(theater.getVipDiscount());
-        }
+//        Users users=usersDao.findOne(Long.valueOf(1));
+//        if (users.getIsvip()==1){
+//            Theater theater=theaterDao.findOne(tId);
+//            prices.multiply(theater.getVipDiscount());
+//        }
         orders.setPrice(prices);
+        ordersDao.save(orders);//保存价格
         return true;
     }
 

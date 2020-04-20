@@ -5,10 +5,12 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
+    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
 
     <link type="text/css" rel="styleSheet"  href="/css/movie.css" />
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/movie.js"></script>
 
 
 </head>
@@ -28,53 +30,112 @@
     <div id="dss">
     </div>
     <div >
+        <form id="filter" th:action="@{/movie/list}" method="get" >
+            <span>放映状态：</span>
+            <input type="text" list="l_list" name="showState" id="showState" />
+            <datalist id="l_list">
+                <option value="即将上映"></option>
+                <option value="上映"></option>
+                <option value="下架"></option>
+
+            </datalist>
+            <span>类型：</span>
+<!--            <input type="text" list="b_list" name="cId" id="cId"  value="" />-->
+<!--            <datalist id="b_list" >-->
+<!--                <option th:each="catergory:${options}"  ></option>-->
+<!--            </datalist>-->
+            <select id="cId" name="cId" lay-verify="required">
+                <option value="" style="display: none"></option>
+                <option th:each="catergory:${options}"  th:text="${catergory.cName}" th:value="${catergory.cId}"  ></option>
+            </select>
+
+            <span>排序：</span>
+            <input type="text" list="s_list" name="sortBy" id="sortBy" />
+            <datalist id="s_list">
+                <option value="票房"></option>
+                <option value="上座率"></option>
+
+            </datalist>
+            <span>名称:</span>
+            <input type="text" name="startCount" autocomplete="on" placeholder="" id="startCount"/>
+            <button>搜索</button>
+        </form >
         <table id="movietable">
             <tr>
                 <th>名称</th>
-                <th>屏幕类型</th>
-                <th>排片率</th>
+                <th>放映状态</th>
                 <th>价格</th>
                 <th>上映时间</th>
                 <th>类别</th>
                 <th class="action">操作</th>
             </tr>
 
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+            <tr th:each="movie:${list.list}">
+                <td th:text="${movie.mName}"></td>
+                <td th:text="${movie.showState}"></td>
+                <td th:text="${movie.price}"></td>
+                <td th:text="${movie.showTime}"></td>
+                <td th:text="${movie.catergory}"></td>
+                <td th:text="${movie.mId}" id="mId" style="display: none"></td>
                 <td class="action">
-                    <input type="button" value="修改">
-                    <input type="text" value="删除">
+                    <input type="button"   οnclick="update()" value="编辑" data-toggle="modal" data-target="#addModal"/>
+                    <input type="text" value="删除" onclick="deletemovie()"/>
+                    <input type="text" value="排片" />
                 </td>
             </tr>
 
-            <tr class="alt">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="action">
-                    <div><input type="button" value="修改">
-                        <input type="text" value="删除"></div>
 
-                </td>
-            </tr>
             <tr class="add">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>
+                    <li>
+                        <a th:href="'/movie/list?pageNum=1'">首页</a>
+                    </li>
+                </td>
+                <td>
+                    <li >
+                        <a th:href="'/movie/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>
+                    </li>
+                </td>
+                <td>
+                    <li >
+                        <a th:href="'/movie/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>
+                    </li>
+                </td>
+                <td>
+                    <li>
+                        <a th:href="'/movie/list?pageNum=' + ${list.pages - 1}">尾页</a>
+                    </li>
+                </td>
                 <td></td>
                 <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>
             </tr>
+<!--            <div class="page-footer">-->
+<!--                <ul class="pagination pull-right no-margin">-->
 
+<!--                    &lt;!&ndash; 首页 &ndash;&gt;-->
+<!--                    <li>-->
+<!--                        <a th:href="'/movie/list?pageNum=1'">首页</a>-->
+<!--                    </li>-->
+
+<!--                    &lt;!&ndash; 上一页 &ndash;&gt;-->
+<!--                    <li th:if="${list.isHasPreviousPage()}">-->
+<!--                        <a th:href="'/movie/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>-->
+<!--                    </li>-->
+
+<!--                    &lt;!&ndash; 中间页 &ndash;&gt;-->
+
+<!--                    &lt;!&ndash; 下一页 &ndash;&gt;-->
+<!--                    <li th:if="${list.isHasNextPage()}">-->
+<!--                        <a th:href="'/movie/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>-->
+<!--                    </li>-->
+
+<!--                    &lt;!&ndash; 尾页 &ndash;&gt;-->
+<!--                    <li>-->
+<!--                        <a th:href="'/movie/list?pageNum=' + ${list.pages - 1}">尾页</a>-->
+<!--                    </li>-->
+
+<!--                </ul>-->
+<!--            </div>-->
 
 
 
@@ -92,105 +153,74 @@
                         &times;
                     </button>
                     <h4 class="modal-title" id="myModalLabel">
-                        模态框（Modal）标题
+                        添加影片
                     </h4>
                 </div>
                 <div class="modal-body">
-                    <form id="form" method="POST" enctype="multipart/form-data" action="upload" onsubmit="return check();">
+                    <form id="form"  >
                         <div id="img">
-                        <img id="preview">
-
-
-
-                        <input  type="file" accept="image/*" name="file" id="file"/>
-                        <input id="formSub" type="submit" value="提交"/>
-
-
-                    </div>
+                            <img id="preview"/>
+                            <input  type="file" accept="image/*" name="file" id="file"/>
+                            <input id="poster" name="poster" type="submit" value="提交"/>
+                        </div>
 
                         <div class="inputone">
                             <span>名称：</span>
-                            <input type="text">
-
+                            <input id="mName" name="mName" type="text"/>
                         </div>
 
-                        <div class="inputone">
+                        <div class="inputone" id="cate">
                             <span>类别：</span>
-                            <input type="text">
-
+                            <select id="catergory" name="catergory" required="required" multiple="multiple" size="3" lay-verify="required">
+                                <option value="" style="display: none"></option>
+                                <option th:each="catergory:${options}"  th:text="${catergory.cName}" th:value="${catergory.cId}"  ></option>
+                            </select>
                         </div>
-                        <div class="inputone">
-                            <span>屏幕类型：</span>
-                            <input type="text">
-
-                        </div>
-
                         <div class="inputone">
                             <span>时长：</span>
-                            <input type="text">
+                            <input id="duration" name="duration" type="text"/>
 
                         </div>
-
+                        <div class="inputone">
+                            <span>导演：</span>
+                            <input id="director" name="director" type="text"/>
+                        </div>
                         <div class="inputone">
                             <span>演员：</span>
-                            <input type="text">
-
+                            <input id="actor" name="actor" type="text"/>
                         </div>
-
                         <div class="inputone">
                             <span>简介：</span>
-                            <input type="text">
+                            <input id="description" name="description" type="text"/>
 
                         </div>
-
                         <div class="inputone">
                             <span>价格：</span>
-                            <input type="text">
-
+                            <input id="price" name="price" type="text"/>
+                        </div>
+                        <div class="inputone">
+                            <span>上映时间</span>
+                            <input id="showTime" name="showTime" placeholder="2020-03-12 00:00:00" type="text"/>
+                        </div>
+                        <div class="inputone">
+                            <span>下架时间</span>
+                            <input id="endTime" name="endTime" placeholder="2020-03-12 00:00:00" type="text"/>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                     </button>
-                    <button type="button" class="btn btn-primary">
-                        提交更改
+                    <button type="button" id="create" onclick="addmovie()" class="btn btn-primary">
+                        提交
                     </button>
+
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
     <div id="footer"></div>
-    <script>
-        var fileDom = document.getElementById("file");
-        var previewDom = document.getElementById("preview");
-        fileDom.addEventListener("change", function () {
-            var file = fileDom.files[0];
-            // check if input contains a valid image file
-            if (!file || file.type.indexOf("image/") < 0) {
-                fileDom.value = "";
-                previewDom.src = "";
-                return;
-            }
 
-            // use FileReader to load image and show preview of the image
-            var fileReader = new FileReader();
-            fileReader.onload = function(e){
-                previewDom.src = e.target.result;
-            };
-            fileReader.readAsDataURL(file);
-        });
-
-        var formDom = document.getElementById("form");
-        function check() {
-            var file = fileDom.files[0];
-            // check if input contains a valid image file
-            if (!file || file.type.indexOf("image/") < 0) {
-                return false;
-            }
-            return true;
-        }
-    </script>
 
 
 </body>

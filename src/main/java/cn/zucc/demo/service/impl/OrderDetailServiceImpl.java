@@ -40,8 +40,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     @Transactional
-    public OrderDetail addOrderDetail(AddOrderDetailRequest addOrderDetailRequest) {
-        OrderDetail orderDetail=OrderDetail.builder().oId(addOrderDetailRequest.getOId())
+    public OrderDetail addOrderDetail(AddOrderDetailRequest addOrderDetailRequest,Long oId) {
+        OrderDetail orderDetail=OrderDetail.builder().oId(oId)
                 .sdId(addOrderDetailRequest.getSdId())
                 .sId(addOrderDetailRequest.getSId())
                 .rating(BigDecimal.ZERO)

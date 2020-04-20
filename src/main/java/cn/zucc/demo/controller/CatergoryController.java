@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 /**
  * @description: 电影类别
@@ -27,7 +28,8 @@ public class CatergoryController {
      * @return
      */
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public RootData addCatergory(@RequestParam(value = "cName",required = true) String cName,@RequestParam(value = "tId",required=true) Long tId){
+    public RootData addCatergory(@RequestParam(value = "cName",required = true) String cName, HttpSession session){
+        Long tId= (Long) session.getAttribute("tId");
         catergoryService.addCatergory(cName,tId);
         return ResultUtil.success("新增成功");
     }

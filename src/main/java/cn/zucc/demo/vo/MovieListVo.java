@@ -27,16 +27,14 @@ public class MovieListVo {
     private String poster;
     //    导演
     private String director;
-    //    屏幕类型
-    private String screenCate;
+    //    演员
+    private String actor;
     //    票价
     private BigDecimal price;
     //    时长
     private Integer duration;
     //    电影类别
-    private String ficId;
-    private String secId;
-    private String thcId;
+    private String catergory;
     //    评分
     private BigDecimal rating;
     //    简介
@@ -49,7 +47,10 @@ public class MovieListVo {
     private Date endTime;
 //    票房
     private Long tickets;
+//    放映状态
+    private String showState;
 //    上座率
     private BigDecimal attendence;
-
+    //    影院id
+    private Long tId;
 }

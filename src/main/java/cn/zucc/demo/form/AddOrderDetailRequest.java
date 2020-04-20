@@ -1,6 +1,8 @@
 package cn.zucc.demo.form;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -10,9 +12,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AddOrderDetailRequest {
-    //    订单id
-    private Long oId;
     //    座位详情id
     private Long sdId;
     //    播放场次id

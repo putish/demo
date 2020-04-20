@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"/>
     <meta name="viewport" content="maximum-scale=3.0,minimum-scale=0.3,user-scalable=1,initial-scale=0.5"/>
     <link type="text/css" rel="styleSheet"  href="/css/book.css" />
+    <script src="/js/book.js"></script>
+
     <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -28,12 +31,10 @@
 
     </div>
     <div id="bigblock">
-        <div class="name">name</div>
+        <div class="bigname" th:text="${movie.mName}"></div>
         <div id="ads">
-            <div id="smallable"><img src="" alt=""></div>
-            <div id="poster">
+            <div id="smallable"><img th:src="${movie.poster}" alt=""/></div>
 
-            </div>
 
 
         </div>
@@ -41,14 +42,16 @@
         <div class="text-desc">
 
             <div class="insideblock">
-                <p class="movie_lable" >lable</p>
-                <p class="movie_duration" >dur分钟</p>
+                <p class="movie_lable" th:text="${movie.catergory}"></p>
+                <p class="movie_duration" th:text="${movie.duration}+' 分钟'"></p>
             </div>
 
-            <p class="movie_actor" >演员：actor</p>
+            <p class="movie_actor" th:text="${movie.actor}"></p>
+            <p class="movie_actor" th:text="${movie.director}"></p>
 
-            <p class="movie_description" >description</p>
-            <p class="movie_price" >price$</p>
+            <p class="movie_description" ><textarea rows="4" th:text="${movie.description}" readonly="readonly"></textarea></p>
+            <div th:text="${movie.mId}" id="mId" style="display: none"></div>
+
         </div>
 
     </div>
@@ -58,214 +61,77 @@
             <p id="aftertomm">后天</p></div>
 
     </div>
-    <div id="tdsche" class="schedule">
-        <div class="scene">
-            <div class="time">12:00-16:00</div>
-            <div class="location">1号厅</div>
-            <div class="action">特惠</div>
-            <div class="price">14￥</div>
+    <div id="tdsche" class="schedule" >
+        <div class="scene" th:each="tdscreen:${tdlist}">
+            <div class="name" th:text="${tdscreen.mName}"></div>
+            <div class="time" th:text=" ${#dates.format(tdscreen.startTime,'HH:mm')}+'-'+${#dates.format(tdscreen.endTime,'HH:mm')}"></div>
+            <div class="location" th:text="${tdscreen.hName}"></div>
+            <div th:text="${tdscreen.hId}" id="hId" style="display: none"></div>
+            <div th:text="${tdscreen.sId}" id="sId" style="display: none"></div>
 
             <div class="book">
-                <div><button>加购</button></div>
+                <button onclick="chooseSeats()">加购</button>
+            </div>
+            <div class="price" th:text="${tdscreen.price}+' ￥'"></div>
+        </div>
+
+    </div>
+    <div id="tmsche" class="schedule" th:each="tmscreen:${tmlist}">
+        <div class="scene">
+            <div class="name" th:text="${tmscreen.mName}"></div>
+            <div class="time" th:text="${tmscreen.startTime}+'-'+${tmscreen.endTime}"></div>
+            <div class="location" th:text="${tmscreen.hName}"></div>
+            <div class="price" th:text="${tmscreen.price}+' ￥'"></div>
+
+            <div class="book">
+                <button onclick="chooseSeats()">加购</button>
             </div>
 
         </div>
-        <div  class="scene">
-            <div class="time"></div>
-            <div class="location"></div>
-            <div class="price"></div>
-            <div class="action"></div>
-            <div class="book">
-                <div><button>加购</button></div>
-            </div>
-        </div>
-        <div  class="scene">
-            <div class="time"></div>
-            <div class="location"></div>
-            <div class="price"></div>
-            <div class="action"></div>
-            <div class="book">
-                <div><button>加购</button></div>
-            </div>
-        </div>
     </div>
-    <div id="tmsche" class="schedule">
-        <div class="scene">
-            <div class="time"></div>
-            <div class="location"></div>
-            <div class="price"></div>
-            <div class="action"></div>
-        </div>
-        <div class="scene">
-            <div class="time"></div>
-            <div class="location"></div>
-            <div class="price"></div>
-            <div class="action"></div>
-        </div>
-        <div class="scene">
-            <div class="time"></div>
-            <div class="location"></div>
-            <div class="price"></div>
-            <div class="action"></div>
-        </div>
-    </div>
-    <div id="aftche" class="schedule">
-        <div class="scene">
-            <div class="time"></div>
-            <div class="location"></div>
-            <div class="price"></div>
-            <div class="action"></div>
-        </div>
-        <div class="scene">
-            <div class="time"></div>
-            <div class="location"></div>
-            <div class="price"></div>
-            <div class="action"></div>
-        </div>
-        <div class="scene">
-            <div class="time"></div>
-            <div class="location"></div>
-            <div class="price"></div>
-            <div class="action"></div>
-        </div>
-    </div>
-    <div class="modal-fade"  id="seatModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title" >
-                        座位表
-                    </h4>
-                </div>
-                <div class="modal-body" id="seats">
+    <div id="aftche" class="schedule" th:each="aftscreen:${aftlist}">
+        <div class="name" th:text="${aftscreen.mName}"></div>
+        <div class="time" th:text="${aftscreen.startTime}+'-'+${aftscreen.endTime}">12:00-16:00</div>
+        <div class="location" th:text="${aftscreen.hName}"></div>
+        <div class="price" th:text="${aftscreen.price}+' ￥'"></div>
+<!--        <div th:text="${hall.hId}" id="hId" style="display: none"></div>-->
 
-                </div>
-                <div class="modal-footer" id="seat-footer">
-
-                    <button  class="btn btn-primary" onclick="closeSeat()">
-                        提交
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
+        <div class="book">
+            <button data-toggle="modal"  onclick="chooseSeats()">加购</button>
         </div>
     </div>
-    <div id="footer">
+<div class="modal-fade"  id="seatModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="seatModalclose" aria-hidden="true" onclick="closemodal()">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    座位表
+                </h4>
+            </div>
+            <div class="modal-body" id="seats">
+
+            </div>
+            <div class="modal-footer" id="seat-footer">
+
+                <button  class="btn btn-primary" onclick="addOrders()">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<div id="footer">
 
     </div>
 </body>
 
 
-<script type="text/javascript">
-    var tdsche=document.getElementById("tdsche");
-    var tmsche=document.getElementById("tmsche");
-    var aftche=document.getElementById("aftche");
-    var today=document.getElementById("today")
-    var tommorrow=document.getElementById("tommorrow")
-    var aftertomm=document.getElementById("aftertomm")
 
-
-    today.onmouseover=function () {
-        tdsche.style.display="block";
-        tmsche.style.display="none";
-        aftche.style.display="none";
-        today.style.color="red";
-        today.style.fontSize="27px"
-        tommorrow.style.color="black";
-        tommorrow.style.fontSize="25px";
-        aftertomm.style.color="black";
-        aftertomm.style.fontSize="25px";
-    }
-    tommorrow.onmouseover=function () {
-        tdsche.style.display="none";
-        tmsche.style.display="block";
-        aftche.style.display="none";
-        tommorrow.style.color="red";
-        tommorrow.style.fontSize="27px"
-        today.style.color="black";
-        today.style.fontSize="25px";
-        aftertomm.style.color="black";
-        aftertomm.style.fontSize="25px";
-    }
-    aftertomm.onmouseover=function () {
-        tdsche.style.display="none";
-        tmsche.style.display="none";
-        aftche.style.display="block";
-        aftertomm.style.color="red";
-        aftertomm.style.fontSize="27px";
-        today.style.color="black";
-        today.style.fontSize="25px";
-        tommorrow.style.color="black";
-        tommorrow.style.fontSize="25px"
-    }
-    function createSeats() {
-        var row=document.getElementById("row").value;
-        var col=document.getElementById("col").value;
-        var seat=document.getElementById("seats");
-        alert(row+" "+col );
-        if(!isNaN(row)&&!isNaN(col)) {
-            if (row > 10 || col > 10) {
-                document.getElementById("seatModal").style.display = "none";
-                alert("行数和列数不可以超过10");
-                return;
-            } else {
-                document.getElementById("seatModal").style.display = "block";
-            }
-
-            for (var i = 0; i < row; i++) {//一维数组长度为30
-                seatArray[i] = new Array();
-                for (var j = 0; j < col; j++) {//第二维长度为20
-                    seatArray[i][j] = 1;
-                }
-            }
-            //设置空位
-            // seatArray[1][5]=0;
-            //设置被人占得位置
-            // seatArray[8][2]=2;
-
-            //添加30行li
-            // alert(col);
-            for (var v = 0; v < row; v++) {
-                // $('#seats').append('');
-                var string = "<ul name = \"chair\">";
-                for (var i = 0; i < col; i++) {
-                    string = string + '<li ><img src=' + 'img/seat_selected.png ' + '/></li>';
-                }
-                string = string + '</ul>';
-                $('#seats').append(string);
-            }
-            var lis = document.querySelectorAll('ul[name="chair"] li');
-            // alert("ssdsd");
-            for (var i = 0; i < lis.length; i++) {
-                lis[i]._index = i;
-                lis[i].onclick = function () {
-                    var indexCol = this._index % col;
-                    var indexRow = (this._index - indexCol) / col;
-
-                    //报行列号
-                    // alert(indexRow + " " + indexCol);
-                    // 如果可选则更新状态
-                    if (seatArray[indexRow][indexCol] == 1) {
-                        $(this).replaceWith('<li><img src="img/seat_sale.png"/></li>');//更换图片
-                        seatArray[indexRow][indexCol] = 0;//更新自己选定的数组位置状态
-                    }
-                    else if (seatArray[indexRow][indexCol] == 0) {
-                        $(this).replaceWith('<li><img src="img/seat_selected.png"/></li>');//更换图片
-                        seatArray[indexRow][indexCol] = 1;//更新自己选定的数组位置状态
-                    }
-                }
-            }
-
-        }
-        else {
-            alert("行数和列数必需是数字");
-        }
-        seat.style.width=(col/2*80+10)+"px";
-
-    }
-</script>
 
 
 </html>
