@@ -40,4 +40,6 @@ public class Orders {
     private Date endTime;
     //    影院id
     private Long tId;
+    //    删除标志
+    private Integer deleteFlag;
 }

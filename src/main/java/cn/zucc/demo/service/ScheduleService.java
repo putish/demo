@@ -3,12 +3,22 @@ package cn.zucc.demo.service;
 import cn.zucc.demo.bean.Schedule;
 import cn.zucc.demo.form.AddScheduleRequest;
 
+import java.util.List;
+
 /**
  * @description:
  * @author: hjj
  * @create: 2020-04-06 21:14
  */
 public interface ScheduleService {
+
+    /**
+     * 排片表列表
+     * @param mId
+     * @param tId
+     * @return
+     */
+    List<Schedule> getList(Long mId,Long tId);
 
     /**
      * 新增排片表
@@ -38,6 +48,6 @@ public interface ScheduleService {
      * @param tId
      * @return
      */
-    boolean editSchedule(AddScheduleRequest request,Long tId);
+    boolean editSchedule(AddScheduleRequest request,Long tId,Long scId);
 
 }

@@ -78,7 +78,7 @@
                 <td th:text="${movie.catergory}"></td>
                 <td th:text="${movie.mId}" id="mId" style="display: none"></td>
                 <td class="action">
-                    <input type="button"   οnclick="update()" value="编辑" data-toggle="modal" data-target="#addModal"/>
+                    <input type="button"   οnclick="update()" value="编辑" onclick="editMovie()" data-toggle="modal" data-target="#addModal"/>
                     <input type="text" value="删除" onclick="deletemovie()"/>
                     <input type="text" value="排片" />
                 </td>
@@ -97,7 +97,7 @@
                     </li>
                 </td>
                 <td>
-                    <li >
+                    <li>
                         <a th:href="'/movie/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>
                     </li>
                 </td>
@@ -109,34 +109,6 @@
                 <td></td>
                 <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>
             </tr>
-<!--            <div class="page-footer">-->
-<!--                <ul class="pagination pull-right no-margin">-->
-
-<!--                    &lt;!&ndash; 首页 &ndash;&gt;-->
-<!--                    <li>-->
-<!--                        <a th:href="'/movie/list?pageNum=1'">首页</a>-->
-<!--                    </li>-->
-
-<!--                    &lt;!&ndash; 上一页 &ndash;&gt;-->
-<!--                    <li th:if="${list.isHasPreviousPage()}">-->
-<!--                        <a th:href="'/movie/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>-->
-<!--                    </li>-->
-
-<!--                    &lt;!&ndash; 中间页 &ndash;&gt;-->
-
-<!--                    &lt;!&ndash; 下一页 &ndash;&gt;-->
-<!--                    <li th:if="${list.isHasNextPage()}">-->
-<!--                        <a th:href="'/movie/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>-->
-<!--                    </li>-->
-
-<!--                    &lt;!&ndash; 尾页 &ndash;&gt;-->
-<!--                    <li>-->
-<!--                        <a th:href="'/movie/list?pageNum=' + ${list.pages - 1}">尾页</a>-->
-<!--                    </li>-->
-
-<!--                </ul>-->
-<!--            </div>-->
-
 
 
 
@@ -212,6 +184,109 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                     </button>
                     <button type="button" id="create" onclick="addmovie()" class="btn btn-primary">
+                        提交
+                    </button>
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal-fade"  id="schedualModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" id="addModalClose" aria-hidden="true">
+                            &times;
+                        </button >
+                        <h4 class="modal-title">
+                            排片表
+                        </h4>
+                    </div>
+                    <form th:action="@{/schedule/list}"></form>
+                    <div  class="modal-body" >
+                        <table id="schedualtable">
+                            <tr>
+                                <th>第一排片量</th>
+                                <th>第二排片量</th>
+                                <th>第三排片量</th>
+                                <th>屏幕类型</th>
+                                <th>票价</th>
+                                <th class="action">操作</th>
+                            </tr>
+
+                            <tr th:each="schedule:${list}">
+                                <td th:text="${schedule.fCount}"></td>
+                                <td th:text="${schedule.sCount}"></td>
+                                <td th:text="${schedule.tCount}"></td>
+                                <td th:text="${schedule.screenCate}"></td>
+                                <td th:text="${schedule.price}"></td>
+                                <td th:text="${schedule.scId}" id="scId" style="display: none"></td>
+                                <td class="action">
+                                    <input type="button"   οnclick="update()" value="编辑" onclick="editSchedule()" data-toggle="modal" data-target="#addModal"/>
+                                    <input type="text" value="删除" onclick="deleteSchedule()"/>
+                                    <input type="text" value="排片" />
+                                </td>
+                            </tr>
+
+                            <tr class="add">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="action"><input type="button" οnclick="addSchedule()" value="增加" data-toggle="modal" data-target="#addSchedualModal"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer" >
+
+                        <button  class="btn btn-primary">
+                            提交
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    <div class="modal-fade" id="addSchedualModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        排片表
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form id="schedualform"  >
+
+                        <div class="inputone">
+                            <span>第一排片量：</span>
+                            <input id="fCount" name="fCount" type="text"/>
+                        </div>
+                        <div class="inputone">
+                            <span>第二排片量：</span>
+                            <input id="sCount" name="sCount" type="text"/>
+                        </div>
+                        <div class="inputone">
+                            <span>第三排片量：</span>
+                            <input id="tCount" name="tCount" type="text"/>
+                        </div>
+                        <div class="inputone">
+                            <span>屏幕类型：</span>
+                            <input id="screenCate" name="screenCate" type="text"/>
+                        </div>
+                        <div class="inputone">
+                            <span>票价：</span>
+                            <input id="sprice" name="price" type="text"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" onclick="addSchedule()" class="btn btn-primary">
                         提交
                     </button>
 

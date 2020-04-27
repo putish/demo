@@ -55,5 +55,9 @@ public class Theater {
     private Integer deleteFlag;
 //    密码
     private String pwd;
+    //    营业开始时间
+    private String startTime;
+    //    营业结束时间
+    private String endTime;
 
 }

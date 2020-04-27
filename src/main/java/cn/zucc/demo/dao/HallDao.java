@@ -4,6 +4,8 @@ import cn.zucc.demo.bean.Hall;
 import cn.zucc.demo.bean.Movie;
 import cn.zucc.demo.bean.Screen;
 import cn.zucc.demo.vo.HallTimeTableVo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
@@ -22,7 +24,13 @@ public interface HallDao extends JpaRepository<Hall,Long> {
      */
     List<Hall> findByHIdAndTIdAndDeleteFlag(Long hId, Long tId, Integer deleteFlag);
 
-    List<Hall> findByTIdAndDeleteFlag(Long tId,Integer deletFlag);
+    /**
+     *
+     * @param tId
+     * @param deletFlag
+     * @return
+     */
+    List<Hall> findByTIdAndDeleteFlagOrderBySeatCount(Long tId,Integer deletFlag);
     /**
      * 播放厅列表
      * @param useState 使用状态
@@ -32,9 +40,10 @@ public interface HallDao extends JpaRepository<Hall,Long> {
      * @param endCount 查询座位数结束
      * @return
      */
-    @Query(nativeQuery = true,value = "SELECT * from hall WHERE (use_state= ?1 OR ?1 is null) AND (screen_cate= ?2 OR ?2 is null) " +
-            "AND (seat_count> ?3 OR ?3 is null) AND (seat_count< ?4 OR ?4 is null) AND delete_flag=1 AND t_id=?5")
-    List<Hall> findList(Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId);
+    @Query(nativeQuery = true,value = "SELECT * from hall WHERE (use_state= ?1 OR ?1 is null) AND (screen_cate= ?2 " +
+            "OR ?2 is null) AND (seat_count> ?3 OR ?3 is null) AND (seat_count< ?4 OR ?4 is null) " +
+            "AND delete_flag=1 AND t_id=?5 ORDER BY ?#{#pageable}")
+    Page<Hall> findList(Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId, Pageable pageable);
 
     /**
      * 播放厅时刻表
@@ -59,6 +68,5 @@ public interface HallDao extends JpaRepository<Hall,Long> {
             "AS mName,start_time AS startTime,screen.end_time AS endTime" +
             " FROM screen LEFT JOIN hall on hall.h_id=screen.h_id LEFT JOIN movie on movie.m_id=screen.m_id " +
             "WHERE (hall.h_id= ?1 OR ?1 is null) AND (start_time<?2 OR ?2 is null) AND (screen.end_time<?3 OR ?3 is null) AND (screen.t_id=?4 OR ?4 is null) AND hall.delete_flag=1 AND screen.delete_flag=1")
-
     List<Map<String,Object>> findhallTimeTable(Long hId, Date startTime, Date endTime, Long tId);
 }

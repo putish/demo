@@ -1,5 +1,8 @@
 package cn.zucc.demo.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author hjj
  * @Description TODO
@@ -28,5 +31,15 @@ public enum OStatusEnum implements BaseEnum<Integer, OStatusEnum> {
     @Override
     public String getContent() {
         return this.content;
+    }
+
+    public static String getContentByValue(Integer value){
+        List<OStatusEnum> list= Arrays.asList(OStatusEnum.class.getEnumConstants());
+        for (OStatusEnum stateEnum:list){
+            if (stateEnum.getValue()==value){
+                return stateEnum.getContent();
+            }
+        }
+        return "";
     }
 }

@@ -43,4 +43,5 @@ public class Screen {
 //    删除标志
     private Integer deleteFlag;
 
+
 }

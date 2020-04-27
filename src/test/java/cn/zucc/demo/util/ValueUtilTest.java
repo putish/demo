@@ -5,11 +5,19 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.junit.Test;
+import org.springframework.boot.SpringBootVersion;
+import org.springframework.core.SpringVersion;
 
 import java.io.UnsupportedEncodingException;
 
 public class ValueUtilTest {
 
+    @Test
+    public void TestspringVersionAndspringBootVersion () {
+        String springVersion = SpringVersion.getVersion();
+        String springBootVersion = SpringBootVersion.getVersion();
+        System.out.println(springBootVersion);
+    }
     @Test
     public void sign() {
         String token = ValueUtil.sign("admin", "127.0.0.1");

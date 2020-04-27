@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /**
  * @description: 添加排片表
  * @author: hjj
@@ -25,5 +27,7 @@ public class AddScheduleRequest {
     private Long tCount;
     //    屏幕类型
     private String screenCate;
+    //    票价
+    private BigDecimal price;
 
 }

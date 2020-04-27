@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * @description: 排片
@@ -28,13 +29,18 @@ public class Schedule {
 //    影片id
     private Long mId;
 //    第一排片量
-    private Long fCount;
+    private Integer fCount;
 //    第二排片量
-    private Long sCount;
+    private Integer sCount;
 //    第三排片量
-    private Long tCount;
+    private Integer tCount;
 //    屏幕类型
     private String screenCate;
 //    影院id
     private Long tId;
+//    删除标志
+    private Integer deleteFlag;
+    //    票价
+    private BigDecimal price;
+
 }

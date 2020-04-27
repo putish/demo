@@ -13,7 +13,7 @@ window.onload=function (){
         tmsche.style.display="none";
         aftche.style.display="none";
         today.style.color="red";
-        today.style.fontSize="27px"
+        today.style.fontSize="27px";
         tommorrow.style.color="black";
         tommorrow.style.fontSize="25px";
         aftertomm.style.color="black";
@@ -24,7 +24,7 @@ window.onload=function (){
         tmsche.style.display="block";
         aftche.style.display="none";
         tommorrow.style.color="red";
-        tommorrow.style.fontSize="27px"
+        tommorrow.style.fontSize="27px";
         today.style.color="black";
         today.style.fontSize="25px";
         aftertomm.style.color="black";
@@ -53,6 +53,8 @@ function closemodal() {
 }
 function chooseSeats()  {
     var hId=$("#hId").text();
+    var sId=$("#sId").text();
+
     var json={
         hId:hId
     }
@@ -60,7 +62,10 @@ function chooseSeats()  {
         type : 'GET',
         dataType : 'json',
         url: "/hall/getSeat",    //向后端请求数据的url
-        data:{hId:hId},
+        data:{
+            hId:hId,
+            sId:sId
+        },
         success: function (data) {
             var max=data.data.length;
             var data=eval(JSON.stringify(data.data));
@@ -145,7 +150,6 @@ function addOrders() {
     var seatVos=[];
     for(var i=0;i<=row;i++){
         for (var j=0;j<=col;j++){
-            // alert(seatArray[i][j])
             if (seatArray[i][j] == 3){
                 for (var x=0;x<seatlist.length;x++) {
                     if(seatlist[x][1]==i&&seatlist[x][2]==j){
@@ -158,10 +162,6 @@ function addOrders() {
             }
         }
     }
-    document.getElementById("seatModal").style.display = "none";
-    seatArray=new Array();
-    seatlist=new Array();
-    $('#seats ul').remove();
     $.ajax({
         dataType:'json',
         type: "post",
@@ -173,5 +173,8 @@ function addOrders() {
             viewmodel.text = "数据请求成功，已渲染";
         }
     });
-
+    document.getElementById("seatModal").style.display = "none";
+    seatArray=new Array();
+    seatlist=new Array();
+    $('#seats ul').remove();
 }

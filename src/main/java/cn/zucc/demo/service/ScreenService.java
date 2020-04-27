@@ -1,6 +1,9 @@
 package cn.zucc.demo.service;
 
+import cn.zucc.demo.bean.Hall;
+import cn.zucc.demo.bean.Movie;
 import cn.zucc.demo.bean.Screen;
+import cn.zucc.demo.form.MovieSort;
 import cn.zucc.demo.vo.ScreenListVo;
 
 import java.util.Date;
@@ -15,7 +18,7 @@ public interface ScreenService {
      * @param tId
      * @return
      */
-    boolean addScreen(Long mId, Long hId, Date startTime, Long tId);
+    Screen addScreen(Long mId, Long hId, Date startTime, Long tId);
 
     /**
      * 删除放映场次
@@ -56,6 +59,47 @@ public interface ScreenService {
     List<ScreenListVo> screenList(Long mId,Long hId,Integer showState
             ,Date startTime,Date endTime,Long tId);
 
+    /**
+     * 生成排片表
+     * @param tId
+     * @return
+     */
+    boolean screenSchedule(Long tId);
 
+    /**
+     * 得到排优先度的参数
+     * @param movies
+     * @return
+     */
+    List<MovieSort> getSort(List<Movie> movies,Date date);
 
+    /**
+     * 影片类别优先度值
+     * @param ficId
+     * @param secId
+     * @param thcId
+     * @param date
+     * @return
+     */
+    Float getCategoryIndex(Long ficId,Long secId, Long thcId,Date date);
+    /**
+     * 将类别转化成优先度
+     * @param cName
+     * @param date
+     * @return
+     */
+    Float turnIndex(String cName,Date date);
+
+    /**
+     * 黄金时间段放映表生成
+     * @param movieSorts
+     * @return
+     */
+    void createGoldScreen(List<MovieSort> movieSorts, List<Hall> halls,Long tId);
+    /**
+     * 非黄金时间段放映表生成
+     * @param movieSorts
+     * @return
+     */
+    void createUnGoldScreen(List<MovieSort> movieSorts, List<Hall> halls,Long tId);
 }

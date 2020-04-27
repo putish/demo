@@ -1,25 +1,19 @@
 package cn.zucc.demo.vo;
 
-import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 /**
- * @description: 电影列表
+ * @description:
  * @author: hjj
- * @create: 2020-02-24 23:45
+ * @create: 2020-04-27 13:00
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class MovieListVo {
+public class MovieVo {
+
 
     private Long mId;
     //    电影名称
@@ -44,12 +38,12 @@ public class MovieListVo {
     //    下架时间
     @LastModifiedDate
     private Date endTime;
-//    票房
+    //    票房
     private Long tickets;
-//    放映状态
+    //    放映状态
     private String showState;
-//    上座率
+    //    上座率
     private BigDecimal attendence;
     //    影院下拉选项
-    private String tName;
+    private List<TheatherOptionVo> optionVo;
 }

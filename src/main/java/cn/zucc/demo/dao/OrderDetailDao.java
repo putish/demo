@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface OrderDetailDao extends JpaRepository<OrderDetail,Long> {
+
+    List<OrderDetail> findBySIdAndDeleteFlag(Long sId,Integer deleteFlag);
     /**
      *
      * @param mId

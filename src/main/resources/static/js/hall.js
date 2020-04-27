@@ -27,9 +27,6 @@ function closeSeat() {
                 seat["xAxis"]=i;
                 seat["yAxis"]=j;
                 seatVos.push(seat);
-                // seatVos[x]=seat;
-                // seatVos['seatVos['+x+'].xAxis']=i;
-                // seatVos['seatVos['+x+'].yAxis']=j;
                 x=x+1;
                 index=index+1;
             }
@@ -141,22 +138,17 @@ function createSeats()  {
         for (var v = 0; v  < row; v++) {
             var string = "<ul name="+"\"chair\" >";
             for (var i = 0; i  < col; i++) {
-                string = string + '<li><img src='+'/img/seat_selected.png '+'/></li>';
+                string = string + '<li><img src='+'/img/seat_selected.png '+'/></li>';//生成li标签座位
             }
             string = string + '</ul>';
             $('#seats').append(string);
         }
         var list = document.querySelectorAll('ul[name="chair"] li');
-        // alert("ssdsd");
-
         for (var i = 0; i  <  list.length; i++) {
             list[i]._index = i;
             list[i].onclick = function () {
-                var indexCol = this._index % col;
-                var indexRow = (this._index - indexCol) / col;
-                //报行列号
-                // alert(indexRow + " " + indexCol);
-                // 如果可选则更新状态
+                var indexCol = this._index % col;//根据下标得到列数
+                var indexRow = (this._index - indexCol) / col;//根据下标得到行数
                 if (seatArray[indexRow][indexCol] == 1) {
                     $(this).replaceWith('<li><img src="/img/seat_sale.png"/></li>');//更换图片
                     seatArray[indexRow][indexCol] = 0;//更新自己选定的数组位置状态
@@ -195,7 +187,7 @@ function deleteone() {
     });
 
 }
-function edit(){
+function editHall(){
     var hId=$("#hId").text();
     var addmodel=document.getElementById("addModal");
     $.ajax({

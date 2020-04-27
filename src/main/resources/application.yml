@@ -9,7 +9,7 @@ spring:
   jackson:
     default-property-inclusion: non_null
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
     username: root
     password: a64478590

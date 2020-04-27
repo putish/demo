@@ -30,8 +30,8 @@ public class TheaterServiceImpl implements TheaterService {
         BeanUtils.copyProperties(addTheaterRequest,theater);
         String contactphone=addTheaterRequest.getTContactPhone();
         String legalphone=addTheaterRequest.getTLegalPhone();
-        if(!ValueUtil.checkTel(legalphone)||!ValueUtil.checkTel(contactphone)){
-            throw new TheaterException(ResultMapping.PHONE_FALUT);
+        if(!ValueUtil.checkTel(legalphone)||!ValueUtil.checkTel(contactphone)){//判断电话格式
+            throw new TheaterException(ResultMapping.PHONE_FALUT);//格式错误
         }
         theater.setCreateTime(new Date());
         theater.setDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());

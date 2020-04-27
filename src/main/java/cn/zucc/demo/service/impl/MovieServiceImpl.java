@@ -1,10 +1,8 @@
 package cn.zucc.demo.service.impl;
 
 import cn.zucc.demo.bean.Movie;
-import cn.zucc.demo.dao.CatergoryDao;
-import cn.zucc.demo.dao.MovieDao;
-import cn.zucc.demo.dao.OrderDetailDao;
-import cn.zucc.demo.dao.ScreenDao;
+import cn.zucc.demo.bean.Theater;
+import cn.zucc.demo.dao.*;
 import cn.zucc.demo.enums.ShowStateEnum;
 import cn.zucc.demo.exception.TheaterException;
 import cn.zucc.demo.form.AddMovieRequest;
@@ -36,6 +34,9 @@ public class MovieServiceImpl implements MovieService {
 
     @Autowired
     private OrderDetailDao orderDetailDao;
+
+    @Autowired
+    private TheaterDao theaterDao;
 
     @Autowired
     private CatergoryDao catergoryDao;
@@ -71,6 +72,8 @@ public class MovieServiceImpl implements MovieService {
                 }
                 listVo.setCatergory(catergory);
                 listVo.setShowState(ShowStateEnum.getContentByValue(movie.getShowState()));
+                Theater theater=theaterDao.findOne(tId);
+                listVo.setTName(theater.getTName());
                 list.add(listVo);
             }
         }

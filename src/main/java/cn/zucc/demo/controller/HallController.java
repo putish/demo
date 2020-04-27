@@ -6,12 +6,9 @@ import cn.zucc.demo.form.AddHallRequest;
 import cn.zucc.demo.service.HallService;
 import cn.zucc.demo.util.ResultUtil;
 import cn.zucc.demo.vo.*;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -47,11 +44,8 @@ public class HallController {
         else if (useState=="已过期") {useState1=3;}
         else if (useState=="故障中"){useState1=4;}
         else {useState1=null;}
-        PageHelper.startPage(pageNum,pageSize);
-        List<HallListVo> list=hallService.findList(useState1,screenCate,startCount1,endCount1,tId);
-        PageInfo pageInfo = new PageInfo<HallListVo>(list,pageSize);
-        model.addAttribute("list",pageInfo) ;
-
+        Page<Hall> list=hallService.findList(pageNum,pageSize,useState1,screenCate,startCount1,endCount1,tId);
+        model.addAttribute("list",list) ;
         return "hall";
 
     }
@@ -101,7 +95,7 @@ public class HallController {
     }
     @ResponseBody
     @GetMapping("/getSeat")
-    public RootData getSeat(@RequestParam(required = false) Long hId, HttpSession session,Model model){
+    public RootData getSeat(@RequestParam(required = false) Long hId,@RequestParam(required = false) Long sId, HttpSession session,Model model){
         Long tId= (Long) session.getAttribute("tId");
         List<SeatVo> list=hallService.getSeat(hId, tId);
         return ResultUtil.success(list);

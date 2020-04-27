@@ -35,7 +35,7 @@ public class MovieController {
     @GetMapping("/")
     public String index(Model model, String mName,HttpSession session){
         Long tId= (Long) session.getAttribute("tId");
-        List<MovieListVo> nowshowlist=movieService.findList(tId, ShowStateEnum.IN_SHOW.getValue(), null, null,mName==null?null:"%"+mName+"%");
+        List<MovieListVo> nowshowlist=movieService.findList(tId, ShowStateEnum.WILL_SHOW.getValue(), null, null,mName==null?null:"%"+mName+"%");
         List<MovieListVo> noslist=movieService.findList(tId, ShowStateEnum.IN_SHOW.getValue(), null, null,mName==null?null:"%"+mName+"%");
         model.addAttribute("nowshowlist",nowshowlist);//即将上映
         model.addAttribute("noslist",noslist);//上映

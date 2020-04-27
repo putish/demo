@@ -3,6 +3,7 @@ package cn.zucc.demo.service;
 import cn.zucc.demo.bean.Hall;
 import cn.zucc.demo.form.AddHallRequest;
 import cn.zucc.demo.vo.*;
+import org.springframework.data.domain.Page;
 
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,7 @@ public interface HallService {
      * @param endCount 查询座位数结束
      * @return
      */
-    List<HallListVo> findList(Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId);
+    Page<Hall> findList(Integer pageNum,Integer pageSize,Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId);
     /**
      * 影片下拉列表
      * @param tId
@@ -72,5 +73,5 @@ public interface HallService {
      * @param hId
      * @return
      */
-    List<SeatVo> getSeat(Long hId,Long tId);
+    List<SeatVo> getSeat(Long hId,Long tId,Long sId);
 }

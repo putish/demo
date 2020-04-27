@@ -1,7 +1,13 @@
 package cn.zucc.demo.service.impl;
 
 import cn.zucc.demo.bean.Catergory;
+import cn.zucc.demo.bean.Movie;
 import cn.zucc.demo.dao.CatergoryDao;
+import cn.zucc.demo.dao.MovieDao;
+import cn.zucc.demo.enums.DeleteFlagEnum;
+import cn.zucc.demo.enums.ShowStateEnum;
+import cn.zucc.demo.exception.TheaterException;
+import cn.zucc.demo.mapping.ResultMapping;
 import cn.zucc.demo.service.CatergoryService;
 import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +26,9 @@ public class CatergoryServiceImpl implements CatergoryService {
 
     @Autowired
     private CatergoryDao catergoryDao;
+
+    @Autowired
+    private MovieDao movieDao;
     /**
      * 分类列表
      * @param tId 影院id
@@ -41,11 +50,16 @@ public class CatergoryServiceImpl implements CatergoryService {
     @Override
     @Transactional
     public Catergory addCatergory(String cName, Long tId) {
-        Catergory catergory=new Catergory();
-        catergory.setCName(cName);
-        catergory.setTId(tId);
-        catergory.setDeleteFlag(0);
-        return catergoryDao.save(catergory);
+        Catergory one=catergoryDao.findByCName(cName);
+        if (one.getTId()==tId &&one.getDeleteFlag()== DeleteFlagEnum.UN_DELETE.getValue()) {//判断影片名称是否重复
+            throw new TheaterException(ResultMapping.REPEAT_CATERGORY);
+        }else {
+            Catergory catergory = new Catergory();
+            catergory.setCName(cName);
+            catergory.setTId(tId);
+            catergory.setDeleteFlag(0);
+            return catergoryDao.save(catergory);
+        }
     }
 
     /**
@@ -60,12 +74,18 @@ public class CatergoryServiceImpl implements CatergoryService {
     public boolean deteleCatergory(Long cId, Long tId) {
        Catergory catergory=this.findById(cId,tId);
        if(catergory!=null){
-           catergory.setDeleteFlag(1);
+           List<Movie> list=movieDao.findList(tId, ShowStateEnum.IN_SHOW.getValue(),null);
+           for (Movie movie:list){
+               if (cId==null||movie.getFicId()==cId||movie.getSecId()==cId||movie.getTId()==cId) {
+                    throw new TheaterException(ResultMapping.CIN_USE);
+               }
+            }
+           catergory.setDeleteFlag(DeleteFlagEnum.IS_DELETE.getValue());
            catergoryDao.save(catergory);
            return true;
        }
        else {
-           return  false;
+           throw new TheaterException(ResultMapping.NO_CATERGORY);
        }
     }
 
@@ -79,7 +99,7 @@ public class CatergoryServiceImpl implements CatergoryService {
     @Override
     public Catergory catergoryDetail(Long cId, Long tId) {
 
-        return this.findById(cId,tId);
+        return catergoryDao.findOne(cId);
     }
 
     /**
@@ -93,14 +113,18 @@ public class CatergoryServiceImpl implements CatergoryService {
     @Override
     @Transactional
     public boolean editCatergory(Long cId, String cName, Long tId) {
-        Catergory catergory=this.findById(cId,tId);
-        if(catergory!=null){
-            catergory.setCName(cName);
-            catergoryDao.save(catergory);
-            return true;
-        }
-        else {
-            return  false;
+        Catergory one = catergoryDao.findByCName(cName);
+        if (one.getTId() == tId && one.getDeleteFlag() == DeleteFlagEnum.UN_DELETE.getValue()) {
+            Catergory catergory=catergoryDao.findOne(cId);
+            if (catergory != null) {
+                catergory.setCName(cName);
+                catergoryDao.save(catergory);
+                return true;
+            } else {
+                throw new TheaterException(ResultMapping.NO_CATERGORY);
+            }
+        }else {
+            throw new TheaterException(ResultMapping.REPEAT_CATERGORY);
         }
     }
 

@@ -21,11 +21,13 @@ public class OrdersListVo {
     //    用户id
     private String uName;
     //    订单状态
-    private Integer oStatus;
+    private String oStatus;
     //    价格
     private BigDecimal price;
     //    开始时间
     private Date startTime;
+    //订单名称
+    private String title;
     //    订单详情
     private List<OrderDetailListVo> list;
 

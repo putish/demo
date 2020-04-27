@@ -26,5 +26,4 @@ public interface MovieDao extends JpaRepository<Movie, Long> {
      */
     List<Movie> findByTId(Long tId);
 
-
 }

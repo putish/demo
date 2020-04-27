@@ -13,6 +13,6 @@ public interface CatergoryDao extends JpaRepository<Catergory, Long> {
 
     List<Catergory> findCatergoryByTIdEqualsAndDeleteFlagEquals(Long tId,Integer deleteFlag);
 
-    Catergory findByCId(Long cId);
+    Catergory findByCName(String cName);
 
 }

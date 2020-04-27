@@ -59,7 +59,7 @@
                 <th class="action">操作</th>
             </tr>
 
-            <tr th:each="hall:${list.list}">
+            <tr th:each="hall:${list.getContent()}">
                 <td th:text="${hall.hName}"></td>
                 <td th:text="${hall.screenCate}"></td>
                 <td th:text="${hall.rows}"></td>
@@ -69,47 +69,37 @@
                 <td th:text="${hall.hId}" id="hId" style="display: none"></td>
                 <td class="action">
                     <input type="button" value="时刻表" οnclick="timeTable()" data-toggle="modal" data-target="#timeTableModal"/>
-                    <input type="button" value="修改" onclick="edit()"/>
+                    <input type="button" value="修改" onclick="editHall()"/>
                     <input  type="button" value="删除" onclick="deleteone();"/>
                 </td>
             </tr>
 
             <tr class="add">
-                <td>上一页</td>
-                <td></td>
-                <td>下一页</td>
-                <td></td>
+                <td> <a th:href="'/hall/list'">首页</a></td>
+                <td> <a th:if="${list.hasPrevious()}" th:href="'/hall/list?pageNum=' + ${list.getNumber()}" th:text="上一页"></a></td>
+                <td> <a th:if="${list.hasPrevious()}" th:href="'/hall/list?pageNum=' + ${list.getNumber()}+2" th:text="下一页"></a> </td>
+                <td> <a th:href="'/hall/list?pageNum=' + ${list.totalPages - 1}">尾页</a> </td>
                 <td></td>
                 <td></td>
                 <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>
             </tr>
-            <div class="page-footer">
-                <ul class="pagination pull-right no-margin">
+<!--            <div class="page-footer">-->
+<!--                <ul class="pagination pull-right no-margin">-->
+<!--                    <li>-->
+<!--                        <a th:href="'/hall/list?pageNum=1'">首页</a>-->
+<!--                    </li>-->
+<!--                    <li th:if="${list.isHasPreviousPage()}">-->
+<!--                        <a th:href="'/hall/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>-->
+<!--                    </li>-->
+<!--                    <li th:if="${list.isHasNextPage()}">-->
+<!--                        <a th:href="'/hall/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <a th:href="'/hall/list?pageNum=' + ${list.pages - 1}">尾页</a>-->
+<!--                    </li>-->
 
-                    <!-- 首页 -->
-                    <li>
-                        <a th:href="'/hall/list?pageNum=1'">首页</a>
-                    </li>
-
-                    <!-- 上一页 -->
-                    <li th:if="${list.isHasPreviousPage()}">
-                        <a th:href="'/hall/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>
-                    </li>
-
-                    <!-- 中间页 -->
-
-                    <!-- 下一页 -->
-                    <li th:if="${list.isHasNextPage()}">
-                        <a th:href="'/hall/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>
-                    </li>
-
-                    <!-- 尾页 -->
-                    <li>
-                        <a th:href="'/hall/list?pageNum=' + ${list.pages - 1}">尾页</a>
-                    </li>
-
-                </ul>
-            </div>
+<!--                </ul>-->
+<!--            </div>-->
 
 
 
@@ -137,23 +127,18 @@
                             <span>厅号：</span>
                             <input type="text"  value="" id="addhname"/>
                         </div>
-
-
                         <div class="inputone">
                             <span>屏幕类型：</span>
                             <input type="text" list="b_list" name="screenCate" id="addcate" value="" />
                         </div>
-
                         <div class="inputone">
                             <span>行数：</span>
                             <input type="text" id="col" value="" />
                         </div>
-
                         <div class="inputone">
                             <span>列数：</span>
                             <input type="text" id="row"  value=""/>
                         </div>
-
                     </form>
                 </div>
                 <div class="modal-footer" id="add-footer">

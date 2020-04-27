@@ -60,6 +60,41 @@ function addmovie() {
     });
     document.getElementById("addModal").style.display="none";
 }
+function editMovie(){
+    var mId=$("#mId").text();
+    var addmodel=document.getElementById("addModal");
+    $.ajax({
+        type : 'GET',
+        dataType : 'json',
+        url: "/movie/detail",
+        data:{mId:mId},
+        success: function (data) {
+            var movieDetail=data.data;
+            alert(movieDetail);
+            alert(movieDetail.hname);
+            var previewDom = document.getElementById("preview");
+
+            var mName=document.getElementById('mName');
+            var cate=document.getElementById('cate');
+            var duration=document.getElementById('duration');
+            var actor=document.getElementById('actor');
+            var description= document.getElementById('description');
+            var price =document.getElementById('price');
+            var showTime =document.getElementById('showTime');
+            var endTime =document.getElementById('endTime');
+            mName.value=movieDetail["mName"];
+            description=movieDetail["description"];
+            price=movieDetail["price"];
+            showTime.value=movieDetail["showTime"];
+            endTime.value=movieDetail["endTime"];
+            description=movieDetail["description"];
+            price=movieDetail["price"];
+            addmodel.style.display="block";
+
+
+        }
+    });
+}
 window.onload=function ()
 {
     var fileDom = document.getElementById("file");
@@ -92,4 +127,45 @@ window.onload=function ()
         return true;
     }
 
+};
+function addSchedule() {
+    var fCount=$("#fCount").val();
+    var sCount=$("#sCount").val();
+    var tCount=$("#tCount").val();
+    var screenCate=$("#screenCate").val();
+    var sprice=$("#sprice").val();
+    var mId=$("#mId").text();
+
+    var json={
+        fCount:fCount,
+        sCount:sCount,
+        tCount:tCount,
+        price:sprice,
+        screenCate:screenCate,
+        mId:mId
+    };
+    $.ajax({
+        dataType:'json',
+        type: "post",
+        url: "/schedule/add",//向后端请求数据的url
+        traditiona: true,
+        contentType:"application/json;charset=utf-8",
+        data: JSON.stringify(json),
+        success: function (data) {
+        }
+    });
+    document.getElementById("addSchedualModal").style.display="none";
+}
+function deleteSchedule() {
+    var scId=$("#scId").text();
+    $.ajax({
+        dataType:'json',
+        type: "post",
+        url: "/schedule/delete",//向后端请求数据的url
+        traditiona: true,
+        contentType:"application/json;charset=utf-8",
+        data:{scId:scId},
+        success: function (data) {
+        }
+    });
 }

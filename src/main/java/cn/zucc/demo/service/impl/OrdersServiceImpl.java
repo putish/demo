@@ -130,7 +130,7 @@ public class OrdersServiceImpl implements OrdersService {
         for (Orders order:orders){
             OrdersListVo vo=new OrdersListVo();
             vo.setOId(order.getOId());
-            vo.setOStatus(order.getOStatus());
+            vo.setOStatus(OStatusEnum.getContentByValue(order.getOStatus()));
             vo.setPrice(order.getPrice());
             vo.setStartTime(order.getStartTime());
             Users users=usersDao.findOne(order.getUId());
@@ -146,7 +146,7 @@ public class OrdersServiceImpl implements OrdersService {
         Orders order=ordersDao.findOne(oId);
         OrdersListVo vo=new OrdersListVo();
         vo.setOId(order.getOId());
-        vo.setOStatus(order.getOStatus());
+        vo.setOStatus(OStatusEnum.getContentByValue(order.getOStatus()));
         vo.setPrice(order.getPrice());
         vo.setStartTime(order.getStartTime());
         Users users=usersDao.findOne(order.getUId());

@@ -1,8 +1,11 @@
 package cn.zucc.demo.service.impl;
 
 import cn.zucc.demo.bean.Hall;
+import cn.zucc.demo.bean.OrderDetail;
 import cn.zucc.demo.bean.SeatDetail;
 import cn.zucc.demo.dao.HallDao;
+import cn.zucc.demo.dao.OrderDetailDao;
+import cn.zucc.demo.dao.SeatDetailDao;
 import cn.zucc.demo.enums.DeleteFlagEnum;
 import cn.zucc.demo.enums.UseStateEnum;
 import cn.zucc.demo.exception.TheaterException;
@@ -13,6 +16,9 @@ import cn.zucc.demo.service.SeatDetailService;
 import cn.zucc.demo.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,6 +39,8 @@ public class HallServiceImpl implements HallService {
    @Autowired
    private SeatDetailService seatDetailService;
 
+   @Autowired
+    private OrderDetailDao orderDetailDao;
 
 
     @Override
@@ -74,28 +82,16 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    public List<HallListVo> findList(Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId) {
-        List<Hall> list=hallDao.findList(useState,screenCate,startCount,endCount,tId);
-        List<HallListVo> vos=new ArrayList<>();
-        for (Hall hall:list){
-            HallListVo vo=new HallListVo();
-            vo.setCols(hall.getCols());
-            vo.setHId(hall.getHId());
-            vo.setHName(hall.getHName());
-            vo.setUseState(UseStateEnum.getContentByValue(hall.getUseState()));//得到使用状态
-            vo.setTId(hall.getTId());
-            vo.setRows(hall.getRows());
-            vo.setSeatCount(hall.getSeatCount());
-            vo.setScreenCate(hall.getScreenCate());
-            vo.setDeleteFlag(hall.getDeleteFlag());
-            vos.add(vo);
-        }
-        return vos;
+    public Page<Hall> findList(Integer pageNum, Integer pageSize,Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId) {
+        Pageable pageable =  new PageRequest(pageNum,pageSize);
+
+        Page<Hall> list=hallDao.findList(useState,screenCate,startCount,endCount,tId,pageable);
+        return list;
     }
 
     @Override
     public List<HallOptionVo> optionList(Long tId) {
-        List<Hall> list=hallDao.findByTIdAndDeleteFlag(tId,DeleteFlagEnum.UN_DELETE.getValue());
+        List<Hall> list=hallDao.findByTIdAndDeleteFlagOrderBySeatCount(tId,DeleteFlagEnum.UN_DELETE.getValue());
         List<HallOptionVo> optionVos=new ArrayList<>();
         for(Hall hall:list){
             HallOptionVo optionVo=new HallOptionVo();
@@ -167,11 +163,19 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    public List<SeatVo> getSeat(Long hId,Long tId) {
+    public List<SeatVo> getSeat(Long hId,Long tId,Long sId) {
         List<SeatDetail> seatDetails=seatDetailService.findList(hId,tId);
+        List<OrderDetail> orderDetails=orderDetailDao.findBySIdAndDeleteFlag(sId,DeleteFlagEnum.UN_DELETE.getValue());
+        List<Long> useSDId=new ArrayList<>();//已经预定的座位
+        for(OrderDetail orderDetail:orderDetails){
+            useSDId.add(orderDetail.getSdId());
+        }
         List<SeatVo> list=new ArrayList<>();
         for (SeatDetail seatDetail:seatDetails){
-            SeatVo vo=new SeatVo(seatDetail.getSdId(),seatDetail.getXAxis(),seatDetail.getYAxis(),seatDetail.getUseState());
+            SeatVo vo=new SeatVo(seatDetail.getSdId(),seatDetail.getXAxis(),seatDetail.getYAxis(),UseStateEnum.IN_SPARE.getValue());
+            if(useSDId.contains(vo.getSdId())){
+                vo.setUseState(UseStateEnum.IN_USE.getValue());
+            }
             list.add(vo);
         }
 
