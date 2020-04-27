@@ -97,7 +97,7 @@ public class HallController {
     @GetMapping("/getSeat")
     public RootData getSeat(@RequestParam(required = false) Long hId,@RequestParam(required = false) Long sId, HttpSession session,Model model){
         Long tId= (Long) session.getAttribute("tId");
-        List<SeatVo> list=hallService.getSeat(hId, tId);
+        List<SeatVo> list=hallService.getSeat(hId, tId,sId);
         return ResultUtil.success(list);
     }
     @ResponseBody
