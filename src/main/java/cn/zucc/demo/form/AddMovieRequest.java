@@ -22,9 +22,6 @@ public class AddMovieRequest {
     private String director;
     //    演员
     private String actor;
-
-    //    票价
-    private BigDecimal price;
     //    时长
     private Integer duration;
 //    分类

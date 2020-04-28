@@ -20,7 +20,6 @@ function addmovie() {
     var duration=$("#duration").val();
     var actor=$("#actor").val();
     var description=$("#description").val();
-    var price=$("#price").val();
     var showTime=$("#showTime").val();
     var endTime=$("#endTime").val();
     var director=$("#director").val();
@@ -70,28 +69,27 @@ function editMovie(){
         data:{mId:mId},
         success: function (data) {
             var movieDetail=data.data;
-            alert(movieDetail);
-            alert(movieDetail.hname);
-            var previewDom = document.getElementById("preview");
-
-            var mName=document.getElementById('mName');
-            var cate=document.getElementById('cate');
-            var duration=document.getElementById('duration');
-            var actor=document.getElementById('actor');
-            var description= document.getElementById('description');
-            var price =document.getElementById('price');
-            var showTime =document.getElementById('showTime');
-            var endTime =document.getElementById('endTime');
-            mName.value=movieDetail["mName"];
-            description=movieDetail["description"];
-            price=movieDetail["price"];
-            showTime.value=movieDetail["showTime"];
-            endTime.value=movieDetail["endTime"];
-            description=movieDetail["description"];
-            price=movieDetail["price"];
-            addmodel.style.display="block";
-
-
+            if(movieDetail["showState"]!=3) {//影片下映后不可编辑
+                var previewDom = document.getElementById("preview");
+                var mName = document.getElementById('mName');
+                var cate = document.getElementById('cate');
+                var duration = document.getElementById('duration');
+                var actor = document.getElementById('actor');
+                var description = document.getElementById('description');
+                var showTime = document.getElementById('showTime');
+                var endTime = document.getElementById('endTime');
+                mName.value = movieDetail["mName"];
+                description = movieDetail["description"];
+                showTime.value = movieDetail["showTime"];
+                endTime.value = movieDetail["endTime"];
+                description = movieDetail["description"];
+                addmodel.style.display = "block";
+                if (movieDetail["showState"] == 2) {
+                    showTime.attr("readonly", "true");//上映后上映时间不可编辑
+                }
+            }else{
+                alert("影片下映后不可编辑");
+            }
         }
     });
 }

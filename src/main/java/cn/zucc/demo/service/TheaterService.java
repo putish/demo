@@ -18,7 +18,7 @@ public interface TheaterService {
 
     /**
      * 删除影院
-     * @param tId
+     * @param tId 影院id
      * @return
      */
     boolean deleteTheater(Long tId);

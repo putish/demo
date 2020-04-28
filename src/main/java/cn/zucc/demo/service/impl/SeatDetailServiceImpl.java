@@ -6,7 +6,6 @@ import cn.zucc.demo.enums.DeleteFlagEnum;
 import cn.zucc.demo.enums.UseStateEnum;
 import cn.zucc.demo.service.SeatDetailService;
 import cn.zucc.demo.vo.SeatAddVo;
-import cn.zucc.demo.vo.SeatVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +31,7 @@ public class SeatDetailServiceImpl implements SeatDetailService {
         seatDetail.setYAxis(seatVo.getYAxis());
         seatDetail.setTId(tId);
         seatDetail.setDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
-        seatDetail.setUseState(UseStateEnum.IN_SPARE.getValue());
+        seatDetail.setUseState(UseStateEnum.IN_USE.getValue());
         seatDetailDao.save(seatDetail);
         return true;
     }

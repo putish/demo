@@ -103,15 +103,7 @@ public class OrdersServiceImpl implements OrdersService {
             for(OrderDetail detail:details){//添加订单详情
                 orderDetailService.deleteOrderDetail(detail.getOdId());
             }
-            if (orders.getCoId()!=null) {
-                Coupon coupon = couponDao.findOne(orders.getCoId());
-                if (coupon.getEndTime().compareTo(new Date()) >= -1) {
-                    coupon.setUseState(UseStateEnum.IN_SPARE.getValue());
-                } else {
-                    coupon.setUseState(UseStateEnum.OUT_DATE.getValue());
-                }
-                couponDao.save(coupon);
-            }
+
             ordersDao.save(orders);
             return true;
         }

@@ -38,7 +38,7 @@ public class ScreenController {
 
     /**
      * 订票列表
-     * @param mId
+     * @param mId 影院id
      * @param session
      * @param model
      * @return

@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -42,6 +43,10 @@ public class Screen {
     private Integer showState;
 //    删除标志
     private Integer deleteFlag;
+    //    票价
+    private BigDecimal price;
+    //    屏幕类型
+    private String screenCate;
 
 
 }

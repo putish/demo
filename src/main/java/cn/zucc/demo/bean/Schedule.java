@@ -43,4 +43,5 @@ public class Schedule {
     //    票价
     private BigDecimal price;
 
+
 }

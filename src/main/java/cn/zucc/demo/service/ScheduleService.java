@@ -14,8 +14,8 @@ public interface ScheduleService {
 
     /**
      * 排片表列表
-     * @param mId
-     * @param tId
+     * @param mId 影院id
+     * @param tId 影院id
      * @return
      */
     List<Schedule> getList(Long mId,Long tId);
@@ -23,7 +23,7 @@ public interface ScheduleService {
     /**
      * 新增排片表
      * @param request
-     * @param tId
+     * @param tId 影院id
      * @return
      */
     boolean addSchedule(AddScheduleRequest request,Long tId);
@@ -45,7 +45,7 @@ public interface ScheduleService {
     /**
      * 编辑排片表
      * @param request
-     * @param tId
+     * @param tId 影院id
      * @return
      */
     boolean editSchedule(AddScheduleRequest request,Long tId,Long scId);

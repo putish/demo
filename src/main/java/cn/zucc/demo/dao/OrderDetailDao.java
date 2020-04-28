@@ -12,8 +12,8 @@ public interface OrderDetailDao extends JpaRepository<OrderDetail,Long> {
     List<OrderDetail> findBySIdAndDeleteFlag(Long sId,Integer deleteFlag);
     /**
      *
-     * @param mId
-     * @param tId
+     * @param mId 影院id
+     * @param tId 影院id
      * @return
      */
     @Query(nativeQuery = true,value= "select sum (odId) from order_detail left jion screen on screen.s_id=order_detail.s_id where screen.m_id=?1 and screen_t_id=?2")

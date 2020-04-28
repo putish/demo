@@ -34,16 +34,12 @@ public class Movie {
     private String director;
     //    演员
     private String actor;
-    //    票价
-    private BigDecimal price;
 //    时长
     private Integer duration;
 //    电影类别
     private Long ficId;
     private Long secId;
     private Long thcId;
-    //屏幕类型
-    private String screenCate;
 //    简介
     private String description;
     @CreatedDate
@@ -56,5 +52,7 @@ public class Movie {
     private Long tId;
 //    上映状态
     private Integer showState;
+//    删除标志
+    private Integer deleteFlag;
 }
 

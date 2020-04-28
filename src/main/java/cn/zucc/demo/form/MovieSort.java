@@ -30,6 +30,10 @@ public class MovieSort {
     private Integer GoldSeatCount ;
     //    非黄金时间排片量
     private Integer UnGoldSeatCount;
+    //    票价
+    private BigDecimal price;
+    //    屏幕类型
+    private String screenCate;
 
 
 }

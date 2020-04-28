@@ -6,21 +6,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * @description: 座位
- * @author: hjj
- * @create: 2020-02-26 13:46
- */
+ * @author hjj
+ * @Description TODO
+ * @create: 2020-04-28 14:56
+ **/
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SeatVo {
+public class SeatDelVo {
     private Long sdId;
-//    行
-    private int xAxis;
-//  列
-    private int yAxis;
-//    删除标志
-    private Integer useState;
-
+    //    行
+    private Integer xAxis;
+    //  列
+    private Integer yAxis;
 }

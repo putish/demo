@@ -13,7 +13,7 @@ public interface OrdersService {
     /**
      * 添加订单
      * @param requests
-     * @param tId
+     * @param tId 影院id
      * @return
      */
     boolean addOrders(List<AddOrderDetailRequest> requests, Long tId);
@@ -35,7 +35,7 @@ public interface OrdersService {
 
     /**
      * 订单列表
-     * @param tId
+     * @param tId 影院id
      * @return
      */
     List<OrdersListVo> findList(Long tId,Integer oState);
@@ -43,7 +43,7 @@ public interface OrdersService {
     /**
      * 订单详情
      * @param oId
-     * @param tId
+     * @param tId 影院id
      * @return
      */
     OrdersListVo ordersDetail(Long oId,Long tId);

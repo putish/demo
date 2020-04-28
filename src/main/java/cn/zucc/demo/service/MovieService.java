@@ -11,7 +11,7 @@ import java.util.List;
 public interface MovieService {
     /**
      *
-     * @param tId 影院id
+     * @param tId 影院id 影院id
      * @param showState 上映状态
      * @param cId 影片状态
      * @param sortBy 排序依据
@@ -21,7 +21,7 @@ public interface MovieService {
 
     /**
      * 影片下拉列表
-     * @param tId
+     * @param tId 影院id
      * @return
      */
     List<MovieOptionVo> optionList(Long tId);
@@ -36,27 +36,31 @@ public interface MovieService {
 
     /**
      * 影片详情
-     * @param mId 电影id
-     * @param tId 影院id
+     * @param mId 影院id 电影id
+     * @param tId 影院id 影院id
      * @return
      */
-    MovieListVo movieDetail(Long mId,Long tId);
+    Movie movieDetail(Long mId,Long tId);
 
     /**
      * 编辑电影
      * @param addMovieRequest
-     * @param tId 影片id
+     * @param tId 影院id 影片id
      * @return
      */
     boolean editMovie(AddMovieRequest addMovieRequest,Long tId) throws ParseException;
 
     /**
      * 删除影片
-     * @param mId 影片id
-     * @param tId 影院id
+     * @param mId 影院id 影片id
+     * @param tId 影院id 影院id
      * @return
      */
     boolean deleteMovie(Long mId,Long tId);
 
+    /**
+     * 影片定时检查
+     */
+    void movieCheckTask();
 
 }

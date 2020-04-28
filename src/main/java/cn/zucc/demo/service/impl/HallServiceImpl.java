@@ -1,15 +1,15 @@
 package cn.zucc.demo.service.impl;
 
-import cn.zucc.demo.bean.Hall;
-import cn.zucc.demo.bean.OrderDetail;
-import cn.zucc.demo.bean.SeatDetail;
+import cn.zucc.demo.bean.*;
 import cn.zucc.demo.dao.HallDao;
 import cn.zucc.demo.dao.OrderDetailDao;
-import cn.zucc.demo.dao.SeatDetailDao;
+import cn.zucc.demo.dao.ScreenDao;
 import cn.zucc.demo.enums.DeleteFlagEnum;
+import cn.zucc.demo.enums.ShowStateEnum;
 import cn.zucc.demo.enums.UseStateEnum;
 import cn.zucc.demo.exception.TheaterException;
 import cn.zucc.demo.form.AddHallRequest;
+import cn.zucc.demo.form.EditHallRequest;
 import cn.zucc.demo.mapping.ResultMapping;
 import cn.zucc.demo.service.HallService;
 import cn.zucc.demo.service.SeatDetailService;
@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,6 +41,9 @@ public class HallServiceImpl implements HallService {
    @Autowired
     private OrderDetailDao orderDetailDao;
 
+   @Autowired
+   private ScreenDao screenDao;
+
 
     @Override
     @Transactional
@@ -49,7 +51,7 @@ public class HallServiceImpl implements HallService {
         Hall hall=new Hall();
         BeanUtils.copyProperties(addHallRequest,hall);
         hall.setTId(tId);
-        hall.setUseState(UseStateEnum.IN_SPARE.getValue());
+        hall.setUseState(UseStateEnum.IN_USE.getValue());
         hall.setDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
         hall= hallDao.save(hall);
         for(SeatAddVo seatVo:addHallRequest.getSeatVos()){
@@ -67,16 +69,17 @@ public class HallServiceImpl implements HallService {
     @Transactional
     public boolean deleteHall(Long hId, Long tId) {
         Hall hall=hallDao.findOne(hId);
-        if (hall.getUseState()==UseStateEnum.IN_USE.getValue()){
-            throw new TheaterException(ResultMapping.IN_USE);//使用中
-        }
-        List<HallTimeTableVo> list=hallDao.hallTimeTableList(hId,tId);
-        if (list.size()==0){//判断放映列表长度
+
+        List<Screen> screens=screenDao.findByShowStateNotAndHIdAndDeleteFlag(ShowStateEnum.SOLD_OUT.getValue(),hId,DeleteFlagEnum.UN_DELETE.getValue());//查看播放厅时刻表
+        if (screens.size()==0 ){//判断放映列表长度
             hall.setDeleteFlag(DeleteFlagEnum.IS_DELETE.getValue());
+            hallDao.save(hall);
             return true;
         }
         else {
-            throw new TheaterException(ResultMapping.IN_USE);//使用中
+            hall.setUseState(UseStateEnum.WILL_EDIT.getValue());
+            hallDao.save(hall);
+            throw new TheaterException(ResultMapping.CHANGE_TO_WILL_EDIT);
         }
 
     }
@@ -91,7 +94,7 @@ public class HallServiceImpl implements HallService {
 
     @Override
     public List<HallOptionVo> optionList(Long tId) {
-        List<Hall> list=hallDao.findByTIdAndDeleteFlagOrderBySeatCount(tId,DeleteFlagEnum.UN_DELETE.getValue());
+        List<Hall> list=hallDao.findByTIdAndDeleteFlagAndUseStateOrderBySeatCount(tId,DeleteFlagEnum.UN_DELETE.getValue(),UseStateEnum.IN_USE.getValue());
         List<HallOptionVo> optionVos=new ArrayList<>();
         for(Hall hall:list){
             HallOptionVo optionVo=new HallOptionVo();
@@ -106,11 +109,12 @@ public class HallServiceImpl implements HallService {
     public HallDetailVo hallDetail(Long hId, Long tId) {
         Hall hall=hallDao.findOne(hId);
         List<SeatDetail> seats=seatDetailService.findList(hId, tId);
-        List<SeatAddVo> vos=new ArrayList<>();
+        List<SeatDelVo> vos=new ArrayList<>();
         for (SeatDetail seat:seats){
-            SeatAddVo vo=new SeatAddVo();
+            SeatDelVo vo=new SeatDelVo();
             vo.setXAxis(seat.getXAxis());
             vo.setYAxis(seat.getYAxis());
+            vo.setSdId(seat.getSdId());
             vos.add(vo);
         }
         HallDetailVo hallDetail=new HallDetailVo();
@@ -121,58 +125,48 @@ public class HallServiceImpl implements HallService {
 
     @Override
     @Transactional
-    public boolean editHall(Long hId,List<SeatVo> seatVos,AddHallRequest addHallRequest, Long tId) {
-        Hall hall=hallDao.findOne(hId);
-        if (hall.getUseState()==UseStateEnum.IN_USE.getValue()){
-            throw new TheaterException(ResultMapping.IN_USE);
-        }
-        List<HallTimeTableVo> list=hallDao.hallTimeTableList(hId,tId);
-        if (list.size()==0){
-            for(SeatVo seatVo:seatVos){
-                if(seatVo.getXAxis()<hall.getRows()&&seatVo.getYAxis()<hall.getCols()){
-                    SeatDetail seatDetail=SeatDetail.builder()
-                            .hId(hId)
-                            .sdId(seatVo.getSdId())
-                            .xAxis(seatVo.getXAxis())
-                            .yAxis(seatVo.getYAxis())
-                            .useState(seatVo.getUseState())
-                            .tId(tId)
-                            .build();
-                    seatDetailService.editSeatDetail(seatDetail);
+    public boolean editHall(EditHallRequest request, Long tId) {
+        Hall hall=hallDao.findOne(request.getHId());
+        BeanUtils.copyProperties(hall,request);
+
+        List<Screen> screens=screenDao.findByShowStateNotAndHIdAndDeleteFlag(ShowStateEnum.SOLD_OUT.getValue(),hall.getHId(),DeleteFlagEnum.UN_DELETE.getValue());//查看播放厅时刻表
+        if (screens.size()==0 ){//判断放映列表长度
+            BeanUtils.copyProperties(hall,request);
+            for(SeatAddVo seatVo:request.getAddSeatVos()){//新增座位
+                if(seatVo.getXAxis()<=hall.getRows()&&seatVo.getYAxis()<=hall.getCols()){
+                    seatDetailService.addSeatDetail(seatVo,hall.getHId(),tId);
                 }
                 else{
                     throw new TheaterException(ResultMapping.OUT_OF_RANGE);
                 }
             }
+            for(Long sdId:request.getDelSeatVos()){//删除座位
+                seatDetailService.deleteSeatDetail(sdId,tId);
+
+            }
             return true;
+        }else {
+            hall.setUseState(UseStateEnum.WILL_EDIT.getValue());
+            hallDao.save(hall);
+            throw new TheaterException(ResultMapping.CHANGE_TO_WILL_EDIT);
         }
 
 
-        return false;
     }
 
-    @Override
-    public List<HallTimeTableVo> hallTimeTable(Long hId, Date startTime, Date endTime, Long tId) {
-//        List<Map<String,Object>> objects=hallDao.findhallTimeTable(hId, startTime, endTime, tId);
-//        List<HallTimeTableVo> list=new ArrayList<>();
-//        for(Map<String,Object> object :objects){
-//            list.add(HallTimeTableVo.ObjectToVO(object));
-//        }
 
-        return null;
-    }
 
     @Override
-    public List<SeatVo> getSeat(Long hId,Long tId,Long sId) {
+    public List<BookSeatVo> getSeat(Long hId, Long tId, Long sId) {
         List<SeatDetail> seatDetails=seatDetailService.findList(hId,tId);
         List<OrderDetail> orderDetails=orderDetailDao.findBySIdAndDeleteFlag(sId,DeleteFlagEnum.UN_DELETE.getValue());
         List<Long> useSDId=new ArrayList<>();//已经预定的座位
         for(OrderDetail orderDetail:orderDetails){
             useSDId.add(orderDetail.getSdId());
         }
-        List<SeatVo> list=new ArrayList<>();
+        List<BookSeatVo> list=new ArrayList<>();
         for (SeatDetail seatDetail:seatDetails){
-            SeatVo vo=new SeatVo(seatDetail.getSdId(),seatDetail.getXAxis(),seatDetail.getYAxis(),UseStateEnum.IN_SPARE.getValue());
+            BookSeatVo vo=new BookSeatVo(seatDetail.getSdId(),seatDetail.getXAxis(),seatDetail.getYAxis(),UseStateEnum.IN_SPARE.getValue());
             if(useSDId.contains(vo.getSdId())){
                 vo.setUseState(UseStateEnum.IN_USE.getValue());
             }
@@ -180,5 +174,25 @@ public class HallServiceImpl implements HallService {
         }
 
         return list;
+    }
+
+    @Override
+    public void HallCheackTask() {
+        List<Hall> halls=hallDao.findByDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
+        for (Hall hall:halls){
+            if(hall.getUseState()==UseStateEnum.WILL_EDIT.getValue()){
+                List<Screen> screens=screenDao.findByShowStateNotAndHIdAndDeleteFlag(ShowStateEnum.SOLD_OUT.getValue(),hall.getHId(),DeleteFlagEnum.UN_DELETE.getValue());//查看播放厅时刻表
+                if (screens.size()==0 ){//判断放映列表长度
+                   hall.setUseState(UseStateEnum.CAN_EDIT.getValue());
+                   hallDao.save(hall);
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public List<ScreenListVo> getHallSreenList(Long hId) {
+        return null;
     }
 }

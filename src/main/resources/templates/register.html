@@ -129,6 +129,12 @@
             <input type="text"  value="" name="intervalTime" id="intervalTime"/>
         </div>
         <div class="inputone">
+            <span>间隔时间</span>
+            <input type="text"  value="" placeholder="09:30" name="startTime" id="startTime"/><p>-</p>
+            <input type="text"  value="" placeholder="24:00" name="endTime" id="endTime"/>
+
+        </div>
+        <div class="inputone">
             <span>密码</span>
             <input type="password"  value="" name="pwd" id="tpwd"/>
         </div>
@@ -170,6 +176,8 @@
             var tAddress = $('#tAddress').val();
             var tCreditCode = $('#tCreditCode').val();
             var intervalTime = $('#intervalTime').val();
+            var startTime = $('#startTime').val();
+            var endTime = $('#endTime').val();
             var pwd = $('#pwd').val();
             var repeatpwd = $('#repeatpwd').val();
 
@@ -185,6 +193,8 @@
                     tContactPhone: tContactPhone,
                     tAddress: tAddress,
                     tCreditCode: tCreditCode,
+                    startTime:startTime,
+                    endTime:endTime,
                     pwd: pwd
                 };
                 $.ajax({

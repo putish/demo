@@ -1,8 +1,10 @@
 package cn.zucc.demo.service.impl;
 
 import cn.zucc.demo.bean.Movie;
+import cn.zucc.demo.bean.Screen;
 import cn.zucc.demo.bean.Theater;
 import cn.zucc.demo.dao.*;
+import cn.zucc.demo.enums.DeleteFlagEnum;
 import cn.zucc.demo.enums.ShowStateEnum;
 import cn.zucc.demo.exception.TheaterException;
 import cn.zucc.demo.form.AddMovieRequest;
@@ -52,32 +54,35 @@ public class MovieServiceImpl implements MovieService {
         for (Movie movie:movies){
             if (cId==null||movie.getFicId()==cId||movie.getSecId()==cId||movie.getTId()==cId) {//判断电影类别筛选
                 MovieListVo listVo = new MovieListVo();
-                BeanUtils.copyProperties(movie, listVo);
-                String catergory=catergoryDao.findOne(movie.getFicId()).getCName();
-                Long tickets = screenDao.countTicket(movie.getMId(), movie.getTId());
-                listVo.setTickets(tickets==null?0:tickets);
+                BeanUtils.copyProperties(listVo, movie);
 
-                Long seats = screenDao.countSeat(movie.getMId(), movie.getTId());
-                if(seats==null){
-                    listVo.setAttendence(BigDecimal.ZERO);
-                }
-                else {
-                    listVo.setAttendence(BigDecimal.valueOf((tickets / seats)));
-                }
+                String catergory=catergoryDao.findOne(movie.getFicId()).getCName();//类别转成字符串
                 if(movie.getSecId()!=null){
                     catergory=catergory+"/"+catergoryDao.findOne(movie.getSecId()).getCName();
                     if(movie.getThcId()!=null){
                         catergory=catergory+"/"+catergoryDao.findOne(movie.getThcId()).getCName();
                     }
                 }
+
+                Long tickets = screenDao.countTicket(movie.getMId(), movie.getTId());//记录票房
+                listVo.setTickets(tickets==null?0:tickets);
+
+                Long seats = screenDao.countSeat(movie.getMId(), movie.getTId());//上座率
+                if(seats==null){
+                    listVo.setAttendence(BigDecimal.ZERO);
+                }
+                else {
+                    listVo.setAttendence(BigDecimal.valueOf((tickets / seats)));
+                }
+
                 listVo.setCatergory(catergory);
-                listVo.setShowState(ShowStateEnum.getContentByValue(movie.getShowState()));
+                listVo.setShowState(ShowStateEnum.getContentByValue(movie.getShowState()));//上映状态
                 Theater theater=theaterDao.findOne(tId);
-                listVo.setTName(theater.getTName());
+                listVo.setTName(theater.getTName());//影院名称
                 list.add(listVo);
             }
         }
-        if(sortBy==null||sortBy.equals("票房")) {
+        if(sortBy==null||sortBy.equals("票房")) {//排序方式
             list.sort(new Comparator<MovieListVo>() {
                 @Override
                 public int compare(MovieListVo o1, MovieListVo o2) {
@@ -101,7 +106,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<MovieOptionVo> optionList(Long tId) {
-        List<Movie> list=movieDao.findByTId(tId);
+        List<Movie> list=movieDao.findByTIdAndDeleteFlag(tId,DeleteFlagEnum.UN_DELETE.getValue());
         List<MovieOptionVo> optionVos=new ArrayList<>();
 
         for (Movie movie:list){
@@ -115,13 +120,13 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional
-    public Movie addMovie(AddMovieRequest addMovieRequest, Long tId) throws ParseException {
+    public Movie addMovie(AddMovieRequest request, Long tId) throws ParseException {
         Movie movie=new Movie();
-        BeanUtils.copyProperties(addMovieRequest,movie);
-        movie.setEndTime(DateUtil.toDate(addMovieRequest.getEndTime()));//字符串转时间
-        movie.setShowTime(DateUtil.toDate(addMovieRequest.getShowTime()));
+        BeanUtils.copyProperties(request,movie);
+        movie.setEndTime(DateUtil.toDate(request.getEndTime()));//字符串转时间
+        movie.setShowTime(DateUtil.toDate(request.getShowTime()));
         movie.setTId(tId);
-        String[] cIds=addMovieRequest.getCatergory().split(",");//将拼接字符串转化为id
+        String[] cIds=request.getCatergory().split(",");//将拼接字符串转化为id
         for(int i=0;i<cIds.length;i++) {
             if (i == 0) {
                 movie.setFicId(Long.valueOf(cIds[i]));
@@ -136,46 +141,28 @@ public class MovieServiceImpl implements MovieService {
             throw new TheaterException(ResultMapping.FALUT_SHOWTIME);
         }
         movie.setShowState(ShowStateEnum.IN_SHOW.getValue());
+        movie.setDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
         movieDao.save(movie);
         return movie;
     }
 
     @Override
-    public MovieListVo movieDetail(Long mId, Long tId) {
-        Movie movie= movieDao.findOne(mId);
-        MovieListVo listVo = new MovieListVo();
-        BeanUtils.copyProperties(movie, listVo);
-        String catergory=catergoryDao.findOne(movie.getFicId()).getCName();
-        Long tickets = screenDao.countTicket(movie.getMId(), movie.getTId());
-        listVo.setTickets(tickets==null?0:tickets);
-
-        Long seats = screenDao.countSeat(movie.getMId(), movie.getTId());
-        if(seats==null){
-            listVo.setAttendence(BigDecimal.ZERO);
-        }
-        else {
-            listVo.setAttendence(BigDecimal.valueOf((tickets / seats)));
-        }
-        if(movie.getSecId()!=null){
-            catergory=catergory+"/"+catergoryDao.findOne(movie.getSecId()).getCName();
-            if(movie.getThcId()!=null){
-                catergory=catergory+"/"+catergoryDao.findOne(movie.getThcId()).getCName();
-            }
-        }
-        listVo.setCatergory(catergory);
-        listVo.setShowState(ShowStateEnum.getContentByValue(movie.getShowState()));
-        return listVo;
+    public Movie movieDetail(Long mId, Long tId) {
+        return movieDao.findOne(mId);
     }
 
     @Override
     @Transactional
-    public boolean editMovie(AddMovieRequest addMovieRequest, Long tId) throws ParseException {
+    public boolean editMovie(AddMovieRequest request, Long tId) throws ParseException {
         Movie movie=new Movie();
-        BeanUtils.copyProperties(addMovieRequest,movie);
-        movie.setEndTime(DateUtil.toDate(addMovieRequest.getEndTime()));
-        movie.setShowTime(DateUtil.toDate(addMovieRequest.getShowTime()));
+        if(!DateUtil.toDate(request.getEndTime()).after(DateUtil.getStartTime(new Date(),24*60*3))){
+            throw new TheaterException(ResultMapping.FALUT_SHOWTIME);
+        }
+        BeanUtils.copyProperties(request,movie);
+        movie.setEndTime(DateUtil.toDate(request.getEndTime()));
+        movie.setShowTime(DateUtil.toDate(request.getShowTime()));
         movie.setTId(tId);
-        String[] cIds=addMovieRequest.getCatergory().split(",");
+        String[] cIds=request.getCatergory().split(",");
         for(int i=0;i<cIds.length;i++) {
             if (i == 0) {
                 movie.setFicId(Long.valueOf(cIds[i]));
@@ -189,7 +176,6 @@ public class MovieServiceImpl implements MovieService {
         if (!movie.getShowTime().after(new Date())){
             throw new TheaterException(ResultMapping.FALUT_SHOWTIME);
         }
-        movie.setShowState(ShowStateEnum.IN_SHOW.getValue());
         movieDao.save(movie);
         return true;
     }
@@ -199,14 +185,27 @@ public class MovieServiceImpl implements MovieService {
     public boolean deleteMovie(Long mId, Long tId) {
         Movie movie=movieDao.findOne(mId);
         List<ScreenListVo> list=screenService.screenList(mId,null,null,null,null,tId);
-        if (list.size()==0){
-            movie.setShowState(ShowStateEnum.SOLD_OUT.getValue());
-            movie.setEndTime(new Date());
+        if (list.size()==0){//没有播放场次
+            movie.setDeleteFlag(DeleteFlagEnum.IS_DELETE.getValue());
             movieDao.save(movie);
             return true;
         }else {
             throw new TheaterException(ResultMapping.HAVE_SCREEN);
         }
 
+    }
+
+    @Override
+    public void movieCheckTask() {
+        List<Movie> movies=movieDao.findByShowStateNotAndDeleteFlag(ShowStateEnum.SOLD_OUT.getValue(),DeleteFlagEnum.UN_DELETE.getValue());
+        for (Movie movie:movies){
+            if (movie.getEndTime().after(new Date())){//改变下架上映状态
+                movie.setShowState(ShowStateEnum.SOLD_OUT.getValue());
+                movieDao.save(movie);
+            }else if (movie.getShowTime().after(new Date())) {//改变上映上映状态
+                movie.setShowState(ShowStateEnum.IN_SHOW.getValue());
+                movieDao.save(movie);
+            }
+        }
     }
 }

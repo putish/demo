@@ -31,5 +31,5 @@ public class HallDetailVo {
     //    使用状态
     private Integer useState;
 //座位表
-    private List<SeatAddVo> seatVos;
+    private List<SeatDelVo> seatVos;
 }

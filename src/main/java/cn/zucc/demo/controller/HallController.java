@@ -3,6 +3,7 @@ package cn.zucc.demo.controller;
 import cn.zucc.demo.bean.Hall;
 import cn.zucc.demo.data.RootData;
 import cn.zucc.demo.form.AddHallRequest;
+import cn.zucc.demo.form.EditHallRequest;
 import cn.zucc.demo.service.HallService;
 import cn.zucc.demo.util.ResultUtil;
 import cn.zucc.demo.vo.*;
@@ -12,13 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -32,6 +29,18 @@ public class HallController {
         return "hall";
     }
 
+    /**
+     * 播放厅列表
+     * @param pageNum
+     * @param pageSize
+     * @param useState 使用状态
+     * @param screenCate 屏幕类别
+     * @param startCount 查询座位数目起始
+     * @param endCount 查询座位数目结束
+     * @param session
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/list" ,method = RequestMethod.GET)
     public String findList(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum, @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,@RequestParam(required = false) String useState,@RequestParam(required = false) String screenCate,
                            @RequestParam(required = false) String startCount,@RequestParam(required = false) String endCount,HttpSession session,Model model) {
@@ -72,6 +81,13 @@ public class HallController {
         hallService.addHall( request,tId);
         return "hall";
     }
+
+    /**
+     * 删除播放厅
+     * @param hId
+     * @param session
+     * @return
+     */
     @PostMapping("/delete")
     public String deleteHall(@RequestParam(required = false,value="hId") Long hId
             ,HttpSession session){
@@ -79,27 +95,52 @@ public class HallController {
         hallService.deleteHall(hId, tId);
         return "hall";
     }
+
+    /**
+     * 编辑播放厅
+     * @param request
+     * @param session
+     * @return
+     */
+    @ResponseBody
     @PostMapping("/edit")
-    public RootData editHall(Long hId,List<SeatVo> seatVos, AddHallRequest addHallRequest,HttpSession session){
+    public RootData editHall(@RequestBody  EditHallRequest request, HttpSession session){
         Long tId= (Long) session.getAttribute("tId");
-        hallService.editHall(hId, seatVos, addHallRequest, tId);
+        hallService.editHall(request, tId);
         return ResultUtil.success("编辑成功");
 
     }
-    @GetMapping("/timeTable")
-    public String findTimeTable(Long hId, HttpSession session,Model model){
-        Long tId= (Long) session.getAttribute("tId");
-        List<HallTimeTableVo> list=hallService.hallTimeTable(hId, null, null, tId);
-        model.addAttribute("timeTableVos",list);
-        return "movie";
-    }
+//    @GetMapping("/timeTable")
+//    public String findTimeTable(Long hId, HttpSession session,Model model){
+//        Long tId= (Long) session.getAttribute("tId");
+//        List<HallTimeTableVo> list=hallService.hallTimeTable(hId, null, null, tId);
+//        model.addAttribute("timeTableVos",list);
+//        return "movie";
+//    }
+
+    /**
+     * 获取订票时座位表
+     * @param hId
+     * @param sId
+     * @param session
+     * @param model
+     * @return
+     */
     @ResponseBody
     @GetMapping("/getSeat")
     public RootData getSeat(@RequestParam(required = false) Long hId,@RequestParam(required = false) Long sId, HttpSession session,Model model){
         Long tId= (Long) session.getAttribute("tId");
-        List<SeatVo> list=hallService.getSeat(hId, tId,sId);
+        List<BookSeatVo> list=hallService.getSeat(hId, tId,sId);
         return ResultUtil.success(list);
     }
+
+    /**
+     * 播放厅详情
+     * @param hId
+     * @param session
+     * @param model
+     * @return
+     */
     @ResponseBody
     @GetMapping("/hallDetail")
     public RootData hallDetail(@RequestParam(required = false) Long hId, HttpSession session,Model model){

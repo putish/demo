@@ -31,7 +31,7 @@ public class CatergoryServiceImpl implements CatergoryService {
     private MovieDao movieDao;
     /**
      * 分类列表
-     * @param tId 影院id
+     * @param tId 影院id 影院id
      * @return
      */
     @Override
@@ -44,7 +44,7 @@ public class CatergoryServiceImpl implements CatergoryService {
      * 添加分类
      *
      * @param cName 分类名称
-     * @param tId   影院id
+     * @param tId 影院id   影院id
      * @return
      */
     @Override
@@ -66,7 +66,7 @@ public class CatergoryServiceImpl implements CatergoryService {
      * 删除分类
      *
      * @param cId 分类id
-     * @param tId 影院id
+     * @param tId 影院id 影院id
      * @return
      */
     @Override
@@ -93,7 +93,7 @@ public class CatergoryServiceImpl implements CatergoryService {
      * 分类详情
      *
      * @param cId 分类id
-     * @param tId 影院id
+     * @param tId 影院id 影院id
      * @return
      */
     @Override
@@ -107,7 +107,7 @@ public class CatergoryServiceImpl implements CatergoryService {
      *
      * @param cId   分类id
      * @param cName 分类名称
-     * @param tId   影院id
+     * @param tId 影院id   影院id
      * @return
      */
     @Override
@@ -132,7 +132,7 @@ public class CatergoryServiceImpl implements CatergoryService {
      * 根据id查找
      *
      * @param cId 分类id
-     * @param tId 影院id
+     * @param tId 影院id 影院id
      * @return
      */
     @Override

@@ -24,7 +24,10 @@ public enum  ResultMapping {
     FAULT_PWD(11,"密码错误"),
     CIN_USE(13,"类别使用中"),
     OUT_OF_RANGE(2,"超出范围"),
-    NO_CATERGORY(14,"类别名称重复"),
+    NO_CATERGORY(14,"类别不存在"),
+    CHANGE_TO_WILL_EDIT(15,"转为待编辑"),
+    FALUT_ENDTIME(16,"下架时间在三日内"),
+    REPEAT_USERNAME(12,"用户名重复"),
     REPEAT_CATERGORY(12,"类别名称重复");
     private Integer code;
 

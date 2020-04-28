@@ -12,10 +12,22 @@ import java.util.List;
  */
 public interface ScheduleDao extends JpaRepository<Schedule, Long> {
 
+    /**
+     * 播放厅场次列表
+     * @param mId
+     * @param tId
+     * @param deleteFlag
+     * @return
+     */
     List<Schedule> findByMIdAndTIdAndDeleteFlag(Long mId,Long tId,Integer deleteFlag);
 
-    List<Schedule> findByTIdAndDeleteFlag(Long tId,Integer deleteFlag);
 
-    Schedule findByMIdAndDeleteFlagAndScreenCate(Long mId,Integer deleteFlag,String screenCate);
+    /**
+     * 获得影片的排片表
+     * @param mId 影院id
+     * @param deleteFlag 删除标志
+     * @return
+     */
+    List<Schedule> findByMIdAndDeleteFlag(Long mId,Integer deleteFlag);
 
 }

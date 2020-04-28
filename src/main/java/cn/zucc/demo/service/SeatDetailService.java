@@ -2,7 +2,6 @@ package cn.zucc.demo.service;
 
 import cn.zucc.demo.bean.SeatDetail;
 import cn.zucc.demo.vo.SeatAddVo;
-import cn.zucc.demo.vo.SeatVo;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ public interface SeatDetailService {
      * 添加座位
      * @param seatVo
      * @param hId
-     * @param tId
+     * @param tId 影院id
      * @return
      */
     boolean addSeatDetail(SeatAddVo seatVo, Long hId, Long tId);
@@ -20,7 +19,7 @@ public interface SeatDetailService {
     /**
      * 删除座位
      * @param sdId
-     * @param tId
+     * @param tId 影院id
      * @return
      */
     boolean deleteSeatDetail(Long sdId,Long tId);
@@ -28,7 +27,7 @@ public interface SeatDetailService {
     /**
      * 座位列表
      * @param hId
-     * @param tId
+     * @param tId 影院id
      * @return
      */
     List<SeatDetail> findList(Long hId,Long tId);
@@ -43,7 +42,7 @@ public interface SeatDetailService {
     /**
      * 座位详情
      * @param sdId
-     * @param tId
+     * @param tId 影院id
      * @return
      */
     SeatDetail SeatDetailDetil(Long sdId,Long tId);

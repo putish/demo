@@ -7,7 +7,7 @@ import java.util.List;
 public interface CatergoryService {
     /**
      * 分类列表
-     * @param tId 影院id
+     * @param tId 影院id 影院id
      * @return
      */
     List<Catergory> findList(Long tId);
@@ -15,7 +15,7 @@ public interface CatergoryService {
     /**
      * 添加分类
      * @param cName 分类名称
-     * @param tId 影院id
+     * @param tId 影院id 影院id
      * @return
      */
     Catergory addCatergory(String cName,Long tId);
@@ -23,7 +23,7 @@ public interface CatergoryService {
     /**
      * 删除分类
      * @param cId 分类id
-     * @param tId 影院id
+     * @param tId 影院id 影院id
      * @return
      */
     boolean deteleCatergory(Long cId,Long tId);
@@ -31,7 +31,7 @@ public interface CatergoryService {
     /**
      * 分类详情
      * @param cId 分类id
-     * @param tId 影院id
+     * @param tId 影院id 影院id
      * @return
      */
     Catergory catergoryDetail(Long cId,Long tId);
@@ -40,7 +40,7 @@ public interface CatergoryService {
      * 编辑分类
      * @param cId 分类id
      * @param cName 分类名称
-     * @param tId 影院id
+     * @param tId 影院id 影院id
      * @return
      */
     boolean editCatergory(Long cId, String cName,Long tId);
@@ -48,7 +48,7 @@ public interface CatergoryService {
     /**
      * 根据id查找
      * @param cId 分类id
-     * @param tId 影院id
+     * @param tId 影院id 影院id
      * @return
      */
     Catergory findById(Long cId,Long tId);

@@ -40,10 +40,6 @@
 
             </datalist>
             <span>类型：</span>
-<!--            <input type="text" list="b_list" name="cId" id="cId"  value="" />-->
-<!--            <datalist id="b_list" >-->
-<!--                <option th:each="catergory:${options}"  ></option>-->
-<!--            </datalist>-->
             <select id="cId" name="cId" lay-verify="required">
                 <option value="" style="display: none"></option>
                 <option th:each="catergory:${options}"  th:text="${catergory.cName}" th:value="${catergory.cId}"  ></option>
@@ -165,10 +161,6 @@
                             <span>简介：</span>
                             <input id="description" name="description" type="text"/>
 
-                        </div>
-                        <div class="inputone">
-                            <span>价格：</span>
-                            <input id="price" name="price" type="text"/>
                         </div>
                         <div class="inputone">
                             <span>上映时间</span>

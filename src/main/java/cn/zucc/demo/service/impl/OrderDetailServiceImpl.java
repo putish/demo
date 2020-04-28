@@ -67,9 +67,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public boolean deleteOrderDetail(Long odId) {
         OrderDetail orderDetail=orderDetailDao.findOne(odId);
         orderDetail.setDeleteFlag(DeleteFlagEnum.IS_DELETE.getValue());
-        SeatDetail seatDetail=seatDetailDao.findOne(orderDetail.getSdId());
-        seatDetail.setUseState(UseStateEnum.IN_SPARE.getValue());
-        seatDetailDao.save(seatDetail);
+
         Screen screen=screenDao.findOne(orderDetail.getSId());
         screen.setTicketCount(screen.getTicketCount()-1);//已售票数减一
         screenDao.save(screen);
