@@ -4,7 +4,6 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -51,5 +50,5 @@ public class MovieListVo {
 //    上座率
     private BigDecimal attendence;
     //    影院下拉选项
-    private String tName;
+    private List<TheaterOptionVo> theaters;
 }

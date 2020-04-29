@@ -56,7 +56,7 @@ public class MovieController {
     }
 
     /**
-     * 影片列表
+     * 影院端影片列表
      * @param session
      * @param pageNum 当前页面
      * @param pageSize 页面大小
@@ -67,11 +67,20 @@ public class MovieController {
      * @param model
      * @return
      */
-    @GetMapping("/list")
-    public String list(HttpSession session,@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize",defaultValue = "2") int pageSize, @RequestParam(required = false) Integer showState, @RequestParam(required = false) String mName,
-                       @RequestParam(required = false) Long cId, @RequestParam(required = false) String sortBy, Model model){
+    @GetMapping("/theaterlist")
+    public String theaterlist(HttpSession session,@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize",defaultValue = "2") int pageSize,
+                              @RequestParam(required = false) String showState, @RequestParam(required = false) String mName,
+                              @RequestParam(required = false) Long cId, @RequestParam(required = false) String sortBy, Model model){
         Long tId= (Long) session.getAttribute("tId");
-        List<MovieListVo> list=movieService.findList(tId, showState, cId, sortBy,mName==null?null:"%"+mName+"%");
+        Integer showStateEnum=null;
+        if (showState=="即将上映"){
+            showStateEnum=1;
+        }else if (showState=="上映"){
+            showStateEnum=2;
+        }else if (showState=="下架"){
+            showStateEnum=3;
+        }
+        List<MovieListVo> list=movieService.findList(tId, showStateEnum, cId, sortBy,mName==null?null:"%"+mName+"%");
         Page<MovieListVo> page=PageHelper.startPage(pageNum, pageSize);
         PageInfo<MovieListVo> pageInfo=page.toPageInfo();
         pageInfo.setList(list);
@@ -80,7 +89,26 @@ public class MovieController {
         model.addAttribute("list",pageInfo);
         return "movie";
     }
-
+    @GetMapping("/userlist")
+    public String userlist(HttpSession session,@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize",defaultValue = "2") int pageSize,
+                           @RequestParam(required = false) String showState, @RequestParam(required = false) String mName,
+                       @RequestParam(required = false) Long cId, @RequestParam(required = false) String sortBy, Model model){
+        Long uId= (Long) session.getAttribute("uId");
+        Integer showStateEnum=null;
+        if (showState=="即将上映"){
+            showStateEnum=1;
+        }else if (showState=="上映"){
+            showStateEnum=2;
+        }else if (showState=="下架"){
+            showStateEnum=3;
+        }
+        List<MovieListVo> list=movieService.findList(null, showStateEnum, cId, sortBy,mName==null?null:"%"+mName+"%");
+        Page<MovieListVo> page=PageHelper.startPage(pageNum, pageSize);
+        PageInfo<MovieListVo> pageInfo=page.toPageInfo();
+        pageInfo.setList(list);
+        model.addAttribute("list",pageInfo);
+        return "movielist";
+    }
     @GetMapping("/indexlist")
     public String indexlist( HttpSession session,Model model){
         Long tId= (Long) session.getAttribute("tId");

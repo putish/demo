@@ -15,6 +15,7 @@ import cn.zucc.demo.util.DateUtil;
 import cn.zucc.demo.vo.MovieListVo;
 import cn.zucc.demo.vo.MovieOptionVo;
 import cn.zucc.demo.vo.ScreenListVo;
+import cn.zucc.demo.vo.TheaterOptionVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,13 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<MovieListVo> findList(Long tId, Integer showState, Long cId,String sortBy,String mName) {
-        List<Movie> movies=movieDao.findList(tId,showState,mName);
+        List<Movie> movies =new ArrayList<>();
+        if(tId==null){
+            movies = movieDao.findUserMovieList(mName);//用户账号登录
+
+        }else {
+            movies = movieDao.findList(tId, showState, mName);
+        }
 
         List<MovieListVo> list=new ArrayList<>();
         for (Movie movie:movies){
@@ -77,8 +84,16 @@ public class MovieServiceImpl implements MovieService {
 
                 listVo.setCatergory(catergory);
                 listVo.setShowState(ShowStateEnum.getContentByValue(movie.getShowState()));//上映状态
-                Theater theater=theaterDao.findOne(tId);
-                listVo.setTName(theater.getTName());//影院名称
+                if(tId==null){//用户登入后，赋值影院下拉框
+                    List<Long> tIdList=movieDao.tIdList(movie.getMName());
+                    List<TheaterOptionVo> theaters=new ArrayList<>();
+                    for (Long id:tIdList){
+                        TheaterOptionVo vo=new TheaterOptionVo();
+                        Theater theater=theaterDao.findOne(id);
+                        vo.setTId(id);
+                        vo.setTName(theater.getTName());
+                    }
+                }
                 list.add(listVo);
             }
         }
@@ -154,7 +169,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional
     public boolean editMovie(AddMovieRequest request, Long tId) throws ParseException {
-        Movie movie=new Movie();
+        Movie movie=movieDao.findOne(request.getMId());
         if(!DateUtil.toDate(request.getEndTime()).after(DateUtil.getStartTime(new Date(),24*60*3))){
             throw new TheaterException(ResultMapping.FALUT_SHOWTIME);
         }

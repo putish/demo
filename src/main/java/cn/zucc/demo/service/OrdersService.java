@@ -6,6 +6,7 @@ import cn.zucc.demo.form.AddOrdersRequest;
 import cn.zucc.demo.vo.OrdersDetailVo;
 import cn.zucc.demo.vo.OrdersListVo;
 
+import java.util.Date;
 import java.util.List;
 
 public interface OrdersService {
@@ -13,10 +14,10 @@ public interface OrdersService {
     /**
      * 添加订单
      * @param requests
-     * @param tId 影院id
+     * @param uId 用户id
      * @return
      */
-    boolean addOrders(List<AddOrderDetailRequest> requests, Long tId);
+    boolean addOrders(List<AddOrderDetailRequest> requests, Long uId);
 
     /**
      * 支付订单
@@ -31,14 +32,14 @@ public interface OrdersService {
      * @param uId
      * @return
      */
-    boolean deleteOrders(Long oId,Long uId,Long tId);
+    boolean unsubscribeOrders(Long oId,Long uId);
 
     /**
      * 订单列表
      * @param tId 影院id
      * @return
      */
-    List<OrdersListVo> findList(Long tId,Integer oState);
+    List<OrdersListVo> findList(Long tId,Long uId, Integer oState, Date startTime,Date endTime);
 
     /**
      * 订单详情

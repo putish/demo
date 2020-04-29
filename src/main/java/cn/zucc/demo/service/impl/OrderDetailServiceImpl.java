@@ -54,8 +54,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         seatDetail.setUseState(UseStateEnum.IN_USE.getValue());
         seatDetailDao.save(seatDetail);
         Screen screen=screenDao.findOne(orderDetail.getSId());
-        Movie movie=movieDao.findOne(screen.getMId());
-        orderDetail.setPrice(movie.getPrice());
+        orderDetail.setPrice(screen.getPrice());
         screen.setTicketCount(screen.getTicketCount()+1);//已售票数加一
         screenDao.save(screen);
         orderDetailDao.save(orderDetail);

@@ -240,4 +240,6 @@ li{
     margin-right: 40px;
     float: left;
 }
-
+#edit{
+    display: none;
+}

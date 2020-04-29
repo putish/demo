@@ -14,6 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddMovieRequest {
+    private Long mId;
     //    电影名称
     private String mName;
     //    海报

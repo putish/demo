@@ -37,7 +37,14 @@
 
                         <p class="movie_description"><textarea rows="4" th:text="${movie.description}" readonly="readonly"></textarea></p>
                         <p class="movie_price" th:text="${movie.price}+' ￥'">￥</p>
-                        <button><a th:href="'/screen/book?mId='+${movie.mId}"></a>选座购票</button>
+                        <div class="theaterOption" id="theaterOption">
+                            <span>影院：</span>
+                            <select required="required" multiple="multiple" size="3" lay-verify="required">
+                                <option value="" style="display: none"></option>
+                                <option th:each="theater:${movie.theaters}"  th:text="${theater.tName}" th:value="${theater.tId}"  ></option>
+                            </select>
+                        </div>
+                        <button><a th:href="'/screen/book?mId='+${movie.mId}+'&tId='+${theater.tId}"></a>选座购票</button>
                     </div>
 
 <!--                </div>-->

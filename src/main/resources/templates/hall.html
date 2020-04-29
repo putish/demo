@@ -83,26 +83,6 @@
                 <td></td>
                 <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>
             </tr>
-<!--            <div class="page-footer">-->
-<!--                <ul class="pagination pull-right no-margin">-->
-<!--                    <li>-->
-<!--                        <a th:href="'/hall/list?pageNum=1'">首页</a>-->
-<!--                    </li>-->
-<!--                    <li th:if="${list.isHasPreviousPage()}">-->
-<!--                        <a th:href="'/hall/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>-->
-<!--                    </li>-->
-<!--                    <li th:if="${list.isHasNextPage()}">-->
-<!--                        <a th:href="'/hall/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                        <a th:href="'/hall/list?pageNum=' + ${list.pages - 1}">尾页</a>-->
-<!--                    </li>-->
-
-<!--                </ul>-->
-<!--            </div>-->
-
-
-
 
         </table>
 
@@ -142,13 +122,9 @@
                     </form>
                 </div>
                 <div class="modal-footer" id="add-footer">
-                    <button  class="btn btn-default" data-dismiss="modal">关闭
-                    </button>
-                    <button data-toggle="modal"  onclick="createSeats()">座位表</button>
+                    <button id="createSeat" data-toggle="modal"  onclick="createSeats()">座位表</button>
+                    <button id="editSeat" data-toggle="modal"  onclick="editSeats()">座位表</button>
 
-                    <button  class="btn btn-primary">
-                        提交更改
-                    </button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
@@ -169,8 +145,11 @@
                 </div>
                 <div class="modal-footer" id="seat-footer">
 
-                    <button  class="btn btn-primary" onclick="closeSeat()">
-                        提交
+                    <button id="createHallSeat" class="btn btn-primary" onclick="createHallSeat()">
+                        新增座位表
+                    </button>
+                    <button id="editHallSeat" class="btn btn-primary" onclick="editHallSeat()">
+                        编辑座位表
                     </button>
                 </div>
             </div><!-- /.modal-content -->
@@ -181,7 +160,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" id="timeTableclose" aria-hidden="true">
+                    <button type="button" class="close" data-dismiss="timeTableModal" id="timeTableclose" aria-hidden="true">
                         &times;
                     </button>
                     <h4 class="modal-title" >
@@ -189,39 +168,19 @@
                     </h4>
                 </div>
                 <div class="modal-body" id="timeTable">
-                    <input name="hId" hidden="hidden"/>
-                    <form th:action="@{/hall/timeTable}" method="get"></form>
                     <table >
 
-                        <tr>
+                        <tr >
                             <th>影厅名称</th>
                             <th>影片名称</th>
                             <th>播放开始时间</th>
                             <th>播放结束时间</th>
                         </tr>
-                        <tr >
-                            <td >1</td>
-                            <td >冰雪奇缘</td>
-                            <td>2020-04-08 16:30</td>
-                            <td>2020-04-08 18:30</td>
-                        </tr>
-                        <tr >
-                            <td >1</td>
-                            <td >冰雪奇缘</td>
-                            <td>2020-04-08 18:50</td>
-                            <td>2020-04-08 20:50</td>
-                        </tr>
-                        <tr >
-                            <td >1</td>
-                            <td >乌龙院</td>
-                            <td>2020-04-09 8:30</td>
-                            <td >2020-04-09 10:11</td>
-                        </tr>
-                        <tr >
-                            <td >1</td>
-                            <td >乌龙院</td>
-                            <td>2020-04-09 10:31</td>
-                            <td >2020-04-09 12:31</td>
+                        <tr th:each="screen:${list.getContent().getscreenListVos()}">
+                            <td th:text="${screen.hName}"></td>
+                            <td th:text="${screen.mName}"></td>
+                            <td th:text="${screen.startTime}"></td>
+                            <td th:text="${screen.startTime}"><td>
                         </tr>
 
                     </table>

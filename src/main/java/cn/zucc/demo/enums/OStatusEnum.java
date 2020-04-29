@@ -10,9 +10,9 @@ import java.util.List;
  **/
 
 public enum OStatusEnum implements BaseEnum<Integer, OStatusEnum> {
-    YU_DINGH(1,"预订状态"),
+    YU_DINGH(1,"预订"),
     TUI_DING(2,"退订"),
-    FINISH(3,"完成");
+    FINISH(3,"支付完成");
 
 
 

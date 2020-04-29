@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -44,9 +45,8 @@ public class ScreenController {
      * @return
      */
     @GetMapping("/book")
-    public String screenList(@RequestParam(required = false) Long mId, HttpSession session, Model model){
-        Long tId= (Long) session.getAttribute("tId");
-        MovieListVo movie=movieService.movieDetail(mId,tId);
+    public String screenList(@RequestParam(required = false) Long mId, @RequestParam(required = false) Long tId, Model model){
+        Movie movie=movieService.movieDetail(mId,tId);
         model.addAttribute("movie",movie);
         Date today=DateUtil.initDateByDay();//今日零点
         Date tommorrow= DateUtil.getEndTime(today,60*24);//明日零点
@@ -65,9 +65,9 @@ public class ScreenController {
     @GetMapping("/")
     public String index(){return "book";}
     @PostMapping("/addscreen")
-    public String screenList(Long mId, Long hId, String startTime,Long tId, Model model) throws ParseException {
-//        Long tId= (Long) session.getAttribute("tId");
-        screenService.addScreen(mId,hId,DateUtil.toDate(startTime),tId);
+    public String screenList(Long mId, Long hId, String startTime, BigDecimal price, String screenCate, HttpSession session, Model model) throws ParseException {
+        Long tId= (Long) session.getAttribute("tId");
+        screenService.addScreen(mId,hId,DateUtil.toDate(startTime),price, screenCate, tId);
         return "book";
 
     }

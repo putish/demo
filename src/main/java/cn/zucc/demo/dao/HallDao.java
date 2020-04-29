@@ -3,6 +3,7 @@ package cn.zucc.demo.dao;
 import cn.zucc.demo.bean.Hall;
 import cn.zucc.demo.bean.Movie;
 import cn.zucc.demo.bean.Screen;
+import cn.zucc.demo.vo.HallListVo;
 import cn.zucc.demo.vo.HallTimeTableVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +54,7 @@ public interface HallDao extends JpaRepository<Hall,Long> {
     @Query(nativeQuery = true,value = "SELECT * from hall WHERE (use_state= ?1 OR ?1 is null) AND (screen_cate= ?2 " +
             "OR ?2 is null) AND (seat_count> ?3 OR ?3 is null) AND (seat_count< ?4 OR ?4 is null) " +
             "AND delete_flag=1 AND t_id=?5 ORDER BY ?#{#pageable}")
-    Page<Hall> findList(Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId, Pageable pageable);
+    Page<HallListVo> findList(Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId, Pageable pageable);
 
 //    /**
 //     * 播放厅时刻表

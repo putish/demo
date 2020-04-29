@@ -152,4 +152,6 @@
     margin-right: 40px;
     float: left;
 }
-
+#editButton{
+    display: none;
+}

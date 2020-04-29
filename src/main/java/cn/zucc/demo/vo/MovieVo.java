@@ -45,5 +45,5 @@ public class MovieVo {
     //    上座率
     private BigDecimal attendence;
     //    影院下拉选项
-    private List<TheatherOptionVo> optionVo;
+    private List<TheaterOptionVo> optionVo;
 }

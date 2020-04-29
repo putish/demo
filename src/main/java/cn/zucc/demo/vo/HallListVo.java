@@ -3,6 +3,8 @@ package cn.zucc.demo.vo;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * @description: 播放厅列表
  * @author: hjj
@@ -28,4 +30,6 @@ public class HallListVo {
     private String useState;
     //    删除标志
     private Integer deleteFlag;
+
+    private List<ScreenListVo> screenListVos;
 }

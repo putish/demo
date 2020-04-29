@@ -12,6 +12,7 @@ import cn.zucc.demo.form.AddHallRequest;
 import cn.zucc.demo.form.EditHallRequest;
 import cn.zucc.demo.mapping.ResultMapping;
 import cn.zucc.demo.service.HallService;
+import cn.zucc.demo.service.ScreenService;
 import cn.zucc.demo.service.SeatDetailService;
 import cn.zucc.demo.vo.*;
 import org.springframework.beans.BeanUtils;
@@ -37,6 +38,9 @@ public class HallServiceImpl implements HallService {
 
    @Autowired
    private SeatDetailService seatDetailService;
+
+    @Autowired
+    private ScreenService screenService;
 
    @Autowired
     private OrderDetailDao orderDetailDao;
@@ -85,10 +89,16 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    public Page<Hall> findList(Integer pageNum, Integer pageSize,Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId) {
+    public Page<HallListVo> findList(Integer pageNum, Integer pageSize,Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId) {
         Pageable pageable =  new PageRequest(pageNum,pageSize);
 
-        Page<Hall> list=hallDao.findList(useState,screenCate,startCount,endCount,tId,pageable);
+        Page<HallListVo> list=hallDao.findList(useState,screenCate,startCount,endCount,tId,pageable);
+
+        for (HallListVo hallListVo:list){
+            List<ScreenListVo> listVos=screenService.screenList(null,hallListVo.getHId(),null,null,null,null);
+            hallListVo.setScreenListVos(listVos);
+        }
+
         return list;
     }
 

@@ -41,7 +41,7 @@ public class OrdersServiceImpl implements OrdersService {
     private MovieDao movieDao;
 
     @Autowired
-    private CouponDao couponDao;
+    private ScreenDao screenDao;
 
     @Autowired
     private UsersDao usersDao;
@@ -51,33 +51,22 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     @Transactional
-    public boolean addOrders(List<AddOrderDetailRequest> requests, Long tId) {
+    public boolean addOrders(List<AddOrderDetailRequest> requests, Long uId) {
         Orders orders=new Orders();
         BigDecimal prices=BigDecimal.ZERO;
-//        if (addOrdersRequest.getCoId()!=null) {
-//            orders.setCoId(addOrdersRequest.getCoId());
-//            Coupon coupon=couponDao.findOne(orders.getCoId());
-//            if (prices.compareTo(BigDecimal.valueOf(coupon.getConditions()))==1){
-//                prices.subtract(BigDecimal.valueOf(coupon.getQutoa()));
-//                coupon.setUseState(UseStateEnum.IN_USE.getValue());
-//            }
-//        }
+
         orders.setOStatus(OStatusEnum.YU_DINGH.getValue());
         orders.setStartTime(new Date());
-        orders.setUId(Long.valueOf(1));
-        orders.setTId(tId);
+        orders.setUId(uId);
+        Screen screen=screenDao.findOne(requests.get(0).getSId());//获取影院id
         orders=ordersDao.save(orders);
+        orders.setTId(screen.getTId());
         for(AddOrderDetailRequest request:requests){//添加订单详情
             OrderDetail orderDetail=orderDetailService.addOrderDetail(request,orders.getOId());
             prices.add(orderDetail.getPrice());
+            if(orders.getTId()==null){
+            }
         }
-
-
-//        Users users=usersDao.findOne(Long.valueOf(1));
-//        if (users.getIsvip()==1){
-//            Theater theater=theaterDao.findOne(tId);
-//            prices.multiply(theater.getVipDiscount());
-//        }
         orders.setPrice(prices);
         ordersDao.save(orders);//保存价格
         return true;
@@ -95,7 +84,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public boolean deleteOrders(Long oId, Long uId, Long tId) {
+    public boolean unsubscribeOrders(Long oId, Long uId) {
         Orders orders=ordersDao.findOne(oId);
         if (orders.getUId()==uId){
             orders.setOStatus(OStatusEnum.TUI_DING.getValue());
@@ -111,14 +100,9 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public List<OrdersListVo> findList(Long tId,Integer oStatus) {
+    public List<OrdersListVo> findList(Long tId,Long uId, Integer oState, Date startTime,Date endTime) {
         List<OrdersListVo> list=new ArrayList<>();
-        List<Orders> orders=new ArrayList<>();
-        if (oStatus==null) {
-            orders = ordersDao.findByTId(tId);
-        }else {
-            orders=ordersDao.findByTIdAndOStatus(tId,oStatus);
-        }
+        List<Orders> orders=ordersDao.findList(tId, uId, oState, startTime, endTime);
         for (Orders order:orders){
             OrdersListVo vo=new OrdersListVo();
             vo.setOId(order.getOId());

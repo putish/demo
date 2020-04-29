@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  */
 @Getter
 @Setter
-public class TheatherOptionVo {
+public class TheaterOptionVo {
 //    影院id
     private Long tId;
 //    影院名称

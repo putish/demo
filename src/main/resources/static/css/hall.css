@@ -229,4 +229,10 @@
     padding: 3px 7px 2px 7px;
     height: 50px;
 }
+#editSeat{
+    display: none;
+}
+#editHallSeat{
+    display: none;
+}
 

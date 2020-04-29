@@ -70,9 +70,9 @@
     </style>
 </head>
 <body>
-    <div id="loutinav" th:include="commom::commonNav"></div>
+    <!--<div id="loutinav" th:include="commom::commonNav"></div>-->
 
-    <div id="dss"/>
+    <!--<div id="dss"/>-->
     <form  id="login" th:action="@{/theater/inlogin}" method="get">
 
         <div class="inputone">
@@ -96,6 +96,7 @@
 
 
     </div>
+    <div><a th:href="'/theater/register/'">没有用户</a></div>
 
 </body>
 </html>

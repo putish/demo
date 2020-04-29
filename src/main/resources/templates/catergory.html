@@ -26,7 +26,7 @@
 
             <tr th:each="catergory:${list.list}">
                 <td th:text="${catergory.cName}"></td>
-                <td th:text="${catergory.cId}" id="hId" style="display: none"></td>
+                <td th:text="${catergory.cId}" id="cId" style="display: none"></td>
 
                 <td class="action">
                     <input type="button" value="修改" onclick="edit()"/>
@@ -36,7 +36,7 @@
 
             <tr class="add">
                 <td></td>
-                <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>
+                <td class="action"><input type="button" value="增加" data-toggle="modal" data-target="#addModal"/></td>
             </tr>
             <div class="page-footer">
                 <ul class="pagination pull-right no-margin">
@@ -98,8 +98,11 @@
                 <div class="modal-footer" id="add-footer">
                     <button  class="btn btn-default" data-dismiss="modal">关闭
                     </button>
-                    <button  class="btn btn-primary">
+                    <button id="addButton" class="btn btn-primary" onclick="add()">
                         新增
+                    </button>
+                    <button id="editButton" class="btn btn-primary" onclick="editCatergory()">
+                        编辑
                     </button>
                 </div>
             </div><!-- /.modal-content -->
