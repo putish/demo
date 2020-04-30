@@ -25,7 +25,7 @@ public interface OrdersDao extends JpaRepository<Orders,Long> {
      * @param endTime
      * @return
      */
-    @Query(nativeQuery = true,value = "SELECT * from orders WHERE (t_id= ?1 OR ?1 is null) AND (u_id= ?2 OR ?2 is null) AND (o_state= ?2 OR ?2 is null)  " +
+    @Query(nativeQuery = true,value = "SELECT * from orders WHERE (t_id= ?1 OR ?1 is null) AND (u_id= ?2 OR ?2 is null) AND (o_status= ?3 OR ?3 is null)  " +
             " AND delete_flag=1 And (start_time >?4 OR ?4 is null)  And (end_time <?5 OR ?5 is null) ")
     List<Orders> findList(Long tId, Long uId, Integer oState, Date startTime, Date endTime);
 }

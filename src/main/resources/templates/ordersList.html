@@ -33,51 +33,51 @@
     </form >
     <div id="listul">
         <ul>
-            <li style="list-style-type:none;" th:each="orders:${list.list}">
+            <li style="list-style-type:none;" th:each="orders:${list}">
                 <!--                <div>-->
                 <p class="title"  th:text="${orders.title}"></p>
                 <p class="oStatus" th:text="${orders.oStatus}"></p>
                 <p class="price" th:text="${orders.startTime}"></p>
                 <p class="price" th:text="${orders.price}"></p>
-                <p class="price" th:text="${orders.oId}"style="display: none" id="oId"></p>
+                <!--<p id="oId" class="price" th:text="${orders.oId}"style="display: none" />-->
 
-            <li style="list-style-type:none;" th:each="orderDetail:${list.list.list}">
-                    <p class="orderDetail"  th:text="${orderDetail.hName}"></p>
-                    <p class="orderDetail"  th:text="${orderDetail.xAxis}+'行'+${orderDetail.yAxis}+'排'"></p>
-                    <p class="orderDetail"  th:text="${#dates.format(orderDetail.startTime,'HH:mm')}+'-'+${#dates.format(orderDetail.endTime,'HH:mm')}"></p>
-                </li>
-                <button onclick="payOrders()">支付</button>
-                <button onclick="unsubscribe()">退订</button>
+            <!--<li style="list-style-type:none;" th:each="orderDetail:${list.list}">-->
+                    <!--<p class="orderDetail"  th:text="${orderDetail.hName}"></p>-->
+                    <!--<p class="orderDetail"  th:text="${orderDetail.xAxis}+'行'+${orderDetail.yAxis}+'排'"></p>-->
+                    <!--<p class="orderDetail"  th:text="${#dates.format(orderDetail.startTime,'HH:mm')}+'-'+${#dates.format(orderDetail.endTime,'HH:mm')}"></p>-->
+                <!--</li>-->
+                <!--<button onclick="payOrders()">支付</button>-->
+                <!--<button onclick="unsubscribe()">退订</button>-->
 
             </li>
         </ul>
     </div>
-    <div class="modal-footer">
-        <ul class="pagination pull-right no-margin">
+    <!--<div class="modal-footer">-->
+        <!--<ul class="pagination pull-right no-margin">-->
 
-            <!-- 首页 -->
-            <li>
-                <a th:href="'/movie/list?pageNum=0'">首页</a>
-            </li>
+            <!--&lt;!&ndash; 首页 &ndash;&gt;-->
+            <!--<li>-->
+                <!--<a th:href="'/movie/list?pageNum=0'">首页</a>-->
+            <!--</li>-->
 
-            <!-- 上一页 -->
-            <li th:if="${list.isHasPreviousPage()}">
-                <a th:href="'/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>
-            </li>
+            <!--&lt;!&ndash; 上一页 &ndash;&gt;-->
+            <!--<li th:if="${list.isHasPreviousPage()}">-->
+                <!--<a th:href="'/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>-->
+            <!--</li>-->
 
-            <!-- 中间页 -->
+            <!--&lt;!&ndash; 中间页 &ndash;&gt;-->
 
-            <!-- 下一页 -->
-            <li th:if="${list.isHasNextPage()}">
-                <a th:href="'/movie/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>
-            </li>
+            <!--&lt;!&ndash; 下一页 &ndash;&gt;-->
+            <!--<li th:if="${list.isHasNextPage()}">-->
+                <!--<a th:href="'/movie/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>-->
+            <!--</li>-->
 
-            <!-- 尾页 -->
-            <li>
-                <a th:href="'/movie/list?pageNum=' + ${list.getTotal() - 1}">尾页</a>
-            </li>
+            <!--&lt;!&ndash; 尾页 &ndash;&gt;-->
+            <!--<li>-->
+                <!--<a th:href="'/movie/list?pageNum=' + ${list.getTotal() - 1}">尾页</a>-->
+            <!--</li>-->
 
-        </ul>
-    </div>
+        <!--</ul>-->
+    <!--</div>-->
 </body>
 </html>

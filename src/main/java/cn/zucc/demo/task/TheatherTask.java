@@ -34,30 +34,30 @@ public class TheatherTask {
 
 
 
-    @Scheduled(cron="0 0 24 ?")
-    private void screenScheduleTask(){
-        List<Theater> theaters=theaterDao.findByDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
-        for(Theater theater:theaters) {
-            screenService.screenSchedule(theater.getTId());
-        }
-        System.out.println("排片完成");
-    }
-
-    @Scheduled(cron="0 0 24 ?")
-    private void hallTask(){
-        hallService.HallCheackTask();
-        System.out.println("播放厅检查完成");
-    }
-
-    @Scheduled(cron="0 0 24 ?")
-    private void movieTask(){
-        movieService.movieCheckTask();
-        System.out.println("影片检查完成");
-    }
-
-    @Scheduled(cron="0 0 */1 ?")
-    private void screenTask(){
-        screenService.screenCheckTask();
-        System.out.println("播放场次检查完成");
-    }
+//    @Scheduled(cron="0 0 24 ?")
+//    private void screenScheduleTask(){
+//        List<Theater> theaters=theaterDao.findByDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
+//        for(Theater theater:theaters) {
+//            screenService.screenSchedule(theater.getTId());
+//        }
+//        System.out.println("排片完成");
+//    }
+//
+//    @Scheduled(cron="0 0 24 ?")
+//    private void hallTask(){
+//        hallService.HallCheackTask();
+//        System.out.println("播放厅检查完成");
+//    }
+//
+//    @Scheduled(cron="0 0 24 ?")
+//    private void movieTask(){
+//        movieService.movieCheckTask();
+//        System.out.println("影片检查完成");
+//    }
+//
+//    @Scheduled(cron="0 0 */1 ?")
+//    private void screenTask(){
+//        screenService.screenCheckTask();
+//        System.out.println("播放场次检查完成");
+//    }
 }

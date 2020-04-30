@@ -51,7 +51,7 @@ public class TheaterController {
     @PostMapping("/toregister")
     public String addTheater(@RequestBody AddTheaterRequest addTheaterRequest) throws Exception {
         theaterService.addTheater(addTheaterRequest);
-        return  "register";
+        return  "forward:/theater/";//跳转到登录界面
     }
 
     /**
@@ -77,7 +77,7 @@ public class TheaterController {
             } else {
                 if (theater.getPwd().equals(pwd)) {
                     request.getSession().setAttribute("tId", theater.getTId());//用户名存入该用户的session 中
-                    return "forward:/movie/";
+                    return "forward:/hall/list";
                 } else {
                     throw new TheaterException(ResultMapping.FAULT_PWD);
                 }

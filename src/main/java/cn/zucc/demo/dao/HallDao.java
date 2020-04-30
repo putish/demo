@@ -53,8 +53,8 @@ public interface HallDao extends JpaRepository<Hall,Long> {
      */
     @Query(nativeQuery = true,value = "SELECT * from hall WHERE (use_state= ?1 OR ?1 is null) AND (screen_cate= ?2 " +
             "OR ?2 is null) AND (seat_count> ?3 OR ?3 is null) AND (seat_count< ?4 OR ?4 is null) " +
-            "AND delete_flag=1 AND t_id=?5 ORDER BY ?#{#pageable}")
-    Page<HallListVo> findList(Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId, Pageable pageable);
+            "AND delete_flag=1 AND t_id=?5  ")
+    List<Hall> findList(Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId);
 
 //    /**
 //     * 播放厅时刻表

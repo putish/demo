@@ -35,16 +35,18 @@
 
                         <p class="movie_actor" th:text="${movie.actor}"></p>
 
-                        <p class="movie_description"><textarea rows="4" th:text="${movie.description}" readonly="readonly"></textarea></p>
+                        <p class="movie_description"><textarea style="text-overflow: ellipsis;"
+                                                               rows="4" th:text="${movie.description}" readonly="readonly"></textarea></p>
                         <p class="movie_price" th:text="${movie.price}+' ￥'">￥</p>
                         <div class="theaterOption" id="theaterOption">
                             <span>影院：</span>
-                            <select required="required" multiple="multiple" size="3" lay-verify="required">
+                            <input required="required" multiple="multiple" list="b_list"  lay-verify="required"/>
+                            <datalist id="b_list">
                                 <option value="" style="display: none"></option>
-                                <option th:each="theater:${movie.theaters}"  th:text="${theater.tName}" th:value="${theater.tId}"  ></option>
-                            </select>
+                                <option th:each="theater:${movie.theaters}"  th:text="${theater.tName}"  ></option>
+                            </datalist>
                         </div>
-                        <button><a th:href="'/screen/book?mId='+${movie.mId}+'&tId='+${theater.tId}"></a>选座购票</button>
+                        <button><!--<a th:href="'/screen/book?mId='+${theater.tId}"></a>-->选座购票</button>
                     </div>
 
 <!--                </div>-->

@@ -53,7 +53,7 @@ public class HallController {
         else if (useState=="已过期") {useState1=3;}
         else if (useState=="故障中"){useState1=4;}
         else {useState1=null;}
-        Page<HallListVo> list=hallService.findList(pageNum,pageSize,useState1,screenCate,startCount1,endCount1,tId);
+        List<HallListVo> list=hallService.findList(pageNum,pageSize,useState1,screenCate,startCount1,endCount1,tId);
         model.addAttribute("list",list) ;
         return "hall";
 

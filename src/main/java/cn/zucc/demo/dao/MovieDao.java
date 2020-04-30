@@ -44,15 +44,15 @@ public interface MovieDao extends JpaRepository<Movie, Long> {
      * @param mName 影片名称
      * @return
      */
-    @Query(nativeQuery = true,value= "SELECT t_Id FROM movie where m_name = ?1 AND delete_flag=1 ")
-    List<Long> tIdList(String mName);
+    @Query(nativeQuery = true,value= "SELECT * FROM movie where m_name = ?1 AND delete_flag=1 ")
+    List<Movie> tIdList(String mName);
 
     /**
      * 用户端影片
      * @param mName
      * @return
      */
-    @Query(nativeQuery = true,value = "SELECT * from movie WHERE (m_name like ?3 OR ?3 is null)  AND delete_flag=1 GROUP BY m_name")
+    @Query(nativeQuery = true,value = "SELECT * from movie WHERE (m_name like ?1 OR ?1 is null)  AND delete_flag=1 ")
     List<Movie> findUserMovieList( String mName);
 
 }

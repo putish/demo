@@ -1,9 +1,6 @@
 package cn.zucc.demo.service.impl;
 
-import cn.zucc.demo.bean.Movie;
-import cn.zucc.demo.bean.OrderDetail;
-import cn.zucc.demo.bean.Screen;
-import cn.zucc.demo.bean.SeatDetail;
+import cn.zucc.demo.bean.*;
 import cn.zucc.demo.dao.*;
 import cn.zucc.demo.enums.DeleteFlagEnum;
 import cn.zucc.demo.enums.UseStateEnum;
@@ -11,12 +8,14 @@ import cn.zucc.demo.exception.TheaterException;
 import cn.zucc.demo.form.AddOrderDetailRequest;
 import cn.zucc.demo.mapping.ResultMapping;
 import cn.zucc.demo.service.OrderDetailService;
+import cn.zucc.demo.vo.HallDetailVo;
 import cn.zucc.demo.vo.OrderDetailListVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,13 +37,15 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Autowired
     private ScreenDao screenDao;
 
+    @Autowired
+    private HallDao hallDao;
+
     @Override
     @Transactional
     public OrderDetail addOrderDetail(AddOrderDetailRequest addOrderDetailRequest,Long oId) {
         OrderDetail orderDetail=OrderDetail.builder().oId(oId)
                 .sdId(addOrderDetailRequest.getSdId())
                 .sId(addOrderDetailRequest.getSId())
-                .rating(BigDecimal.ZERO)
                 .deleteFlag(DeleteFlagEnum.UN_DELETE.getValue())
                 .build();
         SeatDetail seatDetail=seatDetailDao.findOne(orderDetail.getSdId());
@@ -76,6 +77,27 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public List<OrderDetailListVo> findList(Long oId) {
-        return orderDetailDao.findList(oId);
+        List<OrderDetail> orderDetails=orderDetailDao.findList(oId);
+        List<OrderDetailListVo> list=new ArrayList<>();
+        for(OrderDetail orderDetail:orderDetails){
+            OrderDetailListVo vo=new OrderDetailListVo();
+            vo.setOId(orderDetail.getOId());
+            vo.setOdId(orderDetail.getSdId());
+            vo.setPrice(orderDetail.getPrice());
+
+            Screen screen=screenDao.findOne(orderDetail.getSId());
+            Movie movie=movieDao.findOne(screen.getMId());
+            SeatDetail seatDetail=seatDetailDao.findOne(orderDetail.getSdId());
+            Hall hall=hallDao.findOne(screen.getHId());
+
+            vo.setHName(hall.getHName());
+            vo.setMName(movie.getMName());
+            vo.setStartTime(screen.getStartTime());
+            vo.setEndTime(screen.getEndTime());
+            vo.setXAxis(seatDetail.getXAxis());
+            vo.setYAxis(seatDetail.getYAxis());
+            list.add(vo);
+        }
+        return list;
     }
 }

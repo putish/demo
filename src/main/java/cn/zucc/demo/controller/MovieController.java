@@ -109,13 +109,7 @@ public class MovieController {
         model.addAttribute("list",pageInfo);
         return "movielist";
     }
-    @GetMapping("/indexlist")
-    public String indexlist( HttpSession session,Model model){
-        Long tId= (Long) session.getAttribute("tId");
-        List<MovieListVo> list=movieService.findList(tId, null, null, null,"%%");
-        model.addAttribute("list",list);
-        return "index";
-    }
+
     @PostMapping("/edit")
     public String editMovie(@RequestBody AddMovieRequest request,@RequestParam(required = false)  HttpSession session) throws ParseException {
         Long tId= (Long) session.getAttribute("tId");

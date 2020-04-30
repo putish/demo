@@ -19,18 +19,13 @@
     </div>
     <form  th:action="@{/movie/}" method="get">
         <div id="search">
-            <input type="text" name="mName" autocomplete="on" placeholder=""/>
-            <span id="searchpic"><img src="/img/search1.jpg" alt=""/></span>
+            <input type="text" name="mName" id="searchText" autocomplete="on" placeholder=""/>
+            <button id="searchpic" onclick="toSearch()" ><a th:href="'/movie/userlist'"></a><img src="/img/search1.jpg" alt=""/></button>
         </div>
     </form>
-<!--    <div >-->
 
-<!--        <input type="text" name="keyword" autocomplete="on" placeholder=""/>-->
-<!--        <span id="searchpic"><img src="/img/search1.jpg" alt=""/></span>-->
-<!--    </div>-->
     <div class="concent">
 
-        <!--    <div class="concent" th:each="showmovie,showmoviestate:${showmovies} " th:each="noshmovie,noshmoviestate: ${noshmovies}">-->
         <div class="title"  >
             <p id="hotshow">院线热映</p>
             <div id="insidetitle">
@@ -38,9 +33,7 @@
                 <p id="nos">即将上映</p>
             </div>
         </div>
-            <!--            <p id="nows" th:text=“院线热映"+"$(showmoviestate.size)” ></p>-->
-            <!--            <p id="nos" th:text=“即将上映"+"$(noshmoviestate.size)” ></p>-->
-<!--        </form>-->
+
         <div id="slide">
             <button id="right"></button>
             <button id="left"></button>
@@ -94,12 +87,7 @@
 
     </div>
 
-    <script type="text/javascript">
 
-        // window.οnlοad=function(){
-
-
-    </script>
 
 </body>
 </html>

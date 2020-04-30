@@ -48,18 +48,19 @@ public class OrdersController {
             oStateEnum=3;
         }
         List<OrdersListVo> list=ordersService.findList(tId,uId,oStateEnum,startTime==null?null:DateUtil.toDate(startTime),endTime==null?null:DateUtil.toDate(endTime));
-        return "orderList";
+        model.addAttribute("list",list);
+        return "ordersList";
     }
     @PostMapping( "/pay" )
     public String payOrders(@RequestParam(value = "oId", defaultValue = "0") Long oId, HttpSession session ) {
         Long uId= (Long) session.getAttribute("uId");
         ordersService.payOrders(oId,uId);
-        return "orderList";
+        return "ordersList";
     }
     @PostMapping( "/unsubscribe" )
     public String unsubscribeOrders(@RequestParam(value = "oId", defaultValue = "0") Long oId, HttpSession session ) {
         Long uId= (Long) session.getAttribute("uId");
         ordersService.unsubscribeOrders(oId,uId);
-        return "orderList";
+        return "ordersList";
     }
 }

@@ -1,6 +1,7 @@
 package cn.zucc.demo.dao;
 
 import cn.zucc.demo.bean.OrderDetail;
+import cn.zucc.demo.bean.Orders;
 import cn.zucc.demo.vo.OrderDetailListVo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,10 +33,9 @@ public interface OrderDetailDao extends JpaRepository<OrderDetail,Long> {
      * @param oId
      * @return
      */
-    @Query(nativeQuery = true,value = "SELECT orders.o_id AS oId,m_name AS mName,screen.start_time AS startTime,screen.end_time AS endTime,movie.price AS price,h_name AS hName" +
-            " FROM order_detail LEFT JOIN screen on screen.s_id=order_detail.s_id LEFT JOIN hall on hall.h_id= screen.h_id" +
-            " LEFT JOIN movie on movie.m_id=screen.m_id LEFT JOIN seat_detail on seat_detail.sd_id=order_detail.sd_id  WHERE o_id=?1")
-    List<OrderDetailListVo> findList(Long oId);
+    @Query(nativeQuery = true,value = "SELECT *" +
+            " FROM order_detail WHERE o_id=?1")
+    List<OrderDetail> findList(Long oId);
 
 
 }

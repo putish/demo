@@ -16,4 +16,6 @@ public class TheaterOptionVo {
     private Long tId;
 //    影院名称
     private String tName;
+//    影片id
+    private Long mId;
 }

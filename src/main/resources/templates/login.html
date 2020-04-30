@@ -11,7 +11,7 @@
     <style type="text/css">
         #login{
             width: 550px;
-            height: 80px;
+            height: 200px;
             margin: 100px auto ;
             margin-bottom: 50px;
         }
@@ -67,12 +67,28 @@
             margin: 0px auto;
             float: right;
         }
+        #banner{
+            width: 500px;
+            height: 200px;
+            border: 1px solid #4e17ff;
+            margin: 40px auto;
+        }
+
+        #register{
+            margin-top: 30px;
+            margin-left: 30px;
+            float: left;
+        }
     </style>
 </head>
 <body>
     <!--<div id="loutinav" th:include="commom::commonNav"></div>-->
 
     <!--<div id="dss"/>-->
+    <div id="banner">
+
+    </div>
+
     <form  id="login" th:action="@{/theater/inlogin}" method="get">
 
         <div class="inputone">
@@ -86,17 +102,15 @@
             <input type="password"  value="" name="pwd" id="pwd"/>
         </div>
 
-        <input type="button"><button>登入</button></input>
+        <button>登入</button>
+        <div id="register"><a th:href="'/theater/register/'">没有用户</a></div>
         <select name="type" class="selected" id="type" >
-        <option value="0">用户</option>
-        <option value="1">影院</option>
-    </select>
+            <option value="0">用户</option>
+            <option value="1">影院</option>
+        </select>
     </form>
     <div id="registerbutton">
-
-
     </div>
-    <div><a th:href="'/theater/register/'">没有用户</a></div>
 
 </body>
 </html>

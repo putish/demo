@@ -113,6 +113,7 @@ public class OrdersServiceImpl implements OrdersService {
             vo.setUName(users.getUName());
             List<OrderDetailListVo> detailListVos=orderDetailService.findList(order.getOId());
             vo.setList(detailListVos);
+            list.add(vo);
         }
         return list;
     }

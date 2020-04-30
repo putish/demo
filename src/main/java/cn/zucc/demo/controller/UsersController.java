@@ -32,6 +32,6 @@ public class UsersController {
     @PostMapping("/toregister")
     public String addTheater(@RequestParam(required = false) String uName,@RequestParam(required = false) String pwd) throws Exception {
         usersService.addUsers(uName, pwd);
-        return  "register";
+        return  "forward:/theater/";//跳转到登录界面
     }
 }

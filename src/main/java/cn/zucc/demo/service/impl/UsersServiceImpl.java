@@ -28,7 +28,7 @@ public class UsersServiceImpl implements UsersService {
             users.setUName(uName);
             users.setPwd(pwd);
             usersDao.save(users);
-            return false;
+            return true;
         }else {
             throw new TheaterException(ResultMapping.REPEAT_USERNAME);
         }

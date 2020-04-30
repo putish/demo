@@ -33,8 +33,6 @@ public class OrderDetail {
     private Long sId;
 //    价格
     private BigDecimal price;
-//    评分
-    private BigDecimal rating;
 //    删除标志
     private Integer deleteFlag;
 

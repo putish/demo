@@ -142,3 +142,13 @@
     margin-left: 40px ;
     list-style-type:none;
 }
+.theaterOption{
+    float: right;
+    height: 30px;
+    width: 80px;
+    margin-right: 100px;
+}
+.theaterOption input{
+    height: 30px;
+    width: 80px;
+}

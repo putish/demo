@@ -50,71 +50,92 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<MovieListVo> findList(Long tId, Integer showState, Long cId,String sortBy,String mName) {
         List<Movie> movies =new ArrayList<>();
+        List<MovieListVo> list=new ArrayList<>();
+
         if(tId==null){
             movies = movieDao.findUserMovieList(mName);//用户账号登录
+            List<String> mNames=new ArrayList<>();
+            for (Movie movie:movies){
+                if (!mNames.contains(movie.getMName())){
+                    mNames.add(movie.getMName());
+                    if (cId==null||movie.getFicId()==cId||movie.getSecId()==cId||movie.getTId()==cId) {//判断电影类别筛选
+                        MovieListVo listVo = new MovieListVo();
+                        BeanUtils.copyProperties(movie, listVo);
 
+                        String catergory=catergoryDao.findOne(movie.getFicId()).getCName();//类别转成字符串
+                        if(movie.getSecId()!=null){
+                            catergory=catergory+"/"+catergoryDao.findOne(movie.getSecId()).getCName();
+                            if(movie.getThcId()!=null){
+                                catergory=catergory+"/"+catergoryDao.findOne(movie.getThcId()).getCName();
+                            }
+                        }
+                        listVo.setCatergory(catergory);
+                        listVo.setShowState(ShowStateEnum.getContentByValue(movie.getShowState()));//上映状态
+                        List<Movie> tIdList=movieDao.tIdList(movie.getMName());
+                        List<TheaterOptionVo> theaters=new ArrayList<>();
+                        for(Movie id:tIdList){
+                            TheaterOptionVo vo=new TheaterOptionVo();
+                            Theater theater=theaterDao.findOne(id.getTId());
+                            vo.setTId(id.getTId());
+                            vo.setTName(theater.getTName());
+                            vo.setMId(movie.getMId());
+                            theaters.add(vo);
+                        }
+                        listVo.setTheaters(theaters);
+                        list.add(listVo);
+                    }
+                }
+            }
         }else {
             movies = movieDao.findList(tId, showState, mName);
-        }
+            for (Movie movie : movies) {
+                if (cId == null || movie.getFicId() == cId || movie.getSecId() == cId || movie.getTId() == cId) {//判断电影类别筛选
+                    MovieListVo listVo = new MovieListVo();
+                    BeanUtils.copyProperties(movie, listVo);
 
-        List<MovieListVo> list=new ArrayList<>();
-        for (Movie movie:movies){
-            if (cId==null||movie.getFicId()==cId||movie.getSecId()==cId||movie.getTId()==cId) {//判断电影类别筛选
-                MovieListVo listVo = new MovieListVo();
-                BeanUtils.copyProperties(listVo, movie);
-
-                String catergory=catergoryDao.findOne(movie.getFicId()).getCName();//类别转成字符串
-                if(movie.getSecId()!=null){
-                    catergory=catergory+"/"+catergoryDao.findOne(movie.getSecId()).getCName();
-                    if(movie.getThcId()!=null){
-                        catergory=catergory+"/"+catergoryDao.findOne(movie.getThcId()).getCName();
+                    String catergory = catergoryDao.findOne(movie.getFicId()).getCName();//类别转成字符串
+                    if (movie.getSecId() != null) {
+                        catergory = catergory + "/" + catergoryDao.findOne(movie.getSecId()).getCName();
+                        if (movie.getThcId() != null) {
+                            catergory = catergory + "/" + catergoryDao.findOne(movie.getThcId()).getCName();
+                        }
                     }
-                }
 
-                Long tickets = screenDao.countTicket(movie.getMId(), movie.getTId());//记录票房
-                listVo.setTickets(tickets==null?0:tickets);
+                    Long tickets = screenDao.countTicket(movie.getMId(), movie.getTId());//记录票房
+                    listVo.setTickets(tickets == null ? 0 : tickets);
 
-                Long seats = screenDao.countSeat(movie.getMId(), movie.getTId());//上座率
-                if(seats==null){
-                    listVo.setAttendence(BigDecimal.ZERO);
-                }
-                else {
-                    listVo.setAttendence(BigDecimal.valueOf((tickets / seats)));
-                }
-
-                listVo.setCatergory(catergory);
-                listVo.setShowState(ShowStateEnum.getContentByValue(movie.getShowState()));//上映状态
-                if(tId==null){//用户登入后，赋值影院下拉框
-                    List<Long> tIdList=movieDao.tIdList(movie.getMName());
-                    List<TheaterOptionVo> theaters=new ArrayList<>();
-                    for (Long id:tIdList){
-                        TheaterOptionVo vo=new TheaterOptionVo();
-                        Theater theater=theaterDao.findOne(id);
-                        vo.setTId(id);
-                        vo.setTName(theater.getTName());
+                    Long seats = screenDao.countSeat(movie.getMId(), movie.getTId());//上座率
+                    if (seats == null) {
+                        listVo.setAttendence(BigDecimal.ZERO);
+                    } else {
+                        listVo.setAttendence(BigDecimal.valueOf((tickets / seats)));
                     }
+
+                    listVo.setCatergory(catergory);
+                    listVo.setShowState(ShowStateEnum.getContentByValue(movie.getShowState()));//上映状态
+                    list.add(listVo);
                 }
-                list.add(listVo);
             }
-        }
-        if(sortBy==null||sortBy.equals("票房")) {//排序方式
-            list.sort(new Comparator<MovieListVo>() {
-                @Override
-                public int compare(MovieListVo o1, MovieListVo o2) {
-                    Long tickets1 = o1.getTickets();
-                    Long tickets2 = o2.getTickets();
-                    return tickets1.compareTo(tickets2);
-                }
-            });
-        }else {
-            list.sort(new Comparator<MovieListVo>() {
-                @Override
-                public int compare(MovieListVo o1, MovieListVo o2) {
-                    BigDecimal attendences1=o1.getAttendence();
-                    BigDecimal attendences2=o2.getAttendence();
-                    return attendences1.compareTo(attendences2);
-                }
-            });
+            if(sortBy==null||sortBy.equals("票房")) {//排序方式
+                list.sort(new Comparator<MovieListVo>() {
+                    @Override
+                    public int compare(MovieListVo o1, MovieListVo o2) {
+                        Long tickets1 = o1.getTickets();
+                        Long tickets2 = o2.getTickets();
+                        return tickets1.compareTo(tickets2);
+                    }
+                });
+            }else {
+                list.sort(new Comparator<MovieListVo>() {
+                    @Override
+                    public int compare(MovieListVo o1, MovieListVo o2) {
+                        BigDecimal attendences1=o1.getAttendence();
+                        BigDecimal attendences2=o2.getAttendence();
+                        return attendences1.compareTo(attendences2);
+                    }
+                });
+            }
+
         }
         return list;
     }

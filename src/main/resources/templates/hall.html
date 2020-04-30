@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
-    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
+    <!--<link type="text/css" rel="styleSheet"  href="/css/commom.css" />-->
     <link type="text/css" rel="styleSheet"  href="/css/hall.css" />
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" />
 
     <!---->
     <!--    <link type="text/css" rel="styleSheet"  href="/css/hall.css" />-->
@@ -59,7 +60,7 @@
                 <th class="action">操作</th>
             </tr>
 
-            <tr th:each="hall:${list.getContent()}">
+            <tr th:each="hall:${list}">
                 <td th:text="${hall.hName}"></td>
                 <td th:text="${hall.screenCate}"></td>
                 <td th:text="${hall.rows}"></td>
@@ -76,9 +77,9 @@
 
             <tr class="add">
                 <td> <a th:href="'/hall/list'">首页</a></td>
-                <td> <a th:if="${list.hasPrevious()}" th:href="'/hall/list?pageNum=' + ${list.getNumber()}" th:text="上一页"></a></td>
-                <td> <a th:if="${list.hasPrevious()}" th:href="'/hall/list?pageNum=' + ${list.getNumber()}+2" th:text="下一页"></a> </td>
-                <td> <a th:href="'/hall/list?pageNum=' + ${list.totalPages - 1}">尾页</a> </td>
+                <td> <!--<a th:if="${list.hasPrevious()}" th:href="'/hall/list?pageNum=' + ${list.getNumber()}" th:text="上一页"></a>--></td>
+                <td> <!--<a th:if="${list.hasPrevious()}" th:href="'/hall/list?pageNum=' + ${list.getNumber()}+2" th:text="下一页"></a>--> </td>
+                <td> <!--<a th:href="'/hall/list?pageNum=' + ${list.totalPages - 1}">尾页</a>--> </td>
                 <td></td>
                 <td></td>
                 <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>
@@ -93,11 +94,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" id="addModalClose" aria-hidden="true">
+                    <button type="button" class="close" data-dismiss="addModal" id="addModalClose" aria-hidden="true">
                         &times;
                     </button >
                     <h4 class="modal-title">
-                        添加新影映厅
+                        影映厅
                     </h4>
                 </div>
                 <div ms-controller="addmodal" class="modal-body" id="addbody">
@@ -113,11 +114,11 @@
                         </div>
                         <div class="inputone">
                             <span>行数：</span>
-                            <input type="text" id="col" value="" />
+                            <input type="text" id="row" value="" />
                         </div>
                         <div class="inputone">
                             <span>列数：</span>
-                            <input type="text" id="row"  value=""/>
+                            <input type="text" id="col"  value=""/>
                         </div>
                     </form>
                 </div>
@@ -176,12 +177,12 @@
                             <th>播放开始时间</th>
                             <th>播放结束时间</th>
                         </tr>
-                        <tr th:each="screen:${list.getContent().getscreenListVos()}">
-                            <td th:text="${screen.hName}"></td>
-                            <td th:text="${screen.mName}"></td>
-                            <td th:text="${screen.startTime}"></td>
-                            <td th:text="${screen.startTime}"><td>
-                        </tr>
+                        <!--<tr th:each="screen:${list.screenListVos}">-->
+                            <!--<td th:text="${screen.hName}"></td>-->
+                            <!--<td th:text="${screen.mName}"></td>-->
+                            <!--<td th:text="${screen.startTime}"></td>-->
+                            <!--<td th:text="${screen.startTime}"></td>-->
+                        <!--</tr>-->
 
                     </table>
                 </div>

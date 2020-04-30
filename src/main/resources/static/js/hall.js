@@ -85,7 +85,7 @@ function editHallSeat() {
             }
         }
     }
-    alert(seatVos[0]);
+    // alert(seatVos[0]);
     var hName=$('#addhname').val();
     var cate=$('#addcate').val();
     document.getElementById("seatModal").style.display = "none";
@@ -104,7 +104,7 @@ function editHallSeat() {
     $.ajax({
         dataType:'json',
         type: "post",
-        url: "/hall/add",//向后端请求数据的url
+        url: "/hall/edit",//向后端请求数据的url
         traditiona: true,
         contentType:"application/json;charset=utf-8",
         data: JSON.stringify(json),
@@ -269,22 +269,14 @@ function editSeats()  {
             }
         }
 
-        for (var v = 0; v  <= row; v++) {
+        for (var i = 0; i  <  row; i++) {
             var string = "<ul name="+"\"chair\" >";
-            for (var i = 0; i  <= col; i++) {
-                if (seatArray[v][i]==1){
+            for (var j = 0; j  < col; j++) {
+                if (seatArray[i][j]==1){
                     string = string + '<li><img src='+'/img/seat_selected.png '+'/></li>';
-                }else if (seatArray[v][i]==2){
-                    string = string + '<li><img src='+'/img/seat_sale.png '+'/></li>';
+                }else if (seatArray[i][j]==2){
+                    string = string + '<li><img src='+'/img/seat_book.png '+'/></li>';
                 }
-            }
-            string = string + '</ul>';
-            $('#seats').append(string);
-        }
-        for (var v = 0; v  < row; v++) {
-            var string = "<ul name="+"\"chair\" >";
-            for (var i = 0; i  < col; i++) {
-                string = string + '<li><img src='+'/img/seat_selected.png '+'/></li>';//生成li标签座位
             }
             string = string + '</ul>';
             $('#seats').append(string);
@@ -304,11 +296,11 @@ function editSeats()  {
                     seatArray[indexRow][indexCol] = 1;//更新自己选定的数组位置状态
                     count=count+1;
                 } else if (seatArray[indexRow][indexCol] == 2) {
-                    $(this).replaceWith('<li><img src="img/seat_selected.png"/></li>');//更换图片
+                    $(this).replaceWith('<li><img src="/img/seat_sale.png"/></li>');//更换图片
                     seatArray[indexRow][indexCol] = 3;//更新自己选定的数组位置状态
                     count=count-1;
                 }else if (seatArray[indexRow][indexCol] == 3) {
-                    $(this).replaceWith('<li><img src="img/seat_selected.png"/></li>');//更换图片
+                    $(this).replaceWith('<li><img src="/img/seat_book.png"/></li>');//更换图片
                     seatArray[indexRow][indexCol] = 2;//更新自己选定的数组位置状态
                     count=count+1;
                 }
@@ -353,8 +345,6 @@ function editHall(){
         data:{hId:hId},
         success: function (data) {
             var hallDetail=data.data;
-            alert(hallDetail)
-            alert(hallDetail.hname)
             var hName=document.getElementById('addhname');
             var cate=document.getElementById('addcate');
             var row=document.getElementById('row');
@@ -365,7 +355,7 @@ function editHall(){
             col.value=hallDetail["cols"];
             addmodel.style.display="block";
             var seatVos=eval(JSON.stringify(hallDetail["seatVos"]));
-            for (var index = 0; index  <  max; index++) {//座位表数组
+            for (var index = 0; index  <  seatVos.length; index++) {//座位表数组
                 var seat=new Array(seatVos[index].sdId,seatVos[index].xaxis,seatVos[index].yaxis);
                 seatlist[index]=seat;
             }
@@ -384,9 +374,14 @@ window.onload=function(){
         var addModal=document.getElementById("addModal");
         var seatModal=document.getElementById("seatModal");
         if(addModal.style.display=="block"){
-            if(seatModal.style.display=="none"){
-                addmodel.style.display="none";
-            }
+            alert("sda");
+            addmodel.style.display="none";
+            // addmodel.style.display="none";
+
+            // if(seatModal.style.display=="none"){
+            //
+            //     addmodel.style.display="none";
+            // }
         }
 
     };

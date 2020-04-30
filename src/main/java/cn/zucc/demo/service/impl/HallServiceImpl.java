@@ -89,14 +89,17 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    public Page<HallListVo> findList(Integer pageNum, Integer pageSize,Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId) {
-        Pageable pageable =  new PageRequest(pageNum,pageSize);
+    public List<HallListVo> findList(Integer pageNum, Integer pageSize,Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId) {
 
-        Page<HallListVo> list=hallDao.findList(useState,screenCate,startCount,endCount,tId,pageable);
-
-        for (HallListVo hallListVo:list){
-            List<ScreenListVo> listVos=screenService.screenList(null,hallListVo.getHId(),null,null,null,null);
-            hallListVo.setScreenListVos(listVos);
+        List<Hall> halls=hallDao.findList(useState,screenCate,startCount,endCount,tId);
+        List<HallListVo> list=new ArrayList<>();
+        for (Hall hall:halls){
+            HallListVo vo=new HallListVo();
+            BeanUtils.copyProperties(hall,vo);
+            vo.setUseState(UseStateEnum.getContentByValue(hall.getUseState()));
+            List<ScreenListVo> listVos=screenService.screenList(null,hall.getHId(),null,null,null,null);
+            vo.setScreenListVos(listVos);
+            list.add(vo);
         }
 
         return list;
@@ -137,7 +140,7 @@ public class HallServiceImpl implements HallService {
     @Transactional
     public boolean editHall(EditHallRequest request, Long tId) {
         Hall hall=hallDao.findOne(request.getHId());
-        BeanUtils.copyProperties(hall,request);
+//        BeanUtils.copyProperties(hall,request);
 
         List<Screen> screens=screenDao.findByShowStateNotAndHIdAndDeleteFlag(ShowStateEnum.SOLD_OUT.getValue(),hall.getHId(),DeleteFlagEnum.UN_DELETE.getValue());//查看播放厅时刻表
         if (screens.size()==0 ){//判断放映列表长度

@@ -61,6 +61,24 @@ window.onload=function() {
     $('#left').on('click',function(){
         oBox.animate({scrollRight:100});
     });
+
+};
+function toSearch() {
+    var mName=$("#searchText").val();
+    // alert(mName);
+    $.ajax({
+        dataType:'json',
+        type: "get",
+        url: "/movie/userlist",//向后端请求数据的url
+        traditiona: true,
+        contentType:"application/json;charset=utf-8",
+        data: {
+            mName:mName
+        },
+        success: function (data) {
+        }
+    });
+
 }
 
 
@@ -68,4 +86,4 @@ window.onload=function() {
 
 
 
-//	}
+
