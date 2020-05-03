@@ -13,7 +13,7 @@ import java.util.Date;
  * @create: 2020-02-28 21:52
  */
 public class DateUtil {
-    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static double GOLDRATE=3.4/14.5;//黄金时间与营业时间比例
 
@@ -61,7 +61,18 @@ public class DateUtil {
         return format.parse(date);
 
     }
+    /**
+     * 前后端转换
+     * @param date 时间字符串
+     * @return
+     * @throws ParseException
+     */
+    public static String toString(Date date) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(date);
+        return dateString;
 
+    }
     /**
      * 在线销售
      * @param date

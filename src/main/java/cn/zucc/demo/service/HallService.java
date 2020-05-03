@@ -62,7 +62,7 @@ public interface HallService {
      * @param hId
      * @return
      */
-    List<BookSeatVo> getSeat(Long hId, Long tId, Long sId);
+    List<BookSeatVo> getSeat( Long tId, Long sId);
 
     /**
      * 定期检查
@@ -74,5 +74,7 @@ public interface HallService {
      * @param hId
      * @return
      */
-    List<ScreenListVo> getHallSreenList(Long hId);
+    List<HallTimeTableVo> getHallSreenList(Long hId, Long tId);
+
+    void willEdit(Long hId);
 }

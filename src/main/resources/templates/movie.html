@@ -6,7 +6,8 @@
     <meta charset="UTF-8"/>
     <title>Title</title>
     <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
-
+    <link href="/css/bootstrap-combined.min.css" rel="stylesheet"/>
+    <link href="/css/layoutit.css" rel="stylesheet"/>
     <link type="text/css" rel="styleSheet"  href="/css/movie.css" />
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -15,281 +16,393 @@
 
 </head>
 <body>
-    <div id="loutinav">
-        <ul>
-            <!--<li class="active"><span>享品质</span> </li>-->
-            <li class="label"><a href="index.html"></a><span>首页</span> </li>
-            <li class="label"><span>饮食</span> </li>
-            <li class="label"><span>影片</span> </li>
-            <li class="label"><span>播放厅</span> </li>
-            <li class="login"><span>登入</span> </li>
-            <li class="login"><span>注册</span> </li>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div id="loutinav" th:include="commom::commonNav"></div>
 
-        </ul>
-    </div>
-    <div id="dss">
-    </div>
-    <div >
-        <form id="filter" th:action="@{/movie/list}" method="get" >
-            <span>放映状态：</span>
-            <input type="text" list="l_list" name="showState" id="showState" />
-            <datalist id="l_list">
-                <option value="即将上映"></option>
-                <option value="上映"></option>
-                <option value="下架"></option>
+            <div class="span10">
+                <div class="row-fluid">
+                    <div class="span10">
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <form class="form-search" th:action="@{/movie/theaterlist}" method="get" id="filter">
+                                    <span>放映状态：</span>
+                                    <input  name="showState" class="input-medium search-query" type="text" list="showState_list"/>
+                                    <datalist id="showState_list">
+                                        <option value="即将上映"></option>
+                                        <option value="上映"></option>
+                                        <option value="下架"></option>
+                                    </datalist>
 
-            </datalist>
-            <span>类型：</span>
-            <select id="cId" name="cId" lay-verify="required">
-                <option value="" style="display: none"></option>
-                <option th:each="catergory:${options}"  th:text="${catergory.cName}" th:value="${catergory.cId}"  ></option>
-            </select>
+                                    <span>类型：</span>
+                                    <select  name="cId" lay-verify="required">
+                                            <option value="" style="display: none"></option>
+                                        <option th:each="catergory:${options}"  th:text="${catergory.cName}" th:value="${catergory.cId}"  ></option>
+                                    </select>
 
-            <span>排序：</span>
-            <input type="text" list="s_list" name="sortBy" id="sortBy" />
-            <datalist id="s_list">
-                <option value="票房"></option>
-                <option value="上座率"></option>
+                                    <span>名称:</span>
+                                    <input type="text" name="mName" autocomplete="on" placeholder="" />
 
-            </datalist>
-            <span>名称:</span>
-            <input type="text" name="mName" autocomplete="on" placeholder="" />
-            <button>搜索</button>
-        </form >
-        <table id="movietable">
-            <tr>
-                <th>名称</th>
-                <th>放映状态</th>
-                <th>价格</th>
-                <th>上映时间</th>
-                <th>类别</th>
-                <th class="action">操作</th>
-            </tr>
-
-            <tr th:each="movie:${list.list}">
-                <td th:text="${movie.mName}"></td>
-                <td th:text="${movie.showState}"></td>
-                <td th:text="${movie.price}"></td>
-                <td th:text="${movie.showTime}"></td>
-                <td th:text="${movie.catergory}"></td>
-                <td th:text="${movie.mId}" id="mId" style="display: none"></td>
-                <td class="action">
-                    <input type="button"   οnclick="update()" value="编辑" onclick="movieDetail()" data-toggle="modal" data-target="#addModal"/>
-                    <input type="text" value="删除" onclick="deletemovie()"/>
-                    <input type="text" value="排片" />
-                </td>
-            </tr>
-
-
-            <tr class="add">
-                <td>
-                    <li>
-                        <a th:href="'/movie/list?pageNum=1'">首页</a>
-                    </li>
-                </td>
-                <td>
-                    <li >
-                        <a th:href="'/movie/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>
-                    </li>
-                </td>
-                <td>
-                    <li>
-                        <a th:href="'/movie/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>
-                    </li>
-                </td>
-                <td>
-                    <li>
-                        <a th:href="'/movie/list?pageNum=' + ${list.pages - 1}">尾页</a>
-                    </li>
-                </td>
-                <td></td>
-                <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>
-            </tr>
-
-
-
-        </table>
-
-        <!-- 模态框（Modal） -->
-
-    </div>
-    <div class="modal-fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel">
-                        添加影片
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    <form id="form"  >
-                        <div id="img">
-                            <img id="preview"/>
-                            <input  type="file" accept="image/*" name="file" id="file"/>
-                            <input id="poster" name="poster" type="submit" value="提交"/>
+                                    <span>排序：</span>
+                                    <input type="text" list="sort_list" name="sortBy"/>
+                                    <datalist id="sort_list">
+                                        <option value="票房"></option>
+                                        <option value="上座率"></option>
+                                    </datalist>
+                                    <button type="submit" class="btn">查找</button>
+                                </form>
+                            </div>
                         </div>
-
-                        <div class="inputone">
-                            <span>名称：</span>
-                            <input id="mName" name="mName" type="text"/>
-                        </div>
-
-                        <div class="inputone" id="cate">
-                            <span>类别：</span>
-                            <select id="catergory" name="catergory" required="required" multiple="multiple" size="3" lay-verify="required">
-                                <option value="" style="display: none"></option>
-                                <option th:each="catergory:${options}"  th:text="${catergory.cName}" th:value="${catergory.cId}"  ></option>
-                            </select>
-                        </div>
-                        <div class="inputone">
-                            <span>时长：</span>
-                            <input id="duration" name="duration" type="text"/>
-
-                        </div>
-                        <div class="inputone">
-                            <span>导演：</span>
-                            <input id="director" name="director" type="text"/>
-                        </div>
-                        <div class="inputone">
-                            <span>演员：</span>
-                            <input id="actor" name="actor" type="text"/>
-                        </div>
-                        <div class="inputone">
-                            <span>简介：</span>
-                            <input id="description" name="description" type="text"/>
-
-                        </div>
-                        <div class="inputone">
-                            <span>上映时间</span>
-                            <input id="showTime" name="showTime" placeholder="2020-03-12 00:00:00" type="text"/>
-                        </div>
-                        <div class="inputone">
-                            <span>下架时间</span>
-                            <input id="endTime" name="endTime" placeholder="2020-03-12 00:00:00" type="text"/>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                    </button>
-                    <button type="button" id="create" onclick="addmovie()" class="btn btn-primary">
-                        新增
-                    </button>
-                    <button type="button" id="edit" onclick="editMovie()" class="btn btn-primary">
-                        编辑
-                    </button>
-
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
-    <div class="modal-fade"  id="schedualModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" id="addModalClose" aria-hidden="true">
-                            &times;
-                        </button >
-                        <h4 class="modal-title">
-                            排片表
-                        </h4>
                     </div>
-                    <form th:action="@{/schedule/list}"></form>
-                    <div  class="modal-body" >
-                        <table id="schedualtable">
-                            <tr>
-                                <th>第一排片量</th>
-                                <th>第二排片量</th>
-                                <th>第三排片量</th>
-                                <th>屏幕类型</th>
-                                <th>票价</th>
-                                <th class="action">操作</th>
-                            </tr>
-
-                            <tr th:each="schedule:${list}">
-                                <td th:text="${schedule.fCount}"></td>
-                                <td th:text="${schedule.sCount}"></td>
-                                <td th:text="${schedule.tCount}"></td>
-                                <td th:text="${schedule.screenCate}"></td>
-                                <td th:text="${schedule.price}"></td>
-                                <td th:text="${schedule.scId}" id="scId" style="display: none"></td>
-                                <td class="action">
-                                    <input type="button"   οnclick="update()" value="编辑" onclick="editSchedule()" data-toggle="modal" data-target="#addModal"/>
-                                    <input type="text" value="删除" onclick="deleteSchedule()"/>
-                                    <input type="text" value="排片" />
-                                </td>
-                            </tr>
-
-                            <tr class="add">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="action"><input type="button" οnclick="addSchedule()" value="增加" data-toggle="modal" data-target="#addSchedualModal"/></td>
-                            </tr>
-                        </table>
+                    <div class="span2">
+                        <button class="btn" type="button" onclick="addMovie()" value="增加" >新增</button>
                     </div>
-                    <div class="modal-footer" >
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>放映状态</th>
+                        <th>上映时间</th>
+                        <th>类别</th>
+                        <th class="action">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="movie:${list}">
+                        <td th:text="${movie.mName}"></td>
+                        <td th:text="${movie.showState}"></td>
+                        <td th:text="${movie.showTime}"></td>
+                        <td th:text="${movie.catergory}"></td>
+                        <td th:text="${movie.mId}" id="mId" style="display: none"></td>
+                        <td class="action">
+                            <input type="button" th:name="${movie.mId}"  value="编辑" onclick="editMovie(this)"/>
+                            <input type="button" th:name="${movie.mId}" value="删除" onclick="deletemovie(this)"/>
+                            <a th:href="'/schedule/list?mId='+${movie.mId}"><input type="button" th:name="${movie.mId}" value="排片" /></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <ul>
+                        <li>
+                            <a href="#">上一页</a>
+                        </li>
+                        <li>
+                            <a href="#">1</a>
+                        </li>
+                        <li>
+                            <a href="#">2</a>
+                        </li>
+                        <li>
+                            <a href="#">3</a>
+                        </li>
+                        <li>
+                            <a href="#">4</a>
+                        </li>
+                        <li>
+                            <a href="#">5</a>
+                        </li>
+                        <li>
+                            <a href="#">下一页</a>
+                        </li>
+                    </ul>
+                </div>
 
-                        <button  class="btn btn-primary">
-                            提交
-                        </button>
+                <div class="modal-fade"  id="addModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="addModal" id="addModalClose" aria-hidden="true">
+                                    &times;
+                                </button >
+                                <h4 class="modal-title">
+                                    影片
+                                </h4>
+                            </div>
+                            <div ms-controller="addmodal" class="modal-body" id="addbody">
+                                <form class="form-horizontal">
+                                    <div class="container-fluid">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="row-fluid">
+                                                    <div class="span4" id="img">
+                                                        <img id="preview"/>
+                                                        <div class="row-fluid">
+                                                            <div class="span6">
+                                                                <input class="btn" type="file" accept="image/*" name="file" id="file"/>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="span8">
+                                                        <form class="form-horizontal">
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="mName">名称：</label>
+                                                                <div class="controls">
+                                                                    <input id="mName" name="mName" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="catergory">类别：</label>
+                                                                <div class="controls">
+                                                                    <select id="catergory" name="catergory" required="required" multiple="multiple" size="3" lay-verify="required">
+                                                                        <option value="" style="display: none"></option>
+                                                                        <option th:each="catergory:${options}"  th:text="${catergory.cName}" th:value="${catergory.cId}"  ></option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="duration">时长：</label>
+                                                                <div class="controls">
+                                                                    <input id="duration" name="duration" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="director">导演：</label>
+                                                                <div class="controls">
+                                                                    <input id="director" name="director" type="text"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="actor">演员：</label>
+                                                                <div class="controls">
+                                                                    <input id="actor" name="actor" type="text"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="description">简介：</label>
+                                                                <div class="controls">
+                                                                    <input  id="description" name="description" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="showTime">上映时间：</label>
+                                                                <div class="controls">
+                                                                    <input id="showTime" name="showTime" placeholder="2020-03-12 00:00:00" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="endTime">下架时间：</label>
+                                                                <div class="controls">
+                                                                    <input id="endTime" name="endTime" placeholder="2020-03-12 00:00:00" type="text" />
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            <div class="modal-footer" >
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <button type="button" id="createMovie" onclick="toaddMovie()" class="btn btn-primary">
+                                            新增影片
+                                        </button>
+                                        <button type="button" id="editMovie" onclick="toeditMovie()" class="btn btn-primary">
+                                            编辑影片
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal -->
+                </div>
+
+            </div>
         </div>
-    <div class="modal-fade" id="addSchedualModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title">
-                        排片表
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    <form id="schedualform"  >
-
-                        <div class="inputone">
-                            <span>第一排片量：</span>
-                            <input id="fCount" name="fCount" type="text"/>
-                        </div>
-                        <div class="inputone">
-                            <span>第二排片量：</span>
-                            <input id="sCount" name="sCount" type="text"/>
-                        </div>
-                        <div class="inputone">
-                            <span>第三排片量：</span>
-                            <input id="tCount" name="tCount" type="text"/>
-                        </div>
-                        <div class="inputone">
-                            <span>屏幕类型：</span>
-                            <input id="screenCate" name="screenCate" type="text"/>
-                        </div>
-                        <div class="inputone">
-                            <span>票价：</span>
-                            <input id="sprice" name="price" type="text"/>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                    </button>
-                    <button type="button" onclick="addSchedule()" class="btn btn-primary">
-                        提交
-                    </button>
-
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
+        </div>
     </div>
-    <div id="footer"></div>
+<!--    <div >-->
+<!--        <form id="filter" th:action="@{/movie/list}" method="get" >-->
+<!--            <span>放映状态：</span>-->
+<!--            <input type="text" list="l_list" name="showState" id="showState" />-->
+<!--            <datalist id="l_list">-->
+<!--                <option value="即将上映"></option>-->
+<!--                <option value="上映"></option>-->
+<!--                <option value="下架"></option>-->
+
+<!--            </datalist>-->
+<!--            <span>类型：</span>-->
+<!--            <select id="cId" name="cId" lay-verify="required">-->
+<!--                <option value="" style="display: none"></option>-->
+<!--                <option th:each="catergory:${options}"  th:text="${catergory.cName}" th:value="${catergory.cId}"  ></option>-->
+<!--            </select>-->
+
+<!--            <span>排序：</span>-->
+<!--            <input type="text" list="s_list" name="sortBy" id="sortBy" />-->
+<!--            <datalist id="s_list">-->
+<!--                <option value="票房"></option>-->
+<!--                <option value="上座率"></option>-->
+
+<!--            </datalist>-->
+<!--            <span>名称:</span>-->
+<!--            <input type="text" name="mName" autocomplete="on" placeholder="" />-->
+<!--            <button>搜索</button>-->
+<!--        </form >-->
+<!--        <table id="movietable">-->
+<!--            <tr>-->
+<!--                <th>名称</th>-->
+<!--                <th>放映状态</th>-->
+<!--                <th>价格</th>-->
+<!--                <th>上映时间</th>-->
+<!--                <th>类别</th>-->
+<!--                <th class="action">操作</th>-->
+<!--            </tr>-->
+
+<!--            <tr th:each="movie:${list.list}">-->
+<!--                <td th:text="${movie.mName}"></td>-->
+<!--                <td th:text="${movie.showState}"></td>-->
+<!--                <td th:text="${movie.price}"></td>-->
+<!--                <td th:text="${movie.showTime}"></td>-->
+<!--                <td th:text="${movie.catergory}"></td>-->
+<!--                <td th:text="${movie.mId}" id="mId" style="display: none"></td>-->
+<!--                <td class="action">-->
+<!--                    <input type="button"   οnclick="update()" value="编辑" onclick="movieDetail()" data-toggle="modal" data-target="#addModal"/>-->
+<!--                    <input type="text" value="删除" onclick="deletemovie()"/>-->
+<!--                    <input type="text" value="排片" />-->
+<!--                </td>-->
+<!--            </tr>-->
+
+
+<!--            <tr class="add">-->
+<!--                <td>-->
+<!--                    <li>-->
+<!--                        <a th:href="'/movie/list?pageNum=1'">首页</a>-->
+<!--                    </li>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <li >-->
+<!--                        <a th:href="'/movie/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>-->
+<!--                    </li>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <li>-->
+<!--                        <a th:href="'/movie/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>-->
+<!--                    </li>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <li>-->
+<!--                        <a th:href="'/movie/list?pageNum=' + ${list.pages - 1}">尾页</a>-->
+<!--                    </li>-->
+<!--                </td>-->
+<!--                <td></td>-->
+<!--                <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>-->
+<!--            </tr>-->
+
+
+
+<!--        </table>-->
+
+<!--        &lt;!&ndash; 模态框（Modal） &ndash;&gt;-->
+
+<!--    </div>-->
+<!--    <div class="modal-fade"  id="schedualModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+<!--            <div class="modal-dialog">-->
+<!--                <div class="modal-content">-->
+<!--                    <div class="modal-header">-->
+<!--                        <button type="button" class="close" data-dismiss="modal" id="addModalClose" aria-hidden="true">-->
+<!--                            &times;-->
+<!--                        </button >-->
+<!--                        <h4 class="modal-title">-->
+<!--                            排片表-->
+<!--                        </h4>-->
+<!--                    </div>-->
+<!--                    <form th:action="@{/schedule/list}"></form>-->
+<!--                    <div  class="modal-body" >-->
+<!--                        <table id="schedualtable">-->
+<!--                            <tr>-->
+<!--                                <th>第一排片量</th>-->
+<!--                                <th>第二排片量</th>-->
+<!--                                <th>第三排片量</th>-->
+<!--                                <th>屏幕类型</th>-->
+<!--                                <th>票价</th>-->
+<!--                                <th class="action">操作</th>-->
+<!--                            </tr>-->
+
+<!--                            <tr th:each="schedule:${list}">-->
+<!--                                <td th:text="${schedule.fCount}"></td>-->
+<!--                                <td th:text="${schedule.sCount}"></td>-->
+<!--                                <td th:text="${schedule.tCount}"></td>-->
+<!--                                <td th:text="${schedule.screenCate}"></td>-->
+<!--                                <td th:text="${schedule.price}"></td>-->
+<!--                                <td th:text="${schedule.scId}" id="scId" style="display: none"></td>-->
+<!--                                <td class="action">-->
+<!--                                    <input type="button"   οnclick="update()" value="编辑" onclick="editSchedule()" data-toggle="modal" data-target="#addModal"/>-->
+<!--                                    <input type="text" value="删除" onclick="deleteSchedule()"/>-->
+<!--                                    <input type="text" value="排片" />-->
+<!--                                </td>-->
+<!--                            </tr>-->
+
+<!--                            <tr class="add">-->
+<!--                                <td></td>-->
+<!--                                <td></td>-->
+<!--                                <td></td>-->
+<!--                                <td></td>-->
+<!--                                <td></td>-->
+<!--                                <td class="action"><input type="button" οnclick="addSchedule()" value="增加" data-toggle="modal" data-target="#addSchedualModal"/></td>-->
+<!--                            </tr>-->
+<!--                        </table>-->
+<!--                    </div>-->
+<!--                    <div class="modal-footer" >-->
+
+<!--                        <button  class="btn btn-primary">-->
+<!--                            提交-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
+<!--            </div>&lt;!&ndash; /.modal &ndash;&gt;-->
+<!--        </div>-->
+<!--    <div class="modal-fade" id="addSchedualModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">-->
+<!--                        &times;-->
+<!--                    </button>-->
+<!--                    <h4 class="modal-title">-->
+<!--                        排片表-->
+<!--                    </h4>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <form id="schedualform"  >-->
+
+<!--                        <div class="inputone">-->
+<!--                            <span>第一排片量：</span>-->
+<!--                            <input id="fCount" name="fCount" type="text"/>-->
+<!--                        </div>-->
+<!--                        <div class="inputone">-->
+<!--                            <span>第二排片量：</span>-->
+<!--                            <input id="sCount" name="sCount" type="text"/>-->
+<!--                        </div>-->
+<!--                        <div class="inputone">-->
+<!--                            <span>第三排片量：</span>-->
+<!--                            <input id="tCount" name="tCount" type="text"/>-->
+<!--                        </div>-->
+<!--                        <div class="inputone">-->
+<!--                            <span>屏幕类型：</span>-->
+<!--                            <input id="screenCate" name="screenCate" type="text"/>-->
+<!--                        </div>-->
+<!--                        <div class="inputone">-->
+<!--                            <span>票价：</span>-->
+<!--                            <input id="sprice" name="price" type="text"/>-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭-->
+<!--                    </button>-->
+<!--                    <button type="button" onclick="addSchedule()" class="btn btn-primary">-->
+<!--                        提交-->
+<!--                    </button>-->
+
+<!--                </div>-->
+<!--            </div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
+<!--        </div>&lt;!&ndash; /.modal &ndash;&gt;-->
+<!--    </div>-->
+<!--    <div id="footer"></div>-->
 
 
 

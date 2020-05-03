@@ -3,11 +3,13 @@ package cn.zucc.demo.service.impl;
 import cn.zucc.demo.bean.*;
 import cn.zucc.demo.dao.*;
 import cn.zucc.demo.enums.DeleteFlagEnum;
+import cn.zucc.demo.enums.OStatusEnum;
 import cn.zucc.demo.enums.UseStateEnum;
 import cn.zucc.demo.exception.TheaterException;
 import cn.zucc.demo.form.AddOrderDetailRequest;
 import cn.zucc.demo.mapping.ResultMapping;
 import cn.zucc.demo.service.OrderDetailService;
+import cn.zucc.demo.service.OrdersService;
 import cn.zucc.demo.vo.HallDetailVo;
 import cn.zucc.demo.vo.OrderDetailListVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Autowired
     private HallDao hallDao;
 
+    @Autowired
+    private OrdersService ordersService;
+
     @Override
     @Transactional
     public OrderDetail addOrderDetail(AddOrderDetailRequest addOrderDetailRequest,Long oId) {
@@ -49,15 +54,14 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 .deleteFlag(DeleteFlagEnum.UN_DELETE.getValue())
                 .build();
         SeatDetail seatDetail=seatDetailDao.findOne(orderDetail.getSdId());
-        if(seatDetail.getUseState()==UseStateEnum.IN_USE.getValue()) {
-            throw new TheaterException(ResultMapping.NO_SEAT);
-        }
         seatDetail.setUseState(UseStateEnum.IN_USE.getValue());
         seatDetailDao.save(seatDetail);
         Screen screen=screenDao.findOne(orderDetail.getSId());
         orderDetail.setPrice(screen.getPrice());
         screen.setTicketCount(screen.getTicketCount()+1);//已售票数加一
         screenDao.save(screen);
+        orderDetail.setOStatus(OStatusEnum.YU_DINGH.getValue());
+
         orderDetailDao.save(orderDetail);
         return orderDetail;
     }
@@ -71,6 +75,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         Screen screen=screenDao.findOne(orderDetail.getSId());
         screen.setTicketCount(screen.getTicketCount()-1);//已售票数减一
         screenDao.save(screen);
+        List<OrderDetail> list=orderDetailDao.findList(orderDetail.getOId());
+        if (list.size()==0){
+            ordersService.ordersDelete(orderDetail.getOId());
+        }
         orderDetailDao.save(orderDetail);
         return true;
     }
@@ -82,7 +90,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         for(OrderDetail orderDetail:orderDetails){
             OrderDetailListVo vo=new OrderDetailListVo();
             vo.setOId(orderDetail.getOId());
-            vo.setOdId(orderDetail.getSdId());
+            vo.setOdId(orderDetail.getOdId());
             vo.setPrice(orderDetail.getPrice());
 
             Screen screen=screenDao.findOne(orderDetail.getSId());
@@ -99,5 +107,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             list.add(vo);
         }
         return list;
+    }
+    public boolean unsubscribeDetail(Long odId) {
+        OrderDetail orderDetail=orderDetailDao.findOne(odId);
+        orderDetail.setOStatus(OStatusEnum.TUI_DING.getValue());
+        orderDetailDao.save(orderDetail);
+        return true;
     }
 }

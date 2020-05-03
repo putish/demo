@@ -5,6 +5,7 @@ import cn.zucc.demo.dao.HallDao;
 import cn.zucc.demo.dao.OrderDetailDao;
 import cn.zucc.demo.dao.ScreenDao;
 import cn.zucc.demo.enums.DeleteFlagEnum;
+import cn.zucc.demo.enums.OStatusEnum;
 import cn.zucc.demo.enums.ShowStateEnum;
 import cn.zucc.demo.enums.UseStateEnum;
 import cn.zucc.demo.exception.TheaterException;
@@ -144,7 +145,7 @@ public class HallServiceImpl implements HallService {
 
         List<Screen> screens=screenDao.findByShowStateNotAndHIdAndDeleteFlag(ShowStateEnum.SOLD_OUT.getValue(),hall.getHId(),DeleteFlagEnum.UN_DELETE.getValue());//查看播放厅时刻表
         if (screens.size()==0 ){//判断放映列表长度
-            BeanUtils.copyProperties(hall,request);
+            BeanUtils.copyProperties(request,hall);
             for(SeatAddVo seatVo:request.getAddSeatVos()){//新增座位
                 if(seatVo.getXAxis()<=hall.getRows()&&seatVo.getYAxis()<=hall.getCols()){
                     seatDetailService.addSeatDetail(seatVo,hall.getHId(),tId);
@@ -159,8 +160,7 @@ public class HallServiceImpl implements HallService {
             }
             return true;
         }else {
-            hall.setUseState(UseStateEnum.WILL_EDIT.getValue());
-            hallDao.save(hall);
+            willEdit(hall.getHId());
             throw new TheaterException(ResultMapping.CHANGE_TO_WILL_EDIT);
         }
 
@@ -170,9 +170,12 @@ public class HallServiceImpl implements HallService {
 
 
     @Override
-    public List<BookSeatVo> getSeat(Long hId, Long tId, Long sId) {
-        List<SeatDetail> seatDetails=seatDetailService.findList(hId,tId);
-        List<OrderDetail> orderDetails=orderDetailDao.findBySIdAndDeleteFlag(sId,DeleteFlagEnum.UN_DELETE.getValue());
+    public List<BookSeatVo> getSeat(Long tId, Long sId) {
+        Screen screen=screenDao.findOne(sId);
+        Hall hall=hallDao.findOne(screen.getHId());
+        List<SeatDetail> seatDetails=seatDetailService.findList(hall.getHId(),tId);
+        List<OrderDetail> orderDetails=orderDetailDao.findBySIdAndDeleteFlagAndOStatusNot(sId,DeleteFlagEnum.UN_DELETE.getValue(),
+                OStatusEnum.TUI_DING.getValue());
         List<Long> useSDId=new ArrayList<>();//已经预定的座位
         for(OrderDetail orderDetail:orderDetails){
             useSDId.add(orderDetail.getSdId());
@@ -205,7 +208,14 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    public List<ScreenListVo> getHallSreenList(Long hId) {
+    public List<HallTimeTableVo> getHallSreenList(Long hId, Long tId) {
         return null;
+    }
+
+    @Override
+    public void willEdit(Long hId) {
+        Hall hall=hallDao.findOne(hId);
+        hall.setUseState(UseStateEnum.WILL_EDIT.getValue());
+        hallDao.save(hall);
     }
 }

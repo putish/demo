@@ -48,6 +48,11 @@ public interface ScheduleService {
      * @param tId 影院id
      * @return
      */
-    boolean editSchedule(AddScheduleRequest request,Long tId,Long scId);
+    boolean editSchedule(AddScheduleRequest request,Long tId);
+
+    /**
+     *
+     */
+    void scheduleCheck();
 
 }

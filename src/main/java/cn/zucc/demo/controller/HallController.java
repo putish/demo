@@ -45,14 +45,35 @@ public class HallController {
     public String findList(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum, @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,@RequestParam(required = false) String useState,@RequestParam(required = false) String screenCate,
                            @RequestParam(required = false) String startCount,@RequestParam(required = false) String endCount,HttpSession session,Model model) {
         Long tId= (Long) session.getAttribute("tId");
-        Integer startCount1= StringUtils.isEmpty(startCount)?null:Integer.valueOf(startCount);
-        Integer endCount1=StringUtils.isEmpty(endCount)?null:Integer.valueOf(endCount);
-        Integer useState1;
-        if (useState=="使用中") {useState1=1;}
-        else if (useState=="闲置中") {useState1=2;}
-        else if (useState=="已过期") {useState1=3;}
-        else if (useState=="故障中"){useState1=4;}
-        else {useState1=null;}
+        Integer startCount1=null,endCount1=null,useState1=null;
+        if (StringUtils.isEmpty(startCount)||startCount.equals("")){
+            startCount1=null;
+        }else {
+            startCount1=Integer.valueOf(startCount);
+        }
+        if (StringUtils.isEmpty(endCount)||endCount.equals("")){
+            endCount1=null;
+        }else {
+            endCount1=Integer.valueOf(endCount);
+        }
+        if(useState!=null) {
+
+            if (useState.equals("使用中")) {
+                useState1 = 1;
+            } else if (useState.equals("闲置中")) {
+                useState1 = 2;
+            } else if (useState.equals("待编辑")) {
+                useState1 = 5;
+            } else if (useState.equals("可编辑")) {
+                useState1 = 6;
+            }else if ((useState.equals(""))){
+                useState1=null;
+            }
+        }
+
+        if(screenCate==""){
+            screenCate=null;
+        }
         List<HallListVo> list=hallService.findList(pageNum,pageSize,useState1,screenCate,startCount1,endCount1,tId);
         model.addAttribute("list",list) ;
         return "hall";
@@ -75,11 +96,12 @@ public class HallController {
      * @param request 放映厅请求
      * @return
      */
+    @ResponseBody
     @PostMapping( "/add" )
-    public String addHall(@RequestBody  AddHallRequest request,HttpSession session ) {
+    public RootData addHall(@RequestBody  AddHallRequest request,HttpSession session ) {
         Long tId= (Long) session.getAttribute("tId");
         hallService.addHall( request,tId);
-        return "hall";
+        return ResultUtil.success("添加成功");
     }
 
     /**
@@ -88,12 +110,13 @@ public class HallController {
      * @param session
      * @return
      */
+    @ResponseBody
     @PostMapping("/delete")
-    public String deleteHall(@RequestParam(required = false,value="hId") Long hId
+    public RootData deleteHall(@RequestParam(required = false,value="hId") Long hId
             ,HttpSession session){
         Long tId= (Long) session.getAttribute("tId");
         hallService.deleteHall(hId, tId);
-        return "hall";
+        return ResultUtil.success("删除成功");
     }
 
     /**
@@ -120,7 +143,6 @@ public class HallController {
 
     /**
      * 获取订票时座位表
-     * @param hId
      * @param sId
      * @param session
      * @param model
@@ -128,9 +150,9 @@ public class HallController {
      */
     @ResponseBody
     @GetMapping("/getSeat")
-    public RootData getSeat(@RequestParam(required = false) Long hId,@RequestParam(required = false) Long sId, HttpSession session,Model model){
+    public RootData getSeat(@RequestParam(required = false) Long sId, HttpSession session,Model model){
         Long tId= (Long) session.getAttribute("tId");
-        List<BookSeatVo> list=hallService.getSeat(hId, tId,sId);
+        List<BookSeatVo> list=hallService.getSeat( tId,sId);
         return ResultUtil.success(list);
     }
 
@@ -146,6 +168,13 @@ public class HallController {
     public RootData hallDetail(@RequestParam(required = false) Long hId, HttpSession session,Model model){
         Long tId= (Long) session.getAttribute("tId");
         HallDetailVo vo=hallService.hallDetail(hId, tId);
+        return ResultUtil.success(vo);
+    }
+    @ResponseBody
+    @GetMapping("/hallTime")
+    public RootData hallTime(@RequestParam(required = false) Long hId, HttpSession session,Model model){
+        Long tId= Long.valueOf(1);
+        List<HallTimeTableVo> vo=hallService.getHallSreenList(hId, tId);
         return ResultUtil.success(vo);
     }
 }

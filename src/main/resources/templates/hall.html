@@ -6,199 +6,214 @@
     <title>Title</title>
     <!--<link type="text/css" rel="styleSheet"  href="/css/commom.css" />-->
     <link type="text/css" rel="styleSheet"  href="/css/hall.css" />
-    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/bootstrap-combined.min.css" rel="stylesheet"/>
+    <link href="/css/layoutit.css" rel="stylesheet"/>
+<!--    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->
 
-    <!---->
-    <!--    <link type="text/css" rel="styleSheet"  href="/css/hall.css" />-->
     <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" />
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.bootcss.com/avalon.js/2.2.7/avalon.js"></script>
     <script src="/js/hall.js"></script>
 
 
 </head>
-<body ms-controller="hallmodal">
-    <div id="loutinav" th:include="commom::commonNav"></div>
-
-    <div id="dss"/>
+<body >
 
 
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="loutinav" th:include="commom::commonNav"></div>
 
-    <div ms-controller="listmodal">
-        <form id="filter" th:action="@{/hall/list}" method="get" >
-            <span>使用状态：</span>
-            <input type="text" list="l_list" name="useState" id="useState" />
-            <datalist id="l_list">
-                <option value="使用中"></option>
-                <option value="闲置中"></option>
-                <option value="已过期"></option>
-                <option value="故障中"></option>
+        <div class="span10">
+            <div class="row-fluid">
+                <div class="span10">
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <form class="form-search" th:action="@{/hall/list}" method="get">
+                                <span>使用状态：</span>
+                                <input  name="useState" class="input-medium search-query" type="text" list="useState_list"/>
+                                <datalist id="useState_list">
+                                    <option value="使用中"></option>
+                                    <option value="闲置中"></option>
+                                    <option value="可编辑"></option>
+                                    <option value="待编辑"></option>
 
-            </datalist>
-            <span>屏幕类型：</span>
-            <input type="text" list="b_list" name="screenCate" id="screenCate"  value="" />
-            <datalist id="b_list">
-                <option value="2D"></option>
-                <option value="3D"></option>
-                <option value="MAX"></option>
-            </datalist>
-            <span>座位大小：</span>
-            <input type="text" name="startCount" autocomplete="on" placeholder="" id="startCount"/>
-            <span>- </span>
-            <input type="text" name="endCount" autocomplete="on" placeholder="" id="endCount" />
-            <button>搜索</button>
-    </form >
-        <table id="movietable">
-
-            <tr>
-                <th>厅号</th>
-                <th>屏幕类型</th>
-                <th>行数</th>
-                <th>列数</th>
-                <th>座位数</th>
-                <th>使用状态</th>
-                <th class="action">操作</th>
-            </tr>
-
-            <tr th:each="hall:${list}">
-                <td th:text="${hall.hName}"></td>
-                <td th:text="${hall.screenCate}"></td>
-                <td th:text="${hall.rows}"></td>
-                <td th:text="${hall.cols}"></td>
-                <td th:text="${hall.seatCount}"></td>
-                <td th:text="${hall.useState}"></td>
-                <td th:text="${hall.hId}" id="hId" style="display: none"></td>
-                <td class="action">
-                    <input type="button" value="时刻表" οnclick="timeTable()" data-toggle="modal" data-target="#timeTableModal"/>
-                    <input type="button" value="修改" onclick="editHall()"/>
-                    <input  type="button" value="删除" onclick="deleteone();"/>
-                </td>
-            </tr>
-
-            <tr class="add">
-                <td> <a th:href="'/hall/list'">首页</a></td>
-                <td> <!--<a th:if="${list.hasPrevious()}" th:href="'/hall/list?pageNum=' + ${list.getNumber()}" th:text="上一页"></a>--></td>
-                <td> <!--<a th:if="${list.hasPrevious()}" th:href="'/hall/list?pageNum=' + ${list.getNumber()}+2" th:text="下一页"></a>--> </td>
-                <td> <!--<a th:href="'/hall/list?pageNum=' + ${list.totalPages - 1}">尾页</a>--> </td>
-                <td></td>
-                <td></td>
-                <td class="action"><input type="button" οnclick="add()" value="增加" data-toggle="modal" data-target="#addModal"/></td>
-            </tr>
-
-        </table>
-
-        <!-- 模态框（Modal） -->
-
-    </div>
-    <div class="modal-fade"  id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="addModal" id="addModalClose" aria-hidden="true">
-                        &times;
-                    </button >
-                    <h4 class="modal-title">
-                        影映厅
-                    </h4>
-                </div>
-                <div ms-controller="addmodal" class="modal-body" id="addbody">
-                    <form  ms-click="@add">
-
-                        <div class="inputone">
-                            <span>厅号：</span>
-                            <input type="text"  value="" id="addhname"/>
+                                </datalist>
+                                <span>屏幕类型：</span>
+                                <input name="screenCate"  class="input-medium search-query" type="text" list="screenCate_list"/>
+                                <datalist id="screenCate_list">
+                                    <option value="IMAX"></option>
+                                    <option value="普通"></option>
+                                </datalist>
+                                <span>座位大小：</span>
+                                <input  name="startCount" class="input-medium search-query" type="text"/>
+                                <span> - </span>
+                                <input  name="endCount" class="input-medium search-query" type="text" />
+                                <button type="submit" class="btn">查找</button>
+                            </form>
                         </div>
-                        <div class="inputone">
-                            <span>屏幕类型：</span>
-                            <input type="text" list="b_list" name="screenCate" id="addcate" value="" />
+                    </div>
+                </div>
+                <div class="span2">
+                    <button class="btn" type="button" onclick="addHall()" value="增加" >新增</button>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>厅号</th>
+                    <th>屏幕类型</th>
+                    <th>行数</th>
+                    <th>列数</th>
+                    <th>座位数</th>
+                    <th>使用状态</th>
+                    <th class="action">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="hall,index:${list}">
+                    <td th:text="${hall.hName}"></td>
+                    <td th:text="${hall.screenCate}"></td>
+                    <td th:text="${hall.rows}"></td>
+                    <td th:text="${hall.cols}"></td>
+                    <td th:text="${hall.seatCount}"></td>
+                    <td th:text="${hall.useState}"></td>
+                    <td th:text="${hall.hId}" name="id" style="display: none"></td>
+                    <td class="action">
+                        <a th:href="'/screen/list?hId='+${hall.hId}" ><input type="button" value="时刻表"  /></a>
+                        <input th:name="${hall.hId}" type="button" value="修改" onclick="editHall(this)"/>
+                        <input th:name="${hall.hId}" type="button" value="删除" onclick="deleteHall(this);"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="modal-fade"  id="addModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                 <div class="modal-dialog">
+                     <div class="modal-content">
+                         <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="addModal" id="addModalClose" aria-hidden="true">
+                                 &times;
+                             </button >
+                             <h4 class="modal-title">
+                                 影映厅
+                             </h4>
+                         </div>
+                         <div ms-controller="addmodal" class="modal-body" id="addbody">
+                             <form class="form-horizontal">
+                                 <div class="control-group">
+                                     <label class="control-label" >厅号</label>
+                                     <div class="controls">
+                                         <input type="text"  value="" id="addhname"/>
+                                     </div>
+                                 </div>
+                                 <div class="control-group">
+                                     <label class="control-label" >屏幕类型：</label>
+                                     <div class="controls">
+                                         <input type="text" list="screenCate_list" name="screenCate" id="addcate" value="" />
+                                     </div>
+                                 </div>
+                                 <div class="control-group">
+                                     <label class="control-label" >行数：</label>
+                                     <div class="controls">
+                                         <input type="text" id="row" value="" />
+                                     </div>
+                                 </div>
+                                 <div class="control-group">
+                                     <label class="control-label" >列数：</label>
+                                     <div class="controls">
+                                         <input type="text" id="col"  value="" />
+                                     </div>
+                                 </div>
+
+
+
+
+                             </form>
+                         </div>
+                         <div class="modal-footer" >
+                             <div class="control-group">
+                                 <div class="controls">
+                                     <button id="createSeat" data-toggle="modal"  onclick="createSeats()">座位表</button>
+                                     <button id="editSeat" data-toggle="modal"  onclick="editSeats()">座位表</button>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+            <div class="modal-fade"  id="seatModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" id="seatModalclose" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" >
+                                座位表
+                            </h4>
                         </div>
-                        <div class="inputone">
-                            <span>行数：</span>
-                            <input type="text" id="row" value="" />
+                        <div class="modal-body" id="seats">
+
                         </div>
-                        <div class="inputone">
-                            <span>列数：</span>
-                            <input type="text" id="col"  value=""/>
+                        <div class="modal-footer" id="seat-footer">
+
+                            <button id="createHallSeat" class="btn btn-primary" onclick="createHallSeat()">
+                                新增座位表
+                            </button>
+                            <button id="editHallSeat" class="btn btn-primary" onclick="editHallSeat()">
+                                编辑座位表
+                            </button>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer" id="add-footer">
-                    <button id="createSeat" data-toggle="modal"  onclick="createSeats()">座位表</button>
-                    <button id="editSeat" data-toggle="modal"  onclick="editSeats()">座位表</button>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
 
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
+            <div class="modal-fade"  id="timeTableModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="timeTableModal" id="timeTableclose" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" >
+                                时刻表
+                            </h4>
+                        </div>
+                        <div class="modal-body" id="timeTable">
+                            <table >
+
+                                <tr >
+                                    <th>影厅名称</th>
+                                    <th>影片名称</th>
+                                    <th>播放开始时间</th>
+                                    <th>播放结束时间</th>
+                                </tr>
+<!--                                <tr th:each="screen:${list.get(index).screenListVos}">-->
+<!--                                    <td th:text="${screen.hName}"></td>-->
+<!--                                    <td th:text="${screen.mName}"></td>-->
+<!--                                    <td th:text="${screen.startTime}"></td>-->
+<!--                                    <td th:text="${screen.startTime}"></td>-->
+<!--                                </tr>-->
+
+                            </table>
+                        </div>
+                        <div class="modal-footer" id="timeTable-footer">
+
+
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
+        </div>
     </div>
-    <div class="modal-fade"  id="seatModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" id="seatModalclose" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title" >
-                      座位表
-                    </h4>
-                </div>
-                <div class="modal-body" id="seats">
+</div>
+<div id="footer">
 
-                </div>
-                <div class="modal-footer" id="seat-footer">
+</div>
+<script type="text/javascript">
 
-                    <button id="createHallSeat" class="btn btn-primary" onclick="createHallSeat()">
-                        新增座位表
-                    </button>
-                    <button id="editHallSeat" class="btn btn-primary" onclick="editHallSeat()">
-                        编辑座位表
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
-
-    <div class="modal-fade"  id="timeTableModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="timeTableModal" id="timeTableclose" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title" >
-                        时刻表
-                    </h4>
-                </div>
-                <div class="modal-body" id="timeTable">
-                    <table >
-
-                        <tr >
-                            <th>影厅名称</th>
-                            <th>影片名称</th>
-                            <th>播放开始时间</th>
-                            <th>播放结束时间</th>
-                        </tr>
-                        <!--<tr th:each="screen:${list.screenListVos}">-->
-                            <!--<td th:text="${screen.hName}"></td>-->
-                            <!--<td th:text="${screen.mName}"></td>-->
-                            <!--<td th:text="${screen.startTime}"></td>-->
-                            <!--<td th:text="${screen.startTime}"></td>-->
-                        <!--</tr>-->
-
-                    </table>
-                </div>
-                <div class="modal-footer" id="timeTable-footer">
-
-
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
-    <div id="footer">
-
-    </div>
-    <script type="text/javascript">
-
-    </script>
+</script>
 
 </body>
 </html>

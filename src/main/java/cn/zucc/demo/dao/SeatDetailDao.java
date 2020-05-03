@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SeatDetailDao extends JpaRepository<SeatDetail,Long> {
 
-    List<SeatDetail> findByHIdAndTIdAndDeleteFlag(Long hId,Long tId,Integer deleteFlag);
+    List<SeatDetail> findByHIdAndDeleteFlag(Long hId,Integer deleteFlag);
 }

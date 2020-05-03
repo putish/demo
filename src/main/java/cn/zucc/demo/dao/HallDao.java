@@ -62,10 +62,9 @@ public interface HallDao extends JpaRepository<Hall,Long> {
 //     * @param tId 影院id
 //     * @return
 //     */
-//    @Query(nativeQuery = true,value = "SELECT screen.h_id AS hId,hall.h_name AS hName,movie.m_name " +
-//            "AS mName,start_time AS startTime,end_time AS endTime" +
-//            " FROM screen LEFT JOIN hall on hall.h_id=screen.h_id LEFT JOIN movie on movie.m_id=screen.m_id " +
-//            "WHERE (hall.h_id= ?1 OR ?1 is null) AND (screen.t_id=?2 OR ?2 is null) AND screen.show_state!=3 AND hall.delete_flag = 1 AND screen.delete_flag=1")
+//    @Query(value = "SELECT new cn.zucc.demo.vo.HallTimeTableVo(screen.h_id,hall.h_name,movie.m_name,screen.start_time,screen.end_time)" +
+//            " FROM hall LEFT JOIN screen on hall.h_id=screen.h_id LEFT JOIN movie on movie.m_id=screen.m_id " +
+//            "WHERE (hall.h_id= ?1 OR ?1 is null) AND (screen.t_id=?2 OR ?2 is null)")
 //    List<HallTimeTableVo> hallTimeTableList(Long hId, Long tId);
 //    /**
 //     * 播放厅特定时刻表

@@ -9,10 +9,10 @@ import java.util.List;
 public interface CatergoryDao extends JpaRepository<Catergory, Long> {
 //    List<Catergory> findByCName(String cName);
 
-    List<Catergory> findByCIdEqualsAndTIdEquals(Long cId,Long tId);
+    List<Catergory> findByCIdAndTId(Long cId,Long tId);
 
     List<Catergory> findCatergoryByTIdEqualsAndDeleteFlagEquals(Long tId,Integer deleteFlag);
 
-    Catergory findByCName(String cName);
+    Catergory findByCNameAndTIdAndDeleteFlag(String cName,Long tId,Integer deleteFalg);
 
 }

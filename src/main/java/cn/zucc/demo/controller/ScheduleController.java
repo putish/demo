@@ -31,33 +31,41 @@ public class ScheduleController {
         Long tId= (Long) session.getAttribute("tId");
         List<Schedule> list=scheduleService.getList(mId,tId);
         model.addAttribute("list",list);
-        return "movie";
+        return "schedule";
     }
+    @ResponseBody
     @PostMapping("/delete")
-    public String deleteSchedule(@RequestParam(value = "scId",required = false) Long scId, HttpSession session, Model model){
+    public RootData deleteSchedule(@RequestParam(value = "scId",required = false) Long scId, HttpSession session, Model model){
         Long tId= (Long) session.getAttribute("tId");
         scheduleService.deleteSchedule(scId);
-        return "movie";
+        return ResultUtil.success("删除成功");
     }
+    @ResponseBody
     @PostMapping("/add")
-    public String addSchedule(@RequestBody AddScheduleRequest request, HttpSession session, Model model){
+    public RootData addSchedule(@RequestBody AddScheduleRequest request, HttpSession session, Model model){
         Long tId= (Long) session.getAttribute("tId");
         scheduleService.addSchedule(request,tId);
-        return "movie";
+        return ResultUtil.success("添加成功");
     }
+    @ResponseBody
     @PostMapping("/edit")
-    public String editSchedule(@RequestParam(value = "scId",required = false) Long scId,@RequestBody AddScheduleRequest request, HttpSession session, Model model){
+    public RootData editSchedule(@RequestBody AddScheduleRequest request, HttpSession session, Model model){
         Long tId= (Long) session.getAttribute("tId");
-        scheduleService.editSchedule(request,tId,scId);
-        return "movie";
+        scheduleService.editSchedule(request,tId);
+        return ResultUtil.success("编辑成功");
     }
     @ResponseBody
     @GetMapping("/detail")
-    public RootData scheduleDetail(@RequestParam(value = "mId",required = false) Long scId, HttpSession session, Model model){
+    public RootData scheduleDetail(@RequestParam(value = "scId",required = false) Long scId, HttpSession session, Model model){
         Long tId= (Long) session.getAttribute("tId");
         Schedule schedule=scheduleService.scheduleDetail(scId);
         return ResultUtil.success(schedule);
     }
-
+    @ResponseBody
+    @GetMapping("/check")
+    public RootData check(){
+        scheduleService.scheduleCheck();
+        return ResultUtil.success("");
+    }
 
 }

@@ -41,10 +41,9 @@ public class MovieController {
         model.addAttribute("noslist",noslist);//上映
         return "index";
     }
-
     @ResponseBody
     @PostMapping("/add")
-    public RootData addMovie(@RequestBody AddMovieRequest request, HttpSession session) throws ParseException {
+    public RootData  addMovie(@RequestBody AddMovieRequest request, HttpSession session) throws ParseException {
         Long tId= (Long) session.getAttribute("tId");
         movieService.addMovie(request,tId);
         return ResultUtil.success("新增成功");
@@ -73,20 +72,20 @@ public class MovieController {
                               @RequestParam(required = false) Long cId, @RequestParam(required = false) String sortBy, Model model){
         Long tId= (Long) session.getAttribute("tId");
         Integer showStateEnum=null;
-        if (showState=="即将上映"){
-            showStateEnum=1;
-        }else if (showState=="上映"){
-            showStateEnum=2;
-        }else if (showState=="下架"){
-            showStateEnum=3;
+        if(showState!=null) {
+            if (showState.equals("即将上映")) {
+                showStateEnum = 1;
+            } else if (showState.equals("上映")) {
+                showStateEnum = 2;
+            } else if (showState.equals("下架")) {
+                showStateEnum = 3;
+            }
         }
-        List<MovieListVo> list=movieService.findList(tId, showStateEnum, cId, sortBy,mName==null?null:"%"+mName+"%");
-        Page<MovieListVo> page=PageHelper.startPage(pageNum, pageSize);
-        PageInfo<MovieListVo> pageInfo=page.toPageInfo();
-        pageInfo.setList(list);
+
+        List<MovieListVo> list=movieService.findList(tId, showStateEnum, cId, sortBy,(mName==null||mName=="")?null:"%"+mName+"%");
         List<Catergory> options=catergoryService.findList(tId);
         model.addAttribute("options",options);
-        model.addAttribute("list",pageInfo);
+        model.addAttribute("list",list);
         return "movie";
     }
     @GetMapping("/userlist")
@@ -95,14 +94,16 @@ public class MovieController {
                        @RequestParam(required = false) Long cId, @RequestParam(required = false) String sortBy, Model model){
         Long uId= (Long) session.getAttribute("uId");
         Integer showStateEnum=null;
-        if (showState=="即将上映"){
-            showStateEnum=1;
-        }else if (showState=="上映"){
-            showStateEnum=2;
-        }else if (showState=="下架"){
-            showStateEnum=3;
+        if(showState!=null) {
+            if (showState.equals("即将上映")) {
+                showStateEnum = 1;
+            } else if (showState.equals("上映")) {
+                showStateEnum = 2;
+            } else if (showState.equals("下架")) {
+                showStateEnum = 3;
+            }
         }
-        List<MovieListVo> list=movieService.findList(null, showStateEnum, cId, sortBy,mName==null?null:"%"+mName+"%");
+        List<MovieListVo> list=movieService.findList(null, showStateEnum, cId, sortBy,(mName==null||mName=="")?null:"%"+mName+"%");
         Page<MovieListVo> page=PageHelper.startPage(pageNum, pageSize);
         PageInfo<MovieListVo> pageInfo=page.toPageInfo();
         pageInfo.setList(list);
@@ -111,10 +112,10 @@ public class MovieController {
     }
 
     @PostMapping("/edit")
-    public String editMovie(@RequestBody AddMovieRequest request,@RequestParam(required = false)  HttpSession session) throws ParseException {
+    public String editMovie(@RequestBody AddMovieRequest request,HttpSession session) throws ParseException {
         Long tId= (Long) session.getAttribute("tId");
         movieService.editMovie(request,tId);
-        return "movie";
+        return "forward:/movie/theaterlist";
     }
     @ResponseBody
     @PostMapping("/delete")
@@ -126,7 +127,7 @@ public class MovieController {
     }
     @ResponseBody
     @GetMapping("/detail")
-    public RootData MovieDetail(@RequestParam(required = false)  Long mId,@RequestParam(required = false)  HttpSession session) throws ParseException {
+    public RootData MovieDetail(@RequestParam(required = false)  Long mId,HttpSession session) throws ParseException {
         Long tId= (Long) session.getAttribute("tId");
         return ResultUtil.success(movieService.movieDetail(mId,tId));
     }

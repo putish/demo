@@ -7,14 +7,12 @@ import cn.zucc.demo.service.MovieService;
 import cn.zucc.demo.service.ScreenService;
 import cn.zucc.demo.util.DateUtil;
 import cn.zucc.demo.util.ResultUtil;
+import cn.zucc.demo.vo.MovieDetailVo;
 import cn.zucc.demo.vo.MovieListVo;
 import cn.zucc.demo.vo.ScreenListVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -40,13 +38,12 @@ public class ScreenController {
     /**
      * 订票列表
      * @param mId 影院id
-     * @param session
      * @param model
      * @return
      */
     @GetMapping("/book")
-    public String screenList(@RequestParam(required = false) Long mId, @RequestParam(required = false) Long tId, Model model){
-        Movie movie=movieService.movieDetail(mId,tId);
+    public String bookList(@RequestParam(required = false) Long mId, @RequestParam(required = false) Long tId, Model model) throws ParseException {
+        MovieDetailVo movie=movieService.movieDetail(mId,tId);
         model.addAttribute("movie",movie);
         Date today=DateUtil.initDateByDay();//今日零点
         Date tommorrow= DateUtil.getEndTime(today,60*24);//明日零点
@@ -62,13 +59,42 @@ public class ScreenController {
         model.addAttribute("movie",movie);
         return "book";
     }
+    @GetMapping("/list")
+    public String screenList(@RequestParam(required = false) String showState,HttpSession session,@RequestParam(required = false) Long mId,@RequestParam(required = false) Long hId, Model model) throws ParseException {
+        Long tId = (Long) session.getAttribute("tId");
+        Integer showStateEnum=null;
+        if(showState!=null) {
+            if (showState.equals("即将上映")) {
+                showStateEnum = 1;
+            } else if (showState.equals("上映")) {
+                showStateEnum = 2;
+            } else if (showState.equals("下架")) {
+                showStateEnum = 3;
+            }
+        }
+
+        List<ScreenListVo> list = screenService.screenList(mId, hId, showStateEnum, null, null, tId);
+        model.addAttribute("list",list);
+        return "screen";
+    }
     @GetMapping("/")
     public String index(){return "book";}
+    @ResponseBody
     @PostMapping("/addscreen")
-    public String screenList(Long mId, Long hId, String startTime, BigDecimal price, String screenCate, HttpSession session, Model model) throws ParseException {
+    public RootData screenList(Long mId, Long hId, String startTime, BigDecimal price, String screenCate, HttpSession session, Model model) throws ParseException {
         Long tId= (Long) session.getAttribute("tId");
         screenService.addScreen(mId,hId,DateUtil.toDate(startTime),price, screenCate, tId);
-        return "book";
+        return ResultUtil.success("添加成功");
 
+    }
+    @GetMapping("/schedual")
+    public void schedual(){
+        screenService.screenSchedule(Long.valueOf(1));
+    }
+    @ResponseBody
+    @GetMapping("/check")
+    public RootData check(){
+        screenService.screenCheckTask();
+        return ResultUtil.success("");
     }
 }

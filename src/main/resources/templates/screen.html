@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
+    <link href="/css/bootstrap-combined.min.css" rel="stylesheet"/>
+    <link href="/css/layoutit.css" rel="stylesheet"/>
+    <link type="text/css" rel="styleSheet"  href="/css/movie.css" />
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/movie.js"></script>
+
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div id="loutinav" th:include="commom::commonNav"></div>
+
+            <div class="span10">
+                <div class="row-fluid">
+                    <div class="span10">
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <form class="form-search" th:action="@{/screen/list}" method="get" id="filter">
+                                    <span>放映状态：</span>
+                                    <input  name="showState" class="input-medium search-query" type="text" list="showState_list"/>
+                                    <datalist id="showState_list">
+                                        <option value="即将上映"></option>
+                                        <option value="上映"></option>
+                                        <option value="下架"></option>
+                                    </datalist>
+
+                                    <button type="submit" class="btn">查找</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>影片名称</th>
+                        <th>播放厅名称</th>
+                        <th>票数</th>
+                        <th>上映状态</th>
+                        <th>价格</th>
+                        <th>上映时间</th>
+                        <th>散场时间</th>
+<!--                        <th class="action">操作</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="screen:${list}">
+                        <td th:text="${screen.mName}"></td>
+                        <td th:text="${screen.hName}"></td>
+                        <td th:text="${screen.ticketCount}"></td>
+                        <td th:text="${screen.showState}"></td>
+                        <td th:text="${screen.price}"></td>
+                        <td th:text="${screen.startTime}"></td>
+                        <td th:text="${screen.endTime}"></td>
+<!--                        <td class="action">-->
+<!--                            <input type="button" th:name="${screen.sId}"   value="编辑" onclick="editScreen(this)" />-->
+<!--                            <input type="button" th:name="${screen.sId}" value="删除" onclick="deleteScreen(this)"/>-->
+<!--                            <input type="button" th:name="${screen.sId}" value="排片" />-->
+<!--                        </td>-->
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="modal-fade"  id="addModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="addModal" id="addModalClose" aria-hidden="true">
+                                    &times;
+                                </button >
+                                <h4 class="modal-title">
+                                    影映厅
+                                </h4>
+                            </div>
+                            <div ms-controller="addmodal" class="modal-body" id="addbody">
+                                <form class="form-horizontal">
+                                    <div class="container-fluid">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="row-fluid">
+                                                    <div class="span4" id="img">
+                                                        <img id="preview"/>
+                                                        <div class="row-fluid">
+                                                            <div class="span6">
+                                                                <input class="btn" type="file" accept="image/*" name="file" id="file"/>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="span8">
+                                                        <form class="form-horizontal">
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="mName">影片：</label>
+                                                                <div class="controls">
+                                                                    <input id="mName" name="mName" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="catergory">播放厅：</label>
+                                                                <div class="controls">
+                                                                    <select id="catergory" name="catergory" required="required" multiple="multiple" size="3" lay-verify="required">
+                                                                        <option value="" style="display: none"></option>
+                                                                        <option th:each="catergory:${options}"  th:text="${catergory.cName}" th:value="${catergory.cId}"  ></option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="duration">屏幕类型：</label>
+                                                                <div class="controls">
+                                                                    <input id="duration" name="duration" type="text" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="director">价格：</label>
+                                                                <div class="controls">
+                                                                    <input id="director" name="director" type="text"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="actor">开始时间：</label>
+                                                                <div class="controls">
+                                                                    <input id="actor" name="actor" type="text"/>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="modal-footer" >
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <button type="button" id="createMovie" onclick="toaddScreen()" class="btn btn-primary">
+                                                新增编辑放映场次
+                                            </button>
+                                            <button type="button" id="editMovie" onclick="toeditScreen()" class="btn btn-primary">
+                                                编辑放映场次
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>
