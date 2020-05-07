@@ -39,8 +39,8 @@ public class OrdersController {
         return ResultUtil.success("添加成功");
     }
     @GetMapping("/list" )
-    public String ordersList(HttpSession session,@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize",defaultValue = "2") int pageSize,
-                             @RequestParam(required = false) String oStatus, @RequestParam(required = false) String startTime,@RequestParam(required = false) String endTime, Model model) throws ParseException {
+    public String ordersList(HttpSession session, @RequestParam(required = false) String oStatus, @RequestParam(required = false) String startTime,
+                             @RequestParam(required = false) String endTime, Model model) throws ParseException {
         Long uId= (Long) session.getAttribute("uId");
         Integer oStateEnum=null;
         if (oStatus!=null) {

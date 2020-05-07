@@ -108,9 +108,9 @@ public class DateUtil {
      * 黄金时间开场
      * @return
      */
-    public static Date startGold(){
+    public static Date startGold(Date date){
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
+        calendar.setTime(date);
         calendar.set(Calendar.HOUR_OF_DAY, 18);
         calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
@@ -121,11 +121,11 @@ public class DateUtil {
      * 黄金时间结束
      * @return
      */
-    public static Date endGold(){
+    public static Date endGold(Date date){
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.set(Calendar.HOUR_OF_DAY, 22);
-        calendar.set(Calendar.MINUTE, 0);
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
         return calendar.getTime();
     }
@@ -159,10 +159,10 @@ public class DateUtil {
             }
         }
     }
-    public static Date getOpenHours(String dateString){
+    public static Date getOpenHours(Date thedate,String dateString){
         String[] date=dateString.split(":");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(DateUtil.getEndTime(new Date(),60*24));
+        calendar.setTime(DateUtil.getEndTime(thedate,60*24));
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(date[0]));
         calendar.set(Calendar.MINUTE, Integer.parseInt(date[1]));
         calendar.set(Calendar.SECOND, 0);

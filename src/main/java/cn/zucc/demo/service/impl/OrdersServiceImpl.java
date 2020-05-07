@@ -83,7 +83,7 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public boolean payOrders(Long oId, Long uId) {
         Orders orders=ordersDao.findOne(oId);
-        if (orders.getUId()==uId){
+        if (orders.getOStatus().equals(OStatusEnum.YU_DINGH.getValue())){
             orders.setOStatus(OStatusEnum.FINISH.getValue());
             ordersDao.save(orders);
             return true;
@@ -94,12 +94,14 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public boolean unsubscribeOrders(Long oId, Long uId) {
         Orders orders=ordersDao.findOne(oId);
-        orders.setOStatus(OStatusEnum.TUI_DING.getValue());
-        List<OrderDetail> details=orderDetailDao.findByOId(oId);
-        for(OrderDetail detail:details){//添加订单详情
-            orderDetailService.unsubscribeDetail(detail.getOdId());
-            ordersDao.save(orders);
+        if (orders.getOStatus().equals(OStatusEnum.FINISH.getValue())){
+            orders.setOStatus(OStatusEnum.TUI_DING.getValue());
+            List<OrderDetail> details=orderDetailDao.findByOId(oId);
+            for(OrderDetail detail:details){//添加订单详情
+                orderDetailService.unsubscribeDetail(detail.getOdId());
+                ordersDao.save(orders);
 
+            }
         }
         return true;
     }

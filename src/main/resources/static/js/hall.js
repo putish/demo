@@ -137,20 +137,17 @@ function createSeats() {
         } else {
             seatModal.style.display = "block";
         }
-
-        /*]]>*/
-        for (var i = 0; i < row; i++) {//一维数组长度为30
+        for (var i = 0; i < row; i++) {//行数
             seatArray[i] = new Array();
-            for (var j = 0; j < col; j++) {//第二维长度为20
+            for (var j = 0; j < col; j++) {//列数
                 seatArray[i][j] = 1;
             }
         }
 
-        for (var i = 0; i < row; i++) {//一维数组长度为30
+        for (var i = 0; i < row; i++) {//
             var string = "<ul name=" + "\"chair\" >";
-            for (var j = 0; j < col; j++) {//第二维长度为20
+            for (var j = 0; j < col; j++) {//
                 var index=i * col + j;
-                // alert(index);
                 string = string + '<li name="' + index + '"  onclick="chooseSeat('+index+')"><img src=' + '/img/seat_selected.png ' + '/></li>';//生成li标签座位
             }
             string = string + '</ul>';
@@ -167,8 +164,6 @@ function createSeats() {
 
 function chooseSeat(index) {
     {
-        // var index = $(e).attr("name");
-        // alert(index);
         var indexCol = index % col;//根据下标得到列数
         var indexRow = (index - indexCol) / col;//根据下标得到行数
         if (seatArray[indexRow][indexCol] == 1) {

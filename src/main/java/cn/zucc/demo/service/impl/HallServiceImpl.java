@@ -82,8 +82,7 @@ public class HallServiceImpl implements HallService {
             return true;
         }
         else {
-            hall.setUseState(UseStateEnum.WILL_EDIT.getValue());
-            hallDao.save(hall);
+            willEdit(hall.getHId());//转为待编辑
             throw new TheaterException(ResultMapping.CHANGE_TO_WILL_EDIT);
         }
 
@@ -141,7 +140,6 @@ public class HallServiceImpl implements HallService {
     @Transactional
     public boolean editHall(EditHallRequest request, Long tId) {
         Hall hall=hallDao.findOne(request.getHId());
-//        BeanUtils.copyProperties(hall,request);
 
         List<Screen> screens=screenDao.findByShowStateNotAndHIdAndDeleteFlag(ShowStateEnum.SOLD_OUT.getValue(),hall.getHId(),DeleteFlagEnum.UN_DELETE.getValue());//查看播放厅时刻表
         if (screens.size()==0 ){//判断放映列表长度
@@ -156,8 +154,11 @@ public class HallServiceImpl implements HallService {
             }
             for(Long sdId:request.getDelSeatVos()){//删除座位
                 seatDetailService.deleteSeatDetail(sdId,tId);
-
             }
+            if (hall.getUseState().equals(UseStateEnum.CAN_EDIT.getValue())){
+                hall.setUseState(UseStateEnum.IN_USE.getValue());
+            }
+            hallDao.save(hall);
             return true;
         }else {
             willEdit(hall.getHId());

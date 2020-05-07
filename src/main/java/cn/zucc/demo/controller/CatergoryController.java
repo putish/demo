@@ -33,13 +33,10 @@ public class CatergoryController {
     }
 
     @RequestMapping(value = "/list" ,method = RequestMethod.GET)
-    public String findList(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum, @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-                           HttpSession session,Model model) {
+    public String findList(HttpSession session,Model model) {
         Long tId = (Long) session.getAttribute("tId");
-        PageHelper.startPage(pageNum, pageSize);
         List<Catergory> list = catergoryService.findList(tId);
-        PageInfo<Catergory> pageInfo = new PageInfo<Catergory>(list, pageSize);
-        model.addAttribute("list", pageInfo);
+        model.addAttribute("list", list);
 
         return "catergory";
     }
@@ -61,7 +58,7 @@ public class CatergoryController {
     @PostMapping("/edit")
     public RootData editCatergory(@RequestBody AddCatergoryRequest request, HttpSession session, Model model) {
         Long tId = (Long) session.getAttribute("tId");
-        catergoryService.editCatergory(request.getCId(),request.getCName(),tId);
+         catergoryService.editCatergory(request.getCId(),request.getCName(),tId);
         return ResultUtil.success("编辑成功");
     }
     @ResponseBody

@@ -55,7 +55,7 @@
                         <p class="movie_description" th:text="${movie.description}"></p>
                         <p class="movie_price" th:text="${movie.showState}">￥</p>
                         <div class="theaterOption" id="theaterOption">
-                            <input required="required" multiple="multiple" list="b_list" id="theater"  lay-verify="required"/>
+                            <input required="required" multiple="multiple" list="b_list" id="theater"  lay-verify="required" onchange="gradeChange(this.options[this.options.selectedIndex].text)"/>
                             <datalist id="b_list">
                                 <option value="" style="display: none"></option>
                                 <option th:each="theater:${movie.theaters}"  th:text="${theater.tName}"  ></option>

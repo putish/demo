@@ -2,6 +2,7 @@ package cn.zucc.demo.controller;
 
 import cn.zucc.demo.bean.Movie;
 import cn.zucc.demo.data.RootData;
+import cn.zucc.demo.enums.ShowStateEnum;
 import cn.zucc.demo.mapping.ResultMapping;
 import cn.zucc.demo.service.MovieService;
 import cn.zucc.demo.service.ScreenService;
@@ -45,8 +46,12 @@ public class ScreenController {
     public String bookList(@RequestParam(required = false) Long mId, @RequestParam(required = false) Long tId, Model model) throws ParseException {
         MovieDetailVo movie=movieService.movieDetail(mId,tId);
         model.addAttribute("movie",movie);
-        Date today=DateUtil.initDateByDay();//今日零点
-        Date tommorrow= DateUtil.getEndTime(today,60*24);//明日零点
+        Date today = null;
+        if(movie.getShowState()== ShowStateEnum.IN_SHOW.getValue()) {//影片为上映
+            today=DateUtil.initDateByDay();//今日零点
+        }else if (movie.getShowState()==ShowStateEnum.WILL_SHOW.getValue()){//影片为预售
+            today=DateUtil.toDate(movie.getShowTime());//今日零点
+        }Date tommorrow=DateUtil.getEndTime(today, 60 * 24);//明日零点
         Date afterTommorrow=DateUtil.getEndTime(tommorrow,60*24);//后日零点
         Date endTime=DateUtil.getEndTime(afterTommorrow,60*24);//后日结束
         List<ScreenListVo> tdlist=screenService.screenList(mId,null,null,today,tommorrow,tId);

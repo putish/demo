@@ -175,7 +175,7 @@ public class MovieServiceImpl implements MovieService {
         if (!movie.getShowTime().after(new Date())){//判断上映时间是否正确
             throw new TheaterException(ResultMapping.FALUT_SHOWTIME);
         }
-        movie.setShowState(ShowStateEnum.NO_SHOW.getValue());
+        movie.setShowState(ShowStateEnum.NO_SHOW.getValue());//未上映
         movie.setDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
         movieDao.save(movie);
         return movie;
@@ -207,39 +207,42 @@ public class MovieServiceImpl implements MovieService {
         if(!DateUtil.toDate(request.getEndTime()).after(DateUtil.getStartTime(new Date(),24*60*3))&&movie.getShowState()==ShowStateEnum.WILL_SHOW.getValue()){
             throw new TheaterException(ResultMapping.FALUT_SHOWTIME);
         }
-        BeanUtils.copyProperties(request,movie);
-        movie.setPoster(request.getPoster().replace("C:\\fakepath\\","/img/"));
-        movie.setEndTime(DateUtil.toDate(request.getEndTime()));
-        movie.setShowTime(DateUtil.toDate(request.getShowTime()));
-        movie.setTId(tId);
-        String[] cIds=request.getCatergory().split(",");
-        for(int i=0;i<cIds.length;i++) {
-            if (i == 0) {
-                movie.setFicId(Long.valueOf(cIds[i]));
-            } else if (i == 1) {
-                movie.setSecId(Long.valueOf(cIds[i]));
-            } else if (i == 2) {
-                movie.setThcId(Long.valueOf(cIds[i]));
+        if (!movie.getShowState().equals(ShowStateEnum.SOLD_OUT.getValue())) {
+            BeanUtils.copyProperties(request,movie);
+            movie.setPoster(request.getPoster().replace("C:\\fakepath\\","/img/"));
+            movie.setEndTime(DateUtil.toDate(request.getEndTime()));
+            movie.setShowTime(DateUtil.toDate(request.getShowTime()));
+            movie.setTId(tId);
+            String[] cIds=request.getCatergory().split(",");
+            for(int i=0;i<cIds.length;i++) {
+                if (i == 0) {
+                    movie.setFicId(Long.valueOf(cIds[i]));
+                } else if (i == 1) {
+                    movie.setSecId(Long.valueOf(cIds[i]));
+                } else if (i == 2) {
+                    movie.setThcId(Long.valueOf(cIds[i]));
+                }
             }
+            movieDao.save(movie);
+            return true;
+        }else {
+            throw new TheaterException(ResultMapping.SOLD_OUT);
         }
 
-        movieDao.save(movie);
-        return true;
     }
 
     @Override
     @Transactional
     public boolean deleteMovie(Long mId, Long tId) {
         Movie movie=movieDao.findOne(mId);
-        List<ScreenListVo> list=screenService.screenList(mId,null,null,null,null,tId);
-        if (list.size()==0){//没有播放场次
-            movie.setDeleteFlag(DeleteFlagEnum.IS_DELETE.getValue());
-            movieDao.save(movie);
-            return true;
+        if (movie.getShowState().equals(ShowStateEnum.NO_SHOW.getValue())) {
+                movie.setDeleteFlag(DeleteFlagEnum.IS_DELETE.getValue());
+                movieDao.save(movie);
+                return true;
+
         }else {
             throw new TheaterException(ResultMapping.HAVE_SCREEN);
         }
-
     }
 
     @Override
