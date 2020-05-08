@@ -5,129 +5,185 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="maximum-scale=3.0,minimum-scale=0.3,user-scalable=1,initial-scale=0.5"/>
     <link type="text/css" rel="styleSheet"  href="/css/book.css" />
+    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
+    <link href="/css/bootstrap-combined.min.css" rel="stylesheet"/>
+    <link href="/css/layoutit.css" rel="stylesheet"/>
     <script src="/js/book.js"></script>
 
     <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
 </head>
 
 <body>
-<!--30行20列-->
-    <div id="loutinav">
-        <ul>
-            <!--<li class="active"><span>享品质</span> </li>-->
-            <li class="label"><span>首页</span> </li>
-            <li class="label"><span>饮食</span> </li>
-            <li class="label"><a href="movie.html"></a><span>影片</span> </li>
-            <li class="label"><span>播放厅</span> </li>
-            <li class="login"><span>登入</span> </li>
-            <li class="login"><span>注册</span> </li>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="row-fluid">
+                    <div id="loutinav" th:include="commom::userNav"></div>
+                    <div class="span10">
+                        <h3 th:text="${movie.mName}">
+                        </h3>
+                        <div class="row-fluid">
+                            <div class="span6">
+                                <img alt="140x140" th:src="${movie.poster}"  />
+                            </div>
+                            <div class="span6">
+                                <div class="insideblock">
+                                    <p class="movie_lable" th:text="${movie.catergory}"></p>
+                                    <p class="movie_duration" th:text="${movie.duration}+' 分钟'"></p>
+                                </div>
 
-        </ul>
-    </div>
-    <div id="dss">
+                                <p class="movie_actor" th:text="${movie.actor}"></p>
+                                <p class="movie_actor" th:text="${movie.director}"></p>
 
-    </div>
-    <div id="bigblock">
-        <div class="bigname" th:text="${movie.mName}"></div>
-        <div id="ads">
-            <div id="smallable"><img th:src="${movie.poster}" alt=""/></div>
+                                <p class="movie_description" th:text="${movie.description}" ></p>
+                            </div>
+                        </div>
+                        <div class="tabbable" id="tabs-375867">
+                            <ul class="nav nav-tabs">
 
-
-
+                                <li class="active">
+                                    <a href="#firstDay" data-toggle="tab" th:text="${#dates.format(tdlist.get(0).getStartTime(),'MM月dd日')}"></a>
+                                </li>
+                                <li>
+                                    <a href="#secondDay" data-toggle="tab" >05月06日</a>
+                                </li>
+                                <li>
+                                    <a href="#thirdDay" data-toggle="tab" th:text="${#dates.format(aftlist.get(0).getStartTime(),'MM月dd日')}"></a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="firstDay" >
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                影片名称
+                                            </th>
+                                            <th>
+                                                播放厅名称
+                                            </th>
+                                            <th>
+                                                时间
+                                            </th>
+                                            <th>
+                                                价格
+                                            </th>
+                                            <th>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="tdscreen:${tdlist}">
+                                            <td th:text="${tdscreen.mName}"></td>
+                                            <td th:text="${tdscreen.hName}"></td>
+                                            <td th:text=" ${#dates.format(tdscreen.startTime,'HH:mm')}+'-'+${#dates.format(tdscreen.endTime,'HH:mm')}"></td>
+                                            <td th:text="${tdscreen.price}+' ￥'"></td>
+                                            <td>
+                                                <button th:name="${tdscreen.sId}" onclick="chooseSeats(this)">加购</button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane active" id="secondDay" th:each="tmscreen:${tmlist}">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                影片名称
+                                            </th>
+                                            <th>
+                                                播放厅名称
+                                            </th>
+                                            <th>
+                                                时间
+                                            </th>
+                                            <th>
+                                                价格
+                                            </th>
+                                            <th>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td th:text="${tmscreen.mName}"></td>
+                                            <td th:text="${tmscreen.hName}"></td>
+                                            <td th:text=" ${#dates.format(tmscreen.startTime,'HH:mm')}+'-'+${#dates.format(tmscreen.endTime,'HH:mm')}"></td>
+                                            <td th:text="${tmscreen.price}+' ￥'"></td>
+                                            <td>
+                                                <button th:name="${tmscreen.sId}" onclick="chooseSeats(this)">加购</button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane active" id="thirdDay" th:each="aftscreen:${aftlist}">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                影片名称
+                                            </th>
+                                            <th>
+                                                播放厅名称
+                                            </th>
+                                            <th>
+                                                时间
+                                            </th>
+                                            <th>
+                                                价格
+                                            </th>
+                                            <th>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td th:text="${aftscreen.mName}"></td>
+                                            <td th:text="${aftscreen.hName}"></td>
+                                            <td th:text=" ${#dates.format(aftscreen.startTime,'HH:mm')}+'-'+${#dates.format(aftscreen.endTime,'HH:mm')}"></td>
+                                            <td th:text="${aftscreen.price}+' ￥'"></td>
+                                            <td>
+                                                <button th:name="${aftscreen.sId}" onclick="chooseSeats(this)">加购</button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="text-desc">
-
-            <div class="insideblock">
-                <p class="movie_lable" th:text="${movie.catergory}"></p>
-                <p class="movie_duration" th:text="${movie.duration}+' 分钟'"></p>
-            </div>
-
-            <p class="movie_actor" th:text="${movie.actor}"></p>
-            <p class="movie_actor" th:text="${movie.director}"></p>
-
-            <p class="movie_description" ><textarea rows="4" th:text="${movie.description}" readonly="readonly"></textarea></p>
-            <div th:text="${movie.mId}" id="mId" style="display: none"></div>
-
-        </div>
-
     </div>
-    <div id="insidetitle">
-        <div><p id="today" >今天</p>
-            <p id="tommorrow">明天</p>
-            <p id="aftertomm">后天</p></div>
 
+    <div class="modal-fade"  id="seatModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="seatModalclose" aria-hidden="true" onclick="closemodal()">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" >
+                        座位表
+                    </h4>
+                </div>
+                <div class="modal-body" id="seats">
+
+                </div>
+                <div class="modal-footer" id="seat-footer">
+
+                    <button  class="btn btn-primary" onclick="addOrders()">
+                        提交
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
     </div>
-    <div id="tdsche" class="schedule" >
-        <div class="scene" th:each="tdscreen:${tdlist}">
-            <div class="name" th:text="${tdscreen.mName}"></div>
-            <div class="time" th:text=" ${#dates.format(tdscreen.startTime,'HH:mm')}+'-'+${#dates.format(tdscreen.endTime,'HH:mm')}"></div>
-            <div class="location" th:text="${tdscreen.hName}"></div>
-            <div th:text="${tdscreen.hId}" id="hId" style="display: none"></div>
-            <div th:text="${tdscreen.sId}" id="sId" style="display: none"></div>
 
-            <div class="book">
-                <button onclick="chooseSeats()">加购</button>
-            </div>
-            <div class="price" th:text="${tdscreen.price}+' ￥'"></div>
-        </div>
-
-    </div>
-    <div id="tmsche" class="schedule" th:each="tmscreen:${tmlist}">
-        <div class="scene">
-            <div class="name" th:text="${tmscreen.mName}"></div>
-            <div class="time" th:text="${tmscreen.startTime}+'-'+${tmscreen.endTime}"></div>
-            <div class="location" th:text="${tmscreen.hName}"></div>
-            <div class="price" th:text="${tmscreen.price}+' ￥'"></div>
-
-            <div class="book">
-                <button onclick="chooseSeats()">加购</button>
-            </div>
-
-        </div>
-    </div>
-    <div id="aftche" class="schedule" th:each="aftscreen:${aftlist}">
-        <div class="name" th:text="${aftscreen.mName}"></div>
-        <div class="time" th:text="${aftscreen.startTime}+'-'+${aftscreen.endTime}">12:00-16:00</div>
-        <div class="location" th:text="${aftscreen.hName}"></div>
-        <div class="price" th:text="${aftscreen.price}+' ￥'"></div>
-<!--        <div th:text="${hall.hId}" id="hId" style="display: none"></div>-->
-
-        <div class="book">
-            <button data-toggle="modal"  onclick="chooseSeats()">加购</button>
-        </div>
-    </div>
-<div class="modal-fade"  id="seatModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" id="seatModalclose" aria-hidden="true" onclick="closemodal()">
-                    &times;
-                </button>
-                <h4 class="modal-title" >
-                    座位表
-                </h4>
-            </div>
-            <div class="modal-body" id="seats">
-
-            </div>
-            <div class="modal-footer" id="seat-footer">
-
-                <button  class="btn btn-primary" onclick="addOrders()">
-                    提交
-                </button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>
-
-
-<div id="footer">
-
-    </div>
 </body>
 
 

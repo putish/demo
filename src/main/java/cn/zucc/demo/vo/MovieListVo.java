@@ -51,4 +51,6 @@ public class MovieListVo {
     private BigDecimal attendence;
     //    影院下拉选项
     private List<TheaterOptionVo> theaters;
+
+    private Long tId;
 }

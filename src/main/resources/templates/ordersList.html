@@ -6,78 +6,67 @@
     <title>Title</title>
     <!--    <link type="text/css" rel="styleSheet"  href="/css/index.css" />-->
     <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
-    <script src="/js/index.js"></script>
+    <link href="/css/bootstrap-combined.min.css" rel="stylesheet"/>
+    <link href="/css/layoutit.css" rel="stylesheet"/>
     <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
     <link type="text/css" rel="styleSheet"  href="/css/movielist.css" />
-
+    <script src="/js/ordersList.js"></script>
+    <style type="text/css">
+        .btn{
+            width: 80px;
+            height: 35px;
+        }
+    </style>
 </head>
 <body>
-<div id="loutinav" th:include="commom::commonNav"></div>
+    <div id="loutinav" th:include="commom::userNav"></div>
 
-<div id="dss"/>
-    <form id="filter" th:action="@{/orders/list}" method="get" >
-        <span>支付状态：</span>
-        <input type="text" list="l_list" name="oStatus" id="oStatus" />
-        <datalist id="l_list">
-            <option value="预订"></option>
-            <option value="退订"></option>
-            <option value="完成"></option>
 
-        </datalist>
-
-        <span>时间：</span>
-        <input type="text" name="startTime" autocomplete="on" placeholder="" id="startTime"/>
-        <span>- </span>
-        <input type="text" name="endTime" autocomplete="on" placeholder="" id="endTime" />
-        <button>搜索</button>
-    </form >
     <div id="listul">
-        <ul>
-            <li style="list-style-type:none;" th:each="orders:${list}">
-                <!--                <div>-->
-                <p class="title"  th:text="${orders.title}"></p>
-                <p class="oStatus" th:text="${orders.oStatus}"></p>
-                <p class="price" th:text="${orders.startTime}"></p>
-                <p class="price" th:text="${orders.price}"></p>
-                <!--<p id="oId" class="price" th:text="${orders.oId}"style="display: none" />-->
+        <div class="container-fluid">
+            <div class="span4">
+                <form class="form-search" th:action="@{/orders/list}" method="get">
+                    <span>支付状态：</span>
+                    <input  name="oStatus" class="input-medium search-query" type="text" list="oStatus_list"/>
+                    <datalist id="oStatus_list">
+                        <option value="支付完成"></option>
+                        <option value="退订"></option>
+                        <option value="预定"></option>
+                    </datalist>
+                    <button type="submit" class="btn">查找</button>
+                </form>
+            </div>
+            <div class="row-fluid" th:each="order:${list}" method="get">
+                <div class="span12">
+                    <div class="accordion" id="accordion-571885">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <p th:text="'支付状态：'+${order.oStatus}" id="otatus"></p>
+                                <p th:text="'影片名称：'+${order.title}"></p>
+                                <p th:text="'用户名：'+${order.uName}"></p>
+                            </div>
+                            <div id="accordion-element-622902" class="accordion-body in collapse">
+                                <div class="accordion-inner" th:each="detail:${order.list}">
+                                    <li th:text="'播放厅：'+${detail.hName}"></li>
+                                    <li th:text="'座位：'+${detail.xAxis}+'排'+${detail.xAxis}+'座'"></li>
+                                    <li th:text="'票价：'+${detail.price}"></li>
+                                    <li th:text="'开场时间：'+${detail.startTime}"></li>
+                                    <li>
+                                        <button class="btn" th:name="${detail.odId}" onclick="deleteDetail(this)">删除</button>
+                                    </li>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group"><!--(${order.flag} lt '1')-->
+                        <div th:if="  (${order.oStatus} ne '支付完成')"></div>
+                            <button class="btn" value="支付" th:name="${order.oId}" type="button" onclick="payOrders(this)">支付<em class="icon-align-left"></em></button>
+                            <button class="btn" value="退订" th:name="${order.oId}" type="button" onclick="unsubscribe(this)">退订<em class="icon-align-center"></em></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <!--<li style="list-style-type:none;" th:each="orderDetail:${list.list}">-->
-                    <!--<p class="orderDetail"  th:text="${orderDetail.hName}"></p>-->
-                    <!--<p class="orderDetail"  th:text="${orderDetail.xAxis}+'行'+${orderDetail.yAxis}+'排'"></p>-->
-                    <!--<p class="orderDetail"  th:text="${#dates.format(orderDetail.startTime,'HH:mm')}+'-'+${#dates.format(orderDetail.endTime,'HH:mm')}"></p>-->
-                <!--</li>-->
-                <!--<button onclick="payOrders()">支付</button>-->
-                <!--<button onclick="unsubscribe()">退订</button>-->
-
-            </li>
-        </ul>
-    </div>
-    <!--<div class="modal-footer">-->
-        <!--<ul class="pagination pull-right no-margin">-->
-
-            <!--&lt;!&ndash; 首页 &ndash;&gt;-->
-            <!--<li>-->
-                <!--<a th:href="'/movie/list?pageNum=0'">首页</a>-->
-            <!--</li>-->
-
-            <!--&lt;!&ndash; 上一页 &ndash;&gt;-->
-            <!--<li th:if="${list.isHasPreviousPage()}">-->
-                <!--<a th:href="'/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>-->
-            <!--</li>-->
-
-            <!--&lt;!&ndash; 中间页 &ndash;&gt;-->
-
-            <!--&lt;!&ndash; 下一页 &ndash;&gt;-->
-            <!--<li th:if="${list.isHasNextPage()}">-->
-                <!--<a th:href="'/movie/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>-->
-            <!--</li>-->
-
-            <!--&lt;!&ndash; 尾页 &ndash;&gt;-->
-            <!--<li>-->
-                <!--<a th:href="'/movie/list?pageNum=' + ${list.getTotal() - 1}">尾页</a>-->
-            <!--</li>-->
-
-        <!--</ul>-->
-    <!--</div>-->
 </body>
 </html>

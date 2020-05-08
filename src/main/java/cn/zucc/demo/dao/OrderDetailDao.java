@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface OrderDetailDao extends JpaRepository<OrderDetail,Long> {
 
-    List<OrderDetail> findBySIdAndDeleteFlag(Long sId,Integer deleteFlag);
+    List<OrderDetail> findBySIdAndDeleteFlagAndOStatusNot(Long sId,Integer deleteFlag,Integer oStatus);
     /**
      *
      * @param mId 影院id
@@ -34,7 +34,7 @@ public interface OrderDetailDao extends JpaRepository<OrderDetail,Long> {
      * @return
      */
     @Query(nativeQuery = true,value = "SELECT *" +
-            " FROM order_detail WHERE o_id=?1")
+            " FROM order_detail WHERE o_id=?1 AND delete_flag=1")
     List<OrderDetail> findList(Long oId);
 
 

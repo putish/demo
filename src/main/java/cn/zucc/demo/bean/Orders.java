@@ -32,6 +32,7 @@ public class Orders {
     private Long coId;
 //    价格
     private BigDecimal price;
+    private String title;
 //    开始时间
     @CreatedDate
     private Date startTime;

@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 @Builder
 @DynamicUpdate
 @EntityListeners(AuditingEntityListener.class)
-public class Schedule {
+public class  Schedule{
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Id
     private Long scId;

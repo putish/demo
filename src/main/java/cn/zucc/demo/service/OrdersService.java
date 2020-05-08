@@ -2,6 +2,7 @@ package cn.zucc.demo.service;
 
 import cn.zucc.demo.dao.OrderDetailDao;
 import cn.zucc.demo.form.AddOrderDetailRequest;
+import cn.zucc.demo.form.AddOrderRequest;
 import cn.zucc.demo.form.AddOrdersRequest;
 import cn.zucc.demo.vo.OrdersDetailVo;
 import cn.zucc.demo.vo.OrdersListVo;
@@ -17,7 +18,7 @@ public interface OrdersService {
      * @param uId 用户id
      * @return
      */
-    boolean addOrders(List<AddOrderDetailRequest> requests, Long uId);
+    boolean addOrders(AddOrderRequest request, Long uId);
 
     /**
      * 支付订单
@@ -48,4 +49,12 @@ public interface OrdersService {
      * @return
      */
     OrdersListVo ordersDetail(Long oId,Long tId);
+
+    /**
+     * 订单详情
+     * @param oId
+     * @param tId 影院id
+     * @return
+     */
+    boolean ordersDelete(Long oId);
 }

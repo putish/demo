@@ -4,21 +4,38 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
-<!--    <link type="text/css" rel="styleSheet"  href="/css/index.css" />-->
-    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
-    <script src="/js/index.js"></script>
+    <link href="/css/bootstrap-combined.min.css" rel="stylesheet"/>
+    <link href="/css/layoutit.css" rel="stylesheet"/>    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
     <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
     <link type="text/css" rel="styleSheet"  href="/css/movielist.css" />
 
 </head>
 <body>
-    <div id="loutinav" th:include="commom::commonNav"></div>
+    <div id="loutinav" th:include="commom::userNav"></div>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="row-fluid">
+                    <form class="form-search" th:action="@{/movie/userlist}" method="get">
+                        <div >
 
-    <div id="dss"/>
-    <form id="search" th:action="@{/movie/list}" method="get">
-        <input type="text" name="mName" autocomplete="on" placeholder=""/>
-        <span id="searchpic"><img src="/img/search1.jpg" alt=""/></span>
-    </form>
+                                <input id="searchInput" class="input-medium search-query" name="mName" type="text" />
+
+                        </div>
+                        <div class="btn-group">
+                            <input  name="showState" class="input-medium search-query" type="text" list="showState_list"/>
+                            <datalist id="showState_list">
+                                <option value="即将上映"></option>
+                                <option value="上映"></option>
+                            </datalist>
+                        </div>
+                        <button type="submit" class="btn">查找</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="listul">
         <ul>
             <li style="list-style-type:none;" th:each="movie:${list.list}">
@@ -35,50 +52,26 @@
 
                         <p class="movie_actor" th:text="${movie.actor}"></p>
 
-                        <p class="movie_description"><textarea style="text-overflow: ellipsis;"
-                                                               rows="4" th:text="${movie.description}" readonly="readonly"></textarea></p>
-                        <p class="movie_price" th:text="${movie.price}+' ￥'">￥</p>
+                        <p class="movie_description" th:text="${movie.description}"></p>
+                        <p class="movie_price" th:text="${movie.showState}">￥</p>
                         <div class="theaterOption" id="theaterOption">
-                            <span>影院：</span>
-                            <input required="required" multiple="multiple" list="b_list"  lay-verify="required"/>
+                            <input required="required" multiple="multiple" list="b_list" id="theater"  lay-verify="required" onchange="gradeChange(this.options[this.options.selectedIndex].text)"/>
                             <datalist id="b_list">
                                 <option value="" style="display: none"></option>
                                 <option th:each="theater:${movie.theaters}"  th:text="${theater.tName}"  ></option>
                             </datalist>
                         </div>
-                        <button><!--<a th:href="'/screen/book?mId='+${theater.tId}"></a>-->选座购票</button>
+                        <a th:href="'/screen/book?mId='+${movie.mId}+'&amp;tId='+${movie.tId}" ><button>选座购票</button></a>
                     </div>
 
-<!--                </div>-->
             </li>
         </ul>
     </div>
-    <div class="modal-footer">
-        <ul class="pagination pull-right no-margin">
 
-            <!-- 首页 -->
-            <li>
-                <a th:href="'/movie/list?pageNum=0'">首页</a>
-            </li>
-
-            <!-- 上一页 -->
-            <li th:if="${list.isHasPreviousPage()}">
-                <a th:href="'/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>
-            </li>
-
-            <!-- 中间页 -->
-
-            <!-- 下一页 -->
-            <li th:if="${list.isHasNextPage()}">
-                <a th:href="'/movie/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>
-            </li>
-
-            <!-- 尾页 -->
-            <li>
-                <a th:href="'/movie/list?pageNum=' + ${list.getTotal() - 1}">尾页</a>
-            </li>
-
-        </ul>
-    </div>
 </body>
+<script>
+    document.getElementById('theater').onclick = function (){
+        console.log(document.getElementById('theater').text)
+    }
+</script>
 </html>

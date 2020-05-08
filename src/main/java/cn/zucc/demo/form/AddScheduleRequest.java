@@ -17,14 +17,15 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddScheduleRequest {
+    Long scId;
     //    影片id
     private Long mId;
     //    第一排片量
-    private Long fCount;
+    private Integer fCount;
     //    第二排片量
-    private Long sCount;
+    private Integer sCount;
     //    第三排片量
-    private Long tCount;
+    private Integer tCount;
     //    屏幕类型
     private String screenCate;
     //    票价

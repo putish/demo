@@ -100,13 +100,13 @@ public interface ScreenService {
      * @param movieSorts
      * @return
      */
-    void createGoldScreen(List<MovieSort> movieSorts, List<Hall> halls,Long tId);
+    void createGoldScreen(List<MovieSort> movieSorts, List<Hall> halls,Long tId,Date date);
     /**
      * 非黄金时间段放映表生成
      * @param movieSorts
      * @return
      */
-    void createUnGoldScreen(List<MovieSort> movieSorts, List<Hall> halls,Long tId);
+    void createUnGoldScreen(List<MovieSort> movieSorts, List<Hall> halls,Long tId,Date date);
 
     /**
      * 播放场次检查

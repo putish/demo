@@ -35,5 +35,6 @@ public class OrderDetail {
     private BigDecimal price;
 //    删除标志
     private Integer deleteFlag;
+    private Integer oStatus;
 
 }

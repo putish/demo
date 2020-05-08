@@ -1,5 +1,6 @@
-function deleteone() {
-    var cId=$("#cId").text();
+var cId;
+function deleteCatergory(e) {
+    cId=e.name;
 
     $.ajax({
         dataType:'json',
@@ -7,61 +8,90 @@ function deleteone() {
         url: "/catergory/delete",    //向后端请求数据的url
         data:{cId:cId},
         success: function (data) {
+            window.location.reload();
 
         }
     });
 
 }
-function edit(){
-    var cId=$("#cId").text();
+function editCatergory(e){
+    cId=e.name;
     var addmodel=document.getElementById("addModal");
     $.ajax({
         type : 'GET',
         dataType : 'json',
         url: "/catergory/detail",
-        data:{mId:mId},
+        data:{cId:cId},
         success: function (data) {
             var catergoryDetail=data.data;
-            var cName=document.getElementById('cname');
+            var cName=document.getElementById('cName');
             cName.value=catergoryDetail["cname"];
             addmodel.style.display="block";
-            document.getElementById("editButton").style.display="block";
-            document.getElementById("addButton").style.display="none";
+            document.getElementById("editMovie").style.display="block";
+            document.getElementById("createMovie").style.display="none";
 
         }
     });
 }
-function add() {
+function toaddCatergory() {
 
 
-    var cname=$('#cname').val();
-
+    var cname=$('#cName').val();
+alert(cname)
+    var json={
+        cName:cname
+    };
     $.ajax({
         dataType:'json',
         type: "post",
-        url: "/catergory/add",//向后端请求数据的url
         traditiona: true,
         contentType:"application/json;charset=utf-8",
-        data: JSON.stringify(cname),
+        url: "/catergory/add",//向后端请求数据的url
+        data: JSON.stringify(json),
         success: function (data) {
-        }
+            window.location.reload();
+
+    }
     });
-
+    cId=null;
 };
-function editCatergory() {
-    var cname=$('#cname').val();
-
+function toeditCatergory() {
+    var cname=$('#cName').val();
+   var json={
+       cName:cname,
+       cId:cId
+   };
+    alert(cname);
     $.ajax({
         dataType:'json',
         type: "post",
         url: "/catergory/edit",//向后端请求数据的url
         traditiona: true,
         contentType:"application/json;charset=utf-8",
-        data: JSON.stringify(cname),
+        data: JSON.stringify(json),
         success: function (data) {
-            document.getElementById("editButton").style.display="none";
-            document.getElementById("addButton").style.display="block";
+            document.getElementById("editMovie").style.display="none";
+            document.getElementById("createMovie").style.display="block";
+            window.location.reload();
 
+        },
+        error:function(xhr,state,errorThrown){
+            alert("编辑失败");
         }
+
     });
+    document.getElementById("editMovie").style.display="none";
+    document.getElementById("createMovie").style.display="block";
+    window.location.reload();
+    cId=null;
+
 }
+function addCatergory() {
+    var addModel=document.getElementById("addModal");
+    addModel.style.display="block";
+}
+window.onload=function (){
+document.getElementById("addModalClose").onclick = function () {
+    var addModal = document.getElementById("addModal");
+    addModal.style.display = "none";
+};}

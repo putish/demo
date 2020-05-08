@@ -2,6 +2,7 @@ package cn.zucc.demo.controller;
 
 import cn.zucc.demo.bean.Catergory;
 import cn.zucc.demo.data.RootData;
+import cn.zucc.demo.form.AddCatergoryRequest;
 import cn.zucc.demo.service.CatergoryService;
 import cn.zucc.demo.util.ResultUtil;
 import com.github.pagehelper.PageHelper;
@@ -32,36 +33,37 @@ public class CatergoryController {
     }
 
     @RequestMapping(value = "/list" ,method = RequestMethod.GET)
-    public String findList(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum, @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,
-                           HttpSession session,Model model) {
+    public String findList(HttpSession session,Model model) {
         Long tId = (Long) session.getAttribute("tId");
-        PageHelper.startPage(pageNum, pageSize);
         List<Catergory> list = catergoryService.findList(tId);
-        PageInfo<Catergory> pageInfo = new PageInfo<Catergory>(list, pageSize);
-        model.addAttribute("list", pageInfo);
+        model.addAttribute("list", list);
 
         return "catergory";
     }
-   @PostMapping("/add")
-    public RootData addCatergory(@RequestParam(value = "cName", defaultValue = "1") String cName,HttpSession session, Model model) {
+    @ResponseBody
+    @PostMapping("/add")
+    public RootData addCatergory(@RequestBody AddCatergoryRequest request,HttpSession session, Model model) {
         Long tId = (Long) session.getAttribute("tId");
-        catergoryService.addCatergory(cName,tId);
-        return ResultUtil.success("新增成功");
+        catergoryService.addCatergory(request.getCName(),tId);
+       return ResultUtil.success("添加成功");
     }
+    @ResponseBody
     @PostMapping("/delete")
-    public RootData delCatergory(@RequestParam(value = "cId", defaultValue = "1") Long cId,HttpSession session, Model model) {
+    public RootData delCatergory(@RequestParam(value = "cId", required = false) Long cId,HttpSession session, Model model) {
         Long tId = (Long) session.getAttribute("tId");
         catergoryService.deteleCatergory(cId,tId);
         return ResultUtil.success("删除成功");
     }
+    @ResponseBody
     @PostMapping("/edit")
-    public RootData editCatergory(@RequestParam(value = "cId", defaultValue = "1") Long cId,@RequestParam(value = "cName", defaultValue = "1") String cName,HttpSession session, Model model) {
+    public RootData editCatergory(@RequestBody AddCatergoryRequest request, HttpSession session, Model model) {
         Long tId = (Long) session.getAttribute("tId");
-        catergoryService.editCatergory(cId,cName,tId);
+         catergoryService.editCatergory(request.getCId(),request.getCName(),tId);
         return ResultUtil.success("编辑成功");
     }
+    @ResponseBody
     @GetMapping("/detail")
-    public RootData catergoryDetail(@RequestParam(value = "cId", defaultValue = "1") Long cId,@RequestParam(value = "cName", defaultValue = "1") String cName,HttpSession session, Model model) {
+    public RootData catergoryDetail(@RequestParam(value = "cId", required = false) Long cId,HttpSession session, Model model) {
         Long tId = (Long) session.getAttribute("tId");
         catergoryService.catergoryDetail(cId,tId);
         return ResultUtil.success(catergoryService.catergoryDetail(cId,tId));

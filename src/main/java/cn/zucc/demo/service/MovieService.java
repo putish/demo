@@ -2,6 +2,7 @@ package cn.zucc.demo.service;
 
 import cn.zucc.demo.bean.Movie;
 import cn.zucc.demo.form.AddMovieRequest;
+import cn.zucc.demo.vo.MovieDetailVo;
 import cn.zucc.demo.vo.MovieListVo;
 import cn.zucc.demo.vo.MovieOptionVo;
 
@@ -40,7 +41,7 @@ public interface MovieService {
      * @param tId 影院id 影院id
      * @return
      */
-    Movie movieDetail(Long mId,Long tId);
+    MovieDetailVo movieDetail(Long mId, Long tId) throws ParseException;
 
     /**
      * 编辑电影

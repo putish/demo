@@ -73,25 +73,25 @@ public class TheaterController {
         if (type == 1) {
             Theater theater = theaterService.findByTName(tName);
             if (theater == null) {
-                throw new TheaterException(ResultMapping.NO_USER);
+                return "login";
             } else {
                 if (theater.getPwd().equals(pwd)) {
                     request.getSession().setAttribute("tId", theater.getTId());//用户名存入该用户的session 中
-                    return "forward:/hall/list";
+                    return "forward:/movie/theaterlist";
                 } else {
-                    throw new TheaterException(ResultMapping.FAULT_PWD);
+                    return "login";
                 }
             }
         }else{
             Users users = usersService.findByUName(tName);
             if (users == null) {
-                throw new TheaterException(ResultMapping.NO_USER);
+                return "login";
             } else {
                 if (users.getPwd().equals(pwd)) {
                     request.getSession().setAttribute("uId", users.getUId());//用户名存入该用户的session 中
-                    return "forward:/movie/";
+                    return "forward:/movie/userlist";
                 } else {
-                    throw new TheaterException(ResultMapping.FAULT_PWD);
+                    return "login";
                 }
             }
         }

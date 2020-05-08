@@ -1,17 +1,21 @@
-function deletemovie() {
-    var mId=$("#mId").text();
+var mId;
+function deletemovie(e) {
+   mId=e.name;
     $.ajax({
         dataType:'json',
         type: "post",
         url: "/movie/delete",    //向后端请求数据的url
         data:{mId:mId},
         success: function (data) {
-
+            window.location.reload();
+        },
+        error:function(xhr,state,errorThrown){
+            alert("删除失败");
         }
     });
-
+    mId=null;
 }
-function addmovie() {
+function toeditMovie() {
 
     var poster=$("#file").val();
     var mName=$("#mName").val();
@@ -23,51 +27,6 @@ function addmovie() {
     var endTime=$("#endTime").val();
     var director=$("#director").val();
     var catergory;
-    for(var i=0;i<catergorys.length;i++){
-        if(i==0){
-            catergory=catergorys[i];
-        }
-        else {
-            catergory=catergory+","+catergorys[i];
-        }
-    }
-
-    var json={
-        poster:poster,
-        mName:mName,
-        catergory:catergory,
-        duration:duration,
-        actor:actor,
-        description:description,
-        director:director,
-        showTime:showTime,
-        endTime:endTime
-    };
-    $.ajax({
-        dataType:'json',
-        type: "post",
-        url: "/movie/edit",//向后端请求数据的url
-        traditiona: true,
-        contentType:"application/json;charset=utf-8",
-        data: JSON.stringify(json),
-        success: function (data) {
-        }
-    });
-    document.getElementById("addModal").style.display="none";
-}
-function editMovie() {
-    var mId=$("#mId").text();
-    var poster=$("#file").val();
-    var mName=$("#mName").val();
-    var catergorys=$("#catergory").val();
-    var duration=$("#duration").val();
-    var actor=$("#actor").val();
-    var description=$("#description").val();
-    var showTime=$("#showTime").val();
-    var endTime=$("#endTime").val();
-    var director=$("#director").val();
-    var catergory;
-    alert(poster);
     for(var i=0;i<catergorys.length;i++){
         if(i==0){
             catergory=catergorys[i];
@@ -91,19 +50,75 @@ function editMovie() {
     };
     $.ajax({
         dataType:'json',
+        type: "POST",
+        url: "/movie/edit",//向后端请求数据的url
+        traditiona: true,
+        contentType:"application/json;charset=utf-8",
+        data: JSON.stringify(json),
+        success: function (data) {
+            window.location.reload();
+        },
+        error:function(xhr,state,errorThrown){
+            alert("编辑失败");
+        }
+    });
+    $('#addModal').modal('hide');
+    mId=null;
+}
+function toaddMovie() {
+    var poster=$("#file").val();
+    var mName=$("#mName").val();
+    var catergorys=$("#catergory").val();
+    var duration=$("#duration").val();
+    var actor=$("#actor").val();
+    var description=$("#description").val();
+    var showTime=$("#showTime").val();
+    var endTime=$("#endTime").val();
+    var director=$("#director").val();
+    var catergory;
+    for(var i=0;i<catergorys.length;i++){
+        if(i==0){
+            catergory=catergorys[i];
+        }
+        else {
+            catergory=catergory+","+catergorys[i];
+        }
+    }
+    var json={
+        poster:poster,
+        mName:mName,
+        catergory:catergory,
+        duration:duration,
+        actor:actor,
+        description:description,
+        director:director,
+        showTime:showTime,
+        endTime:endTime
+    };
+    $.ajax({
+        dataType:'json',
         type: "post",
         url: "/movie/add",//向后端请求数据的url
         traditiona: true,
         contentType:"application/json;charset=utf-8",
         data: JSON.stringify(json),
         success: function (data) {
+            window.location.reload();
+        },
+        error:function(xhr,state,errorThrown){
+            alert("新增失败");
         }
     });
+
+
     document.getElementById("addModal").style.display="none";
 }
-function movieDetail(){
-    var mId=$("#mId").text();
-    var addmodel=document.getElementById("addModal");
+function editMovie(e){
+    var addModel=document.getElementById("addModal");
+    addModel.style.display="block";
+    mId=e.name;
+    addMovie();
+
     $.ajax({
         type : 'GET',
         dataType : 'json',
@@ -111,27 +126,29 @@ function movieDetail(){
         data:{mId:mId},
         success: function (data) {
             var movieDetail=data.data;
-            if(movieDetail["showState"]!=3) {//影片下映后不可编辑
+            if(movieDetail["showState"]!=4) {//影片下映后不可编辑
                 var previewDom = document.getElementById("preview");
                 var mName = document.getElementById('mName');
                 var duration = document.getElementById('duration');
                 var actor = document.getElementById('actor');
+                var director = document.getElementById('director');
                 var description = document.getElementById('description');
                 var showTime = document.getElementById('showTime');
                 var endTime = document.getElementById('endTime');
-                mName.value = movieDetail["mName"];
-                description = movieDetail["description"];
+                mName.value = movieDetail["mname"];
+                description.value = movieDetail["description"];
                 showTime.value = movieDetail["showTime"];
                 endTime.value = movieDetail["endTime"];
                 duration.value=movieDetail["duration"];
                 actor.value=movieDetail["actor"];
                 previewDom.src = movieDetail["poster"];
-                addmodel.style.display = "block";
-                if (movieDetail["showState"] == 2) {
+                director.value= movieDetail["director"];
+                document.getElementById("editMovie").style.display="block";
+                document.getElementById("createMovie").style.display="none";
+                if (movieDetail["showState"] == 3) {
                     showTime.attr("readonly", "true");//上映后上映时间不可编辑
                 }
-                document.getElementById("edit").style.display="block";
-                document.getElementById("create").style.display="none";
+
             }else{
                 alert("影片下映后不可编辑");
             }
@@ -169,46 +186,16 @@ window.onload=function ()
         }
         return true;
     }
+    document.getElementById("addModalClose").onclick = function () {
+        var addModal = document.getElementById("addModal");
+        addModal.style.display = "none";
+    };
 
 };
-function addSchedule() {
-    var fCount=$("#fCount").val();
-    var sCount=$("#sCount").val();
-    var tCount=$("#tCount").val();
-    var screenCate=$("#screenCate").val();
-    var sprice=$("#sprice").val();
-    var mId=$("#mId").text();
 
-    var json={
-        fCount:fCount,
-        sCount:sCount,
-        tCount:tCount,
-        price:sprice,
-        screenCate:screenCate,
-        mId:mId
-    };
-    $.ajax({
-        dataType:'json',
-        type: "post",
-        url: "/schedule/add",//向后端请求数据的url
-        traditiona: true,
-        contentType:"application/json;charset=utf-8",
-        data: JSON.stringify(json),
-        success: function (data) {
-        }
-    });
-    document.getElementById("addSchedualModal").style.display="none";
+function addMovie(){
+    var addModel=document.getElementById("addModal");
+    addModel.style.display="block";
 }
-function deleteSchedule() {
-    var scId=$("#scId").text();
-    $.ajax({
-        dataType:'json',
-        type: "post",
-        url: "/schedule/delete",//向后端请求数据的url
-        traditiona: true,
-        contentType:"application/json;charset=utf-8",
-        data:{scId:scId},
-        success: function (data) {
-        }
-    });
-}
+
+

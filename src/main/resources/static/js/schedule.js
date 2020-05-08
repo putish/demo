@@ -100,7 +100,7 @@ function editSchedule(e){
     var test = window.location.search;
     mId=test.substring(5,test.length);
     scId=e.name;
-
+    document.getElementById("addModal").style.display = "block";
     $("#addModel").modal('show');
     $.ajax({
         type : 'GET',
@@ -109,7 +109,6 @@ function editSchedule(e){
         data:{scId:scId},
         success: function (data) {
             var scheduleDetail=data.data;
-            alert(scheduleDetail)
             var fCount = document.getElementById("fCount");
             var sCount = document.getElementById('sCount');
             var tCount = document.getElementById('tCount');

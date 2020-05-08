@@ -47,7 +47,7 @@ public class SeatDetailServiceImpl implements SeatDetailService {
 
     @Override
     public List<SeatDetail> findList(Long hId, Long tId) {
-        return seatDetailDao.findByHIdAndTIdAndDeleteFlag(hId, tId,DeleteFlagEnum.UN_DELETE.getValue());
+        return seatDetailDao.findByHIdAndDeleteFlag(hId,DeleteFlagEnum.UN_DELETE.getValue());
     }
 
     @Override

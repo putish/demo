@@ -36,5 +36,5 @@ public class ScreenListVo {
     //    散场时间
     private Date endTime;
     //    上映状态
-    private Integer showState;
+    private String showState;
 }

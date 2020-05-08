@@ -13,7 +13,7 @@ import java.util.Date;
  * @create: 2020-02-28 21:52
  */
 public class DateUtil {
-    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static double GOLDRATE=3.4/14.5;//黄金时间与营业时间比例
 
@@ -61,7 +61,18 @@ public class DateUtil {
         return format.parse(date);
 
     }
+    /**
+     * 前后端转换
+     * @param date 时间字符串
+     * @return
+     * @throws ParseException
+     */
+    public static String toString(Date date) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(date);
+        return dateString;
 
+    }
     /**
      * 在线销售
      * @param date
@@ -97,9 +108,9 @@ public class DateUtil {
      * 黄金时间开场
      * @return
      */
-    public static Date startGold(){
+    public static Date startGold(Date date){
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
+        calendar.setTime(date);
         calendar.set(Calendar.HOUR_OF_DAY, 18);
         calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
@@ -110,11 +121,11 @@ public class DateUtil {
      * 黄金时间结束
      * @return
      */
-    public static Date endGold(){
+    public static Date endGold(Date date){
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.set(Calendar.HOUR_OF_DAY, 22);
-        calendar.set(Calendar.MINUTE, 0);
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
         return calendar.getTime();
     }
@@ -148,10 +159,10 @@ public class DateUtil {
             }
         }
     }
-    public static Date getOpenHours(String dateString){
+    public static Date getOpenHours(Date thedate,String dateString){
         String[] date=dateString.split(":");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(DateUtil.getEndTime(new Date(),60*24));
+        calendar.setTime(DateUtil.getEndTime(thedate,60*24));
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(date[0]));
         calendar.set(Calendar.MINUTE, Integer.parseInt(date[1]));
         calendar.set(Calendar.SECOND, 0);

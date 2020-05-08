@@ -13,7 +13,7 @@ public enum UseStateEnum implements BaseEnum<Integer,UseStateEnum>{
     IN_SPARE(2,"闲置中"),
     OUT_DATE(4,"已过期"),
     WILL_EDIT(5,"待编辑"),
-    CAN_EDIT(5,"可编辑"),
+    CAN_EDIT(6,"可编辑"),
     IN_FALUT(3,"故障中");
 
     private Integer value;

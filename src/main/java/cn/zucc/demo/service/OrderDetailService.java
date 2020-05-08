@@ -22,6 +22,8 @@ public interface OrderDetailService {
      */
     boolean deleteOrderDetail(Long odId);
 
+    boolean unsubscribeDetail(Long odId);
+
     /**
      *订单详情列表
      * @param oId

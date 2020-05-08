@@ -9,7 +9,8 @@ import java.util.List;
  * @create: 2020-02-25 10:53
  */
 public enum ShowStateEnum implements BaseEnum<Integer,ShowStateEnum>{
-    WILL_SHOW(1,"即将上映"),
+    NO_SHOW(0,"未上映"),
+    WILL_SHOW(1,"预售"),
     IN_SHOW(2,"上映"),
     SOLD_OUT(3,"下架");
 

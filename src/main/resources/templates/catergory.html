@@ -1,117 +1,215 @@
+
 <!DOCTYPE html>
 <html  xmlns="http://www.w3.org/1999/xhtml"
        xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>类别管理</title>
+    <title>Title</title>
     <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
-    <link type="text/css" rel="styleSheet"  href="/css/catergory.css" />
-
-    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+    <link href="/css/bootstrap-combined.min.css" rel="stylesheet"/>
+    <link href="/css/layoutit.css" rel="stylesheet"/>
+    <link type="text/css" rel="styleSheet"  href="/css/movie.css" />
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.bootcss.com/avalon.js/2.2.7/avalon.js"></script>
+    <script src="/js/catergory.js"></script>
+
 
 </head>
 <body>
-    <div id="loutinav" th:include="commom::commonNav"></div>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div id="loutinav" th:include="commom::commonNav"></div>
 
-    <div id="dss"/>
-    <div>
-        <table id="movietable">
-
-            <tr>
-                <th>类别名称</th>
-                <th class="action">操作</th>
-            </tr>
-
-            <tr th:each="catergory:${list.list}">
-                <td th:text="${catergory.cName}"></td>
-                <td th:text="${catergory.cId}" id="cId" style="display: none"></td>
-
-                <td class="action">
-                    <input type="button" value="修改" onclick="edit()"/>
-                    <input  type="button" value="删除" onclick="deleteone();"/>
-                </td>
-            </tr>
-
-            <tr class="add">
-                <td></td>
-                <td class="action"><input type="button" value="增加" data-toggle="modal" data-target="#addModal"/></td>
-            </tr>
-            <div class="page-footer">
-                <ul class="pagination pull-right no-margin">
-
-                    <!-- 首页 -->
-                    <li>
-                        <a th:href="'/hall/list?pageNum=1'">首页</a>
-                    </li>
-
-                    <!-- 上一页 -->
-                    <li th:if="${list.isHasPreviousPage()}">
-                        <a th:href="'/hall/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>
-                    </li>
-
-                    <!-- 中间页 -->
-
-                    <!-- 下一页 -->
-                    <li th:if="${list.isHasNextPage()}">
-                        <a th:href="'/hall/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>
-                    </li>
-
-                    <!-- 尾页 -->
-                    <li>
-                        <a th:href="'/hall/list?pageNum=' + ${list.pages - 1}">尾页</a>
-                    </li>
-
-                </ul>
-            </div>
-
-
-
-
-        </table>
-
-        <!-- 模态框（Modal） -->
-
-    </div>
-    <div class="modal-fade"  id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" id="addModalClose" aria-hidden="true">
-                        &times;
-                    </button >
-                    <h4 class="modal-title">
-                        添加影片类别
-                    </h4>
-                </div>
-                <div ms-controller="addmodal" class="modal-body" id="addbody">
-                    <form  ms-click="@add">
-
-                        <div class="inputone">
-                            <span>类别名称：</span>
-                            <input type="text"  value="" id="cname"/>
+        <div class="span10">
+            <div class="row-fluid">
+                <div class="span10">
+                    <div class="row-fluid">
+                        <div class="span4">
                         </div>
+                    </div>
+                </div>
+                <div class="span2">
+                    <button class="btn" type="button" onclick="addCatergory()" value="增加" >新增</button>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>类别名称</th>
 
-                    </form>
+                    <th class="action">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="catergory:${list.list}">
+                    <td th:text="${catergory.cName}"></td>
+
+                    <td class="action">
+                        <input type="button" th:name="${catergory.cId}" value="编辑" onclick="editCatergory(this)" />
+                        <input type="button" th:name="${catergory.cId}" value="删除" onclick="deleteCatergory(this)"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="modal-fade"  id="addModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="addModal" id="addModalClose" aria-hidden="true">
+                                &times;
+                            </button >
+                            <h4 class="modal-title">
+                                影片类别表
+                            </h4>
+                        </div>
+                        <div ms-controller="addmodal" class="modal-body" id="addbody">
+
+                            <form class="form-horizontal">
+                                <div class="control-group">
+                                    <label class="control-label" for="cName">类别名称：</label>
+                                    <div class="controls">
+                                        <input id="cName" name="cName" type="text" />
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="modal-footer" >
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button type="button" id="createMovie" onclick="toaddCatergory()" class="btn btn-primary">
+                                        新增类别
+                                    </button>
+                                    <button type="button" id="editMovie" onclick="toeditCatergory()" class="btn btn-primary">
+                                        编辑类别
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-footer" id="add-footer">
-                    <button  class="btn btn-default" data-dismiss="modal">关闭
-                    </button>
-                    <button id="addButton" class="btn btn-primary" onclick="add()">
-                        新增
-                    </button>
-                    <button id="editButton" class="btn btn-primary" onclick="editCatergory()">
-                        编辑
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
+            </div>
+        </div>
     </div>
-
-
-
-
+</div>
 
 </body>
 </html>
+<!--<!DOCTYPE html>-->
+<!--<html  xmlns="http://www.w3.org/1999/xhtml"-->
+<!--       xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8"/>-->
+<!--    <title>类别管理</title>-->
+<!--    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />-->
+<!--    <link type="text/css" rel="styleSheet"  href="/css/catergory.css" />-->
+
+<!--    <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>-->
+<!--    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+<!--    <script src="https://cdn.bootcss.com/avalon.js/2.2.7/avalon.js"></script>-->
+
+<!--</head>-->
+<!--<body>-->
+<!--    <div id="loutinav" th:include="commom::commonNav"></div>-->
+
+<!--    <div id="dss"/>-->
+<!--    <div>-->
+<!--        <table id="movietable">-->
+
+<!--            <tr>-->
+<!--                <th>类别名称</th>-->
+<!--                <th class="action">操作</th>-->
+<!--            </tr>-->
+
+<!--            <tr th:each="catergory:${list.list}">-->
+<!--                <td th:text="${catergory.cName}"></td>-->
+<!--                <td th:text="${catergory.cId}" id="cId" style="display: none"></td>-->
+
+<!--                <td class="action">-->
+<!--                    <input type="button" value="修改" onclick="edit()"/>-->
+<!--                    <input  type="button" value="删除" onclick="deleteone();"/>-->
+<!--                </td>-->
+<!--            </tr>-->
+
+<!--            <tr class="add">-->
+<!--                <td></td>-->
+<!--                <td class="action"><input type="button" value="增加" data-toggle="modal" data-target="#addModal"/></td>-->
+<!--            </tr>-->
+<!--            <div class="page-footer">-->
+<!--                <ul class="pagination pull-right no-margin">-->
+
+<!--                    &lt;!&ndash; 首页 &ndash;&gt;-->
+<!--                    <li>-->
+<!--                        <a th:href="'/hall/list?pageNum=1'">首页</a>-->
+<!--                    </li>-->
+
+<!--                    &lt;!&ndash; 上一页 &ndash;&gt;-->
+<!--                    <li th:if="${list.isHasPreviousPage()}">-->
+<!--                        <a th:href="'/hall/list?pageNum=' + ${list.getPrePage()}" th:text="上一页"></a>-->
+<!--                    </li>-->
+
+<!--                    &lt;!&ndash; 中间页 &ndash;&gt;-->
+
+<!--                    &lt;!&ndash; 下一页 &ndash;&gt;-->
+<!--                    <li th:if="${list.isHasNextPage()}">-->
+<!--                        <a th:href="'/hall/list?pageNum=' + ${list.getNextPage()}" th:text="下一页"></a>-->
+<!--                    </li>-->
+
+<!--                    &lt;!&ndash; 尾页 &ndash;&gt;-->
+<!--                    <li>-->
+<!--                        <a th:href="'/hall/list?pageNum=' + ${list.pages - 1}">尾页</a>-->
+<!--                    </li>-->
+
+<!--                </ul>-->
+<!--            </div>-->
+
+
+
+
+<!--        </table>-->
+
+<!--        &lt;!&ndash; 模态框（Modal） &ndash;&gt;-->
+
+<!--    </div>-->
+<!--    <div class="modal-fade"  id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <button type="button" class="close" data-dismiss="modal" id="addModalClose" aria-hidden="true">-->
+<!--                        &times;-->
+<!--                    </button >-->
+<!--                    <h4 class="modal-title">-->
+<!--                        添加影片类别-->
+<!--                    </h4>-->
+<!--                </div>-->
+<!--                <div ms-controller="addmodal" class="modal-body" id="addbody">-->
+<!--                    <form  ms-click="@add">-->
+
+<!--                        <div class="inputone">-->
+<!--                            <span>类别名称：</span>-->
+<!--                            <input type="text"  value="" id="cname"/>-->
+<!--                        </div>-->
+
+<!--                    </form>-->
+<!--                </div>-->
+<!--                <div class="modal-footer" id="add-footer">-->
+<!--                    <button  class="btn btn-default" data-dismiss="modal">关闭-->
+<!--                    </button>-->
+<!--                    <button id="addButton" class="btn btn-primary" onclick="add()">-->
+<!--                        新增-->
+<!--                    </button>-->
+<!--                    <button id="editButton" class="btn btn-primary" onclick="editCatergory()">-->
+<!--                        编辑-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
+<!--        </div>&lt;!&ndash; /.modal &ndash;&gt;-->
+<!--    </div>-->
+
+
+
+
+
+<!--</body>-->
+<!--</html>-->

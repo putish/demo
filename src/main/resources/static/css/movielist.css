@@ -34,21 +34,21 @@
     height: 40px;
 }
 #listul{
-    width: 800px;
+    width: 830px;
     margin-left: 100px;
     margin-top: 40px;
 }
 #listul ul li{
     width: 100%;
-    height: 300px;
+    height: 350px;
 }
 .cover {
     width:170px;
-    height:256px;
+    height:246px;
     /*margin-left: 17px;*/
     /*z-index: 1;*/
     /*position: absolute;*/
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     margin: 20px 10px;
     float: left;
     /*background:pink;*/
@@ -105,7 +105,7 @@
     height: 30px;
 }
 .movie_lable{
-    width: 60%;
+    width: 50%;
     float: left;
     height: 30px;
 }
@@ -116,7 +116,7 @@
 }
 .movie_description{
     width: 100%;
-    height: 80px;
+    height: 40px;
     text-overflow:ellipsis;
 }
 .movie_description textarea{
@@ -151,4 +151,23 @@
 .theaterOption input{
     height: 30px;
     width: 80px;
+}
+li{
+    list-style-type:none;
+}
+p{
+    overflow: hidden;
+}
+.container-fluid{
+    margin: 40px auto;
+    width:450px;
+}
+#searchInput{
+    width: 200px;
+}
+.form-search{
+    width: 100%;
+}
+.form-search button{
+    float: right;
 }

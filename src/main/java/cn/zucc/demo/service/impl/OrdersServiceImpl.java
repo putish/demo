@@ -2,15 +2,18 @@ package cn.zucc.demo.service.impl;
 
 import cn.zucc.demo.bean.*;
 import cn.zucc.demo.dao.*;
+import cn.zucc.demo.enums.DeleteFlagEnum;
 import cn.zucc.demo.enums.OStatusEnum;
 import cn.zucc.demo.enums.UseStateEnum;
 import cn.zucc.demo.form.AddOrderDetailRequest;
+import cn.zucc.demo.form.AddOrderRequest;
 import cn.zucc.demo.form.AddOrdersRequest;
 import cn.zucc.demo.service.OrderDetailService;
 import cn.zucc.demo.service.OrdersService;
 import cn.zucc.demo.vo.OrderDetailListVo;
 import cn.zucc.demo.vo.OrdersDetailVo;
 import cn.zucc.demo.vo.OrdersListVo;
+import cn.zucc.demo.vo.SeatAddVo;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,18 +54,23 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     @Transactional
-    public boolean addOrders(List<AddOrderDetailRequest> requests, Long uId) {
+    public boolean addOrders(AddOrderRequest request, Long uId) {
         Orders orders=new Orders();
         BigDecimal prices=BigDecimal.ZERO;
 
         orders.setOStatus(OStatusEnum.YU_DINGH.getValue());
         orders.setStartTime(new Date());
         orders.setUId(uId);
-        Screen screen=screenDao.findOne(requests.get(0).getSId());//获取影院id
-        orders=ordersDao.save(orders);
+        Screen screen=screenDao.findOne(request.getSId());//获取影院id
+        Movie movie=movieDao.findOne(screen.getMId());
+        orders.setTitle(movie.getMName());
+        orders.setDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
         orders.setTId(screen.getTId());
-        for(AddOrderDetailRequest request:requests){//添加订单详情
-            OrderDetail orderDetail=orderDetailService.addOrderDetail(request,orders.getOId());
+        orders=ordersDao.save(orders);
+
+        for(AddOrderDetailRequest seatAddVo :request.getSeatVos()){
+            //添加订单详情
+            OrderDetail orderDetail=orderDetailService.addOrderDetail(seatAddVo,orders.getOId());
             prices.add(orderDetail.getPrice());
             if(orders.getTId()==null){
             }
@@ -75,7 +83,7 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public boolean payOrders(Long oId, Long uId) {
         Orders orders=ordersDao.findOne(oId);
-        if (orders.getUId()==uId){
+        if (orders.getOStatus().equals(OStatusEnum.YU_DINGH.getValue())){
             orders.setOStatus(OStatusEnum.FINISH.getValue());
             ordersDao.save(orders);
             return true;
@@ -86,17 +94,16 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public boolean unsubscribeOrders(Long oId, Long uId) {
         Orders orders=ordersDao.findOne(oId);
-        if (orders.getUId()==uId){
+        if (orders.getOStatus().equals(OStatusEnum.FINISH.getValue())){
             orders.setOStatus(OStatusEnum.TUI_DING.getValue());
             List<OrderDetail> details=orderDetailDao.findByOId(oId);
             for(OrderDetail detail:details){//添加订单详情
-                orderDetailService.deleteOrderDetail(detail.getOdId());
-            }
+                orderDetailService.unsubscribeDetail(detail.getOdId());
+                ordersDao.save(orders);
 
-            ordersDao.save(orders);
-            return true;
+            }
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -106,6 +113,7 @@ public class OrdersServiceImpl implements OrdersService {
         for (Orders order:orders){
             OrdersListVo vo=new OrdersListVo();
             vo.setOId(order.getOId());
+            vo.setTitle(order.getTitle());
             vo.setOStatus(OStatusEnum.getContentByValue(order.getOStatus()));
             vo.setPrice(order.getPrice());
             vo.setStartTime(order.getStartTime());
@@ -131,5 +139,13 @@ public class OrdersServiceImpl implements OrdersService {
         List<OrderDetailListVo> detailListVos=orderDetailService.findList(order.getOId());
         vo.setList(detailListVos);
         return vo;
+    }
+
+    @Override
+    public boolean ordersDelete(Long oId) {
+        Orders orders=ordersDao.findOne(oId);
+        orders.setDeleteFlag(DeleteFlagEnum.IS_DELETE.getValue());
+        ordersDao.save(orders);
+        return true;
     }
 }

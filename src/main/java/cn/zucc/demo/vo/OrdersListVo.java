@@ -31,5 +31,5 @@ public class OrdersListVo {
     //    订单详情
     private List<OrderDetailListVo> list;
 
-
+    private Integer flag;
 }

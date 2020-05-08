@@ -28,7 +28,9 @@ public enum  ResultMapping {
     CHANGE_TO_WILL_EDIT(15,"转为待编辑"),
     FALUT_ENDTIME(16,"下架时间在三日内"),
     REPEAT_USERNAME(12,"用户名重复"),
-    REPEAT_CATERGORY(12,"类别名称重复");
+    SOLD_OUT(18,"影片已经下架"),
+    REPEAT_CATERGORY(17,"类别名称重复");
+
     private Integer code;
 
     private String message;
