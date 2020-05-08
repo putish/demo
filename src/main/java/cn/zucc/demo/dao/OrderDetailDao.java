@@ -25,7 +25,7 @@ public interface OrderDetailDao extends JpaRepository<OrderDetail,Long> {
      * @param oId
      * @return
      */
-    List<OrderDetail> findByOId(Long oId);
+    List<OrderDetail> findByOIdAndDeleteFlag(Long oId,Integer deleteFlag);
 
 
     /**

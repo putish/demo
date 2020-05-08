@@ -15,6 +15,7 @@ import com.github.pagehelper.PageInfo;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -71,18 +72,9 @@ public class MovieController {
                               @RequestParam(required = false) String showState, @RequestParam(required = false) String mName,
                               @RequestParam(required = false) Long cId, @RequestParam(required = false) String sortBy, Model model){
         Long tId= (Long) session.getAttribute("tId");
-        Integer showStateEnum=null;
-        if(showState!=null) {
-            if (showState.equals("即将上映")) {
-                showStateEnum = 1;
-            } else if (showState.equals("上映")) {
-                showStateEnum = 2;
-            } else if (showState.equals("下架")) {
-                showStateEnum = 3;
-            }
-        }
 
-        List<MovieListVo> list=movieService.findList(tId, showStateEnum, cId, sortBy,(mName==null||mName=="")?null:"%"+mName+"%");
+        List<MovieListVo> list=movieService.findList(tId, !StringUtils.isEmpty(showState)?null:ShowStateEnum.getValueByContent(showState),
+                cId, sortBy,(mName==null||mName=="")?null:"%"+mName+"%");
         List<Catergory> options=catergoryService.findList(tId);
         model.addAttribute("options",options);
         model.addAttribute("list",list);
@@ -93,17 +85,8 @@ public class MovieController {
                            @RequestParam(required = false) String showState, @RequestParam(required = false) String mName,
                        @RequestParam(required = false) Long cId, @RequestParam(required = false) String sortBy, Model model){
         Long uId= (Long) session.getAttribute("uId");
-        Integer showStateEnum=null;
-        if(showState!=null) {
-            if (showState.equals("即将上映")) {
-                showStateEnum = 1;
-            } else if (showState.equals("上映")) {
-                showStateEnum = 2;
-            } else if (showState.equals("下架")) {
-                showStateEnum = 3;
-            }
-        }
-        List<MovieListVo> list=movieService.findList(null, showStateEnum, cId, sortBy,(mName==null||mName=="")?null:"%"+mName+"%");
+        List<MovieListVo> list=movieService.findList(null, !StringUtils.isEmpty(showState)?null:ShowStateEnum.getValueByContent(showState),
+                cId, sortBy,(mName==null||mName=="")?null:"%"+mName+"%");
         Page<MovieListVo> page=PageHelper.startPage(pageNum, pageSize);
         PageInfo<MovieListVo> pageInfo=page.toPageInfo();
         pageInfo.setList(list);

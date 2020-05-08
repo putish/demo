@@ -53,8 +53,12 @@ public interface OrdersService {
     /**
      * 订单详情
      * @param oId
-     * @param tId 影院id
      * @return
      */
     boolean ordersDelete(Long oId);
+
+    /**
+     * 订单检查
+     */
+    void ordersCheckTask();
 }

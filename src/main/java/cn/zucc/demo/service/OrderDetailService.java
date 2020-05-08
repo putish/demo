@@ -22,8 +22,19 @@ public interface OrderDetailService {
      */
     boolean deleteOrderDetail(Long odId);
 
+    /**
+     * 退订
+     * @param odId
+     * @return
+     */
     boolean unsubscribeDetail(Long odId);
 
+    /**
+     * 支付
+     * @param odId
+     * @return
+     */
+    boolean payOrderDetail(Long odId);
     /**
      *订单详情列表
      * @param oId

@@ -76,7 +76,7 @@ public interface ScreenService {
      * @param movies
      * @return
      */
-    List<MovieSort> getSort(List<Movie> movies,Date date);
+    List<MovieSort> getSort(List<Movie> movies,Date date,Integer scheduel);
 
     /**
      * 影片类别优先度值

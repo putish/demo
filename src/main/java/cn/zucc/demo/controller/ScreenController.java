@@ -2,6 +2,7 @@ package cn.zucc.demo.controller;
 
 import cn.zucc.demo.bean.Movie;
 import cn.zucc.demo.data.RootData;
+import cn.zucc.demo.enums.OStatusEnum;
 import cn.zucc.demo.enums.ShowStateEnum;
 import cn.zucc.demo.mapping.ResultMapping;
 import cn.zucc.demo.service.MovieService;
@@ -13,6 +14,7 @@ import cn.zucc.demo.vo.MovieListVo;
 import cn.zucc.demo.vo.ScreenListVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -67,18 +69,8 @@ public class ScreenController {
     @GetMapping("/list")
     public String screenList(@RequestParam(required = false) String showState,HttpSession session,@RequestParam(required = false) Long mId,@RequestParam(required = false) Long hId, Model model) throws ParseException {
         Long tId = (Long) session.getAttribute("tId");
-        Integer showStateEnum=null;
-        if(showState!=null) {
-            if (showState.equals("即将上映")) {
-                showStateEnum = 1;
-            } else if (showState.equals("上映")) {
-                showStateEnum = 2;
-            } else if (showState.equals("下架")) {
-                showStateEnum = 3;
-            }
-        }
 
-        List<ScreenListVo> list = screenService.screenList(mId, hId, showStateEnum, null, null, tId);
+        List<ScreenListVo> list = screenService.screenList(mId, hId, !StringUtils.isEmpty(showState)?null: ShowStateEnum.getValueByContent(showState), null, null, tId);
         model.addAttribute("list",list);
         return "screen";
     }

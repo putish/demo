@@ -186,46 +186,58 @@ public class ScreenServiceImpl implements ScreenService {
     @Override
     public boolean screenSchedule(Long tId) {
         Date today=DateUtil.initDateByDay();//今日零点
-        Date tommorrow= DateUtil.getEndTime(today,60*24);//明日
 
         List<Hall> halls=hallDao.findByTIdAndDeleteFlagAndUseStateOrderBySeatCount(tId,DeleteFlagEnum.UN_DELETE.getValue(), UseStateEnum.IN_USE.getValue());//所有播放厅
         List<Movie> movies=movieDao.findByShowStateAndTId(ShowStateEnum.IN_SHOW.getValue(),tId);//正在上映
         List<Movie> willMovies=movieDao.findByShowStateAndTId(ShowStateEnum.NO_SHOW.getValue(),tId);//即将上映
 
-//        List<Movie> advance=new ArrayList<>();
-//        for (Movie movie:willMovies){
-//            if(movie.getShowTime().equals(DateUtil.getEndTime(today,10*60*24))){//距离上映日期只有十日
-//                advance.add(movie);
-//            }
-//        }
+        List<Movie> advance=new ArrayList<>();
+        for (Movie movie:willMovies){
+            if(movie.getShowTime().equals(DateUtil.getEndTime(today,10*60*24))){//距离上映日期只有十日
+                movie.setShowState(ShowStateEnum.WILL_SHOW.getValue());//设为预售
+                movieDao.save(movie);
+                advance.add(movie);
+            }
+        }
+        for(int i=1;i<=3;i++) {//正在上映
+            Date tommorrow= DateUtil.getEndTime(today,60*24*i);//明日
 
-        List<MovieSort> movieSorts=getSort(movies,tommorrow);
+            List<MovieSort> movieSorts = getSort(movies, tommorrow, i);
 
-        createGoldScreen(movieSorts,halls,tId,tommorrow);//生成黄金时间段播放场次
-        createUnGoldScreen(movieSorts,halls,tId,tommorrow);//生成非黄金时间段播放场次
+            createGoldScreen(movieSorts, halls, tId, tommorrow);//生成黄金时间段播放场次
+            createUnGoldScreen(movieSorts, halls, tId, tommorrow);//生成非黄金时间段播放场次
+        }
+        today=DateUtil.getEndTime(today,9*60*24);
+        for(int i=1;i<=3;i++) {//预售
+            Date tommorrow= DateUtil.getEndTime(today,60*24*i);//明日
 
-//        today=willMovies.get(0).getShowTime();;//今日零点
-//        tommorrow= DateUtil.getEndTime(today,60*24);//明日
-//        List<MovieSort> willtMovieSorts = getSort(willMovies, today);
-//        List<MovieSort> willtmMovieSorts = getSort(willMovies, tommorrow);
-//
-//        createGoldScreen(willtMovieSorts,halls,tId);//生成黄金时间段播放场次
-//        createUnGoldScreen(willtMovieSorts,halls,tId);
-//
-//        createGoldScreen(willtmMovieSorts,halls,tId);//生成黄金时间段播放场次
-//        createUnGoldScreen(willtmMovieSorts,halls,tId);
-        return false;
+            List<MovieSort> movieSorts = getSort(advance, tommorrow, i);
+
+            createGoldScreen(movieSorts, halls, tId, tommorrow);//生成黄金时间段播放场次
+            createUnGoldScreen(movieSorts, halls, tId, tommorrow);//生成非黄金时间段播放场次
+        }
+
+        return true;
     }
 
     @Override
-    public List<MovieSort> getSort(List<Movie> movies,Date date) {
+    public List<MovieSort> getSort(List<Movie> movies,Date date,Integer scheduel) {
         List<MovieSort> list=new ArrayList<>();
         Integer totalTickets = 0;
         for(Movie movie:movies){
             List<Schedule> schedules=scheduleDao.findByMIdAndDeleteFlag(movie.getMId(),DeleteFlagEnum.UN_DELETE.getValue());
 
             for(Schedule schedule:schedules){//总排片量
-                totalTickets+=schedule.getFCount();
+                if(scheduel==1) {
+                    totalTickets+=schedule.getFCount();
+
+                }else if(scheduel==2) {
+                    totalTickets+=schedule.getSCount();
+
+                }else if(scheduel==3) {
+                    totalTickets+=schedule.getTCount();
+
+                }
             }
         }
         for(Movie movie:movies){
@@ -252,18 +264,53 @@ public class ScreenServiceImpl implements ScreenService {
                 vo.setCategoryIndex(categoryIndex);
                 Float totalSort= Float.valueOf(0);
                 if(seats!=0) {
-                    totalSort = categoryIndex * 0.2f + tickets * 0.3f + Float.valueOf(tickets / seats) * 0.5f+schedule.getFCount()/totalTickets*10;
-                }else {
-                    totalSort = categoryIndex * 0.2f + tickets * 0.3f +schedule.getFCount()/totalTickets*10;
+                    if(scheduel==1) {
+                        totalSort = categoryIndex * 0.2f + tickets * 0.3f + Float.valueOf(tickets / seats) * 0.5f+schedule.getFCount()/totalTickets*10;
 
+                    }else if(scheduel==2) {
+                        totalSort = categoryIndex * 0.2f + tickets * 0.3f + Float.valueOf(tickets / seats) * 0.5f+schedule.getSCount()/totalTickets*10;
+
+                    }else if(scheduel==3) {
+                        totalSort = categoryIndex * 0.2f + tickets * 0.3f + Float.valueOf(tickets / seats) * 0.5f+schedule.getTCount()/totalTickets*10;
+
+                    }
+                }else {
+                    if(scheduel==1) {
+                        totalSort = categoryIndex * 0.2f + tickets * 0.3f + schedule.getFCount()/totalTickets*10;
+
+                    }else if(scheduel==2) {
+                        totalSort = categoryIndex * 0.2f + tickets * 0.3f + schedule.getSCount()/totalTickets*10;
+
+                    }else if(scheduel==3) {
+                        totalSort = categoryIndex * 0.2f + tickets * 0.3f + schedule.getTCount()/totalTickets*10;
+
+                    }
                 }
                 vo.setTotalSort(totalSort);//优先度
 
                 vo.setDuration(movie.getDuration());
-                int goldSeat = (int) (schedule.getFCount() * DateUtil.GOLDRATE * totalSort*5);//黄金时间排片量
-                vo.setGoldSeatCount(goldSeat);
-                vo.setUnGoldSeatCount(schedule.getFCount() - goldSeat);//非黄金时间排片量
+                int goldSeat=0;
+                if(scheduel==1) {
+                    goldSeat = (int) (schedule.getFCount() * DateUtil.GOLDRATE * totalSort * 5);//黄金时间排片量
 
+                }else if(scheduel==2) {
+                    goldSeat = (int) (schedule.getSCount() * DateUtil.GOLDRATE * totalSort * 5);//黄金时间排片量
+
+                }else if(scheduel==3) {
+                    goldSeat = (int) (schedule.getTCount() * DateUtil.GOLDRATE * totalSort * 5);//黄金时间排片量
+
+                }
+                vo.setGoldSeatCount(goldSeat);
+                if(scheduel==1) {
+                    vo.setUnGoldSeatCount(schedule.getFCount() - goldSeat);//非黄金时间排片量
+
+                }else if(scheduel==2) {
+                    vo.setUnGoldSeatCount(schedule.getSCount() - goldSeat);//非黄金时间排片量
+
+                }else if(scheduel==3) {
+                    vo.setUnGoldSeatCount(schedule.getTCount() - goldSeat);//非黄金时间排片量
+
+                }
                 list.add(vo);
             }
         }

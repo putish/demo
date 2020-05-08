@@ -4,12 +4,14 @@ import cn.zucc.demo.bean.*;
 import cn.zucc.demo.dao.*;
 import cn.zucc.demo.enums.DeleteFlagEnum;
 import cn.zucc.demo.enums.OStatusEnum;
+import cn.zucc.demo.enums.ShowStateEnum;
 import cn.zucc.demo.enums.UseStateEnum;
 import cn.zucc.demo.form.AddOrderDetailRequest;
 import cn.zucc.demo.form.AddOrderRequest;
 import cn.zucc.demo.form.AddOrdersRequest;
 import cn.zucc.demo.service.OrderDetailService;
 import cn.zucc.demo.service.OrdersService;
+import cn.zucc.demo.util.DateUtil;
 import cn.zucc.demo.vo.OrderDetailListVo;
 import cn.zucc.demo.vo.OrdersDetailVo;
 import cn.zucc.demo.vo.OrdersListVo;
@@ -85,6 +87,13 @@ public class OrdersServiceImpl implements OrdersService {
         Orders orders=ordersDao.findOne(oId);
         if (orders.getOStatus().equals(OStatusEnum.YU_DINGH.getValue())){
             orders.setOStatus(OStatusEnum.FINISH.getValue());
+            orders.setEndTime(new Date());
+            List<OrderDetail> details=orderDetailDao.findByOIdAndDeleteFlag(oId,DeleteFlagEnum.UN_DELETE.getValue());
+            for(OrderDetail detail:details){//添加订单详情
+                orderDetailService.payOrderDetail(detail.getOdId());
+                ordersDao.save(orders);
+
+            }
             ordersDao.save(orders);
             return true;
         }
@@ -94,16 +103,17 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public boolean unsubscribeOrders(Long oId, Long uId) {
         Orders orders=ordersDao.findOne(oId);
-        if (orders.getOStatus().equals(OStatusEnum.FINISH.getValue())){
+        if (orders.getOStatus().equals(OStatusEnum.FINISH.getValue())){//支付完成才可以退订
             orders.setOStatus(OStatusEnum.TUI_DING.getValue());
-            List<OrderDetail> details=orderDetailDao.findByOId(oId);
+            List<OrderDetail> details=orderDetailDao.findByOIdAndDeleteFlag(oId,DeleteFlagEnum.UN_DELETE.getValue());
             for(OrderDetail detail:details){//添加订单详情
                 orderDetailService.unsubscribeDetail(detail.getOdId());
-                ordersDao.save(orders);
 
             }
+            ordersDao.save(orders);
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -147,5 +157,20 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setDeleteFlag(DeleteFlagEnum.IS_DELETE.getValue());
         ordersDao.save(orders);
         return true;
+    }
+    @Override
+    public void ordersCheckTask() {
+        List<Orders> orders=ordersDao.findByOStatus(OStatusEnum.YU_DINGH.getValue());
+        for(Orders order:orders){
+            if (DateUtil.getEndTime(order.getStartTime(),30).after(new Date())){
+                order.setOStatus(OStatusEnum.OUT_OF_TIME.getValue());
+                List<OrderDetail> details=orderDetailDao.findByOIdAndDeleteFlag(order.getOId(),DeleteFlagEnum.UN_DELETE.getValue());
+                for(OrderDetail detail:details){//添加订单详情
+                    orderDetailService.deleteOrderDetail(detail.getOdId());
+
+                }
+                ordersDao.save(order);
+            }
+        }
     }
 }

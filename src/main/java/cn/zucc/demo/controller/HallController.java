@@ -2,16 +2,18 @@ package cn.zucc.demo.controller;
 
 import cn.zucc.demo.bean.Hall;
 import cn.zucc.demo.data.RootData;
+import cn.zucc.demo.enums.ShowStateEnum;
+import cn.zucc.demo.enums.UseStateEnum;
 import cn.zucc.demo.form.AddHallRequest;
 import cn.zucc.demo.form.EditHallRequest;
 import cn.zucc.demo.service.HallService;
 import cn.zucc.demo.util.ResultUtil;
 import cn.zucc.demo.vo.*;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -42,7 +44,7 @@ public class HallController {
      * @return
      */
     @RequestMapping(value = "/list" ,method = RequestMethod.GET)
-    public String findList(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum, @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize,@RequestParam(required = false) String useState,@RequestParam(required = false) String screenCate,
+    public String findList(@RequestParam(required = false) String useState,@RequestParam(required = false) String screenCate,
                            @RequestParam(required = false) String startCount,@RequestParam(required = false) String endCount,HttpSession session,Model model) {
         Long tId= (Long) session.getAttribute("tId");
         Integer startCount1=null,endCount1=null,useState1=null;
@@ -56,25 +58,12 @@ public class HallController {
         }else {
             endCount1=Integer.valueOf(endCount);
         }
-        if(useState!=null) {
-
-            if (useState.equals("使用中")) {
-                useState1 = 1;
-            } else if (useState.equals("闲置中")) {
-                useState1 = 2;
-            } else if (useState.equals("待编辑")) {
-                useState1 = 5;
-            } else if (useState.equals("可编辑")) {
-                useState1 = 6;
-            }else if ((useState.equals(""))){
-                useState1=null;
-            }
-        }
 
         if(screenCate==""){
             screenCate=null;
         }
-        List<HallListVo> list=hallService.findList(pageNum,pageSize,useState1,screenCate,startCount1,endCount1,tId);
+        List<HallListVo> list=hallService.findList(!StringUtils.isEmpty(useState)?null: UseStateEnum.getValueByContent(useState)
+                ,screenCate,startCount1,endCount1,tId);
         model.addAttribute("list",list) ;
         return "hall";
 

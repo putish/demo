@@ -12,6 +12,7 @@ import java.util.List;
 public enum OStatusEnum implements BaseEnum<Integer, OStatusEnum> {
     YU_DINGH(1,"预订"),
     TUI_DING(2,"退订"),
+    OUT_OF_TIME(4,"超时"),
     FINISH(3,"支付完成");
 
 
@@ -41,5 +42,14 @@ public enum OStatusEnum implements BaseEnum<Integer, OStatusEnum> {
             }
         }
         return "";
+    }
+    public static Integer getValueByContent(String content){
+        List<OStatusEnum> list= Arrays.asList(OStatusEnum.class.getEnumConstants());
+        for (OStatusEnum stateEnum:list){
+            if (stateEnum.getContent()==content){
+                return stateEnum.getValue();
+            }
+        }
+        return null;
     }
 }

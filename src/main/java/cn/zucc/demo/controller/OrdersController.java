@@ -1,6 +1,8 @@
 package cn.zucc.demo.controller;
 
 import cn.zucc.demo.data.RootData;
+import cn.zucc.demo.enums.OStatusEnum;
+import cn.zucc.demo.enums.UseStateEnum;
 import cn.zucc.demo.form.AddOrderDetailRequest;
 import cn.zucc.demo.form.AddOrderRequest;
 import cn.zucc.demo.service.OrdersService;
@@ -9,6 +11,7 @@ import cn.zucc.demo.util.ResultUtil;
 import cn.zucc.demo.vo.OrdersListVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -42,17 +45,8 @@ public class OrdersController {
     public String ordersList(HttpSession session, @RequestParam(required = false) String oStatus, @RequestParam(required = false) String startTime,
                              @RequestParam(required = false) String endTime, Model model) throws ParseException {
         Long uId= (Long) session.getAttribute("uId");
-        Integer oStateEnum=null;
-        if (oStatus!=null) {
-            if (oStatus.equals("预订")) {
-                oStateEnum = 1;
-            } else if (oStatus.equals("退订")) {
-                oStateEnum = 2;
-            } else if (oStatus.equals("支付完成")) {
-                oStateEnum = 3;
-            }
-        }
-        List<OrdersListVo> list=ordersService.findList(null,uId,oStateEnum,startTime==null?null:DateUtil.toDate(startTime),endTime==null?null:DateUtil.toDate(endTime));
+
+        List<OrdersListVo> list=ordersService.findList(null,uId,!StringUtils.isEmpty(oStatus)?null: OStatusEnum.getValueByContent(oStatus),startTime==null?null:DateUtil.toDate(startTime),endTime==null?null:DateUtil.toDate(endTime));
         model.addAttribute("list",list);
         return "ordersList";
     }
@@ -60,17 +54,8 @@ public class OrdersController {
     public String orderstheaterList(HttpSession session,@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "pageSize",defaultValue = "2") int pageSize,
                              @RequestParam(required = false) String oStatus, @RequestParam(required = false) String startTime,@RequestParam(required = false) String endTime, Model model) throws ParseException {
         Long tId= (Long) session.getAttribute("tId");
-        Integer oStateEnum=null;
-        if (oStatus!=null) {
-            if (oStatus.equals("预订")) {
-                oStateEnum = 1;
-            } else if (oStatus.equals("退订")) {
-                oStateEnum = 2;
-            } else if (oStatus.equals("支付完成")) {
-                oStateEnum = 3;
-            }
-        }
-        List<OrdersListVo> list=ordersService.findList(tId,null,oStateEnum,startTime==null?null:DateUtil.toDate(startTime),endTime==null?null:DateUtil.toDate(endTime));
+
+        List<OrdersListVo> list=ordersService.findList(tId,null,!StringUtils.isEmpty(oStatus)?null: OStatusEnum.getValueByContent(oStatus),startTime==null?null:DateUtil.toDate(startTime),endTime==null?null:DateUtil.toDate(endTime));
         model.addAttribute("list",list);
         return "orderlist";
     }

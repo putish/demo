@@ -25,7 +25,7 @@
                         <div class="btn-group">
                             <input  name="showState" class="input-medium search-query" type="text" list="showState_list"/>
                             <datalist id="showState_list">
-                                <option value="即将上映"></option>
+                                <option value="预售"></option>
                                 <option value="上映"></option>
                             </datalist>
                         </div>
@@ -55,8 +55,8 @@
                         <p class="movie_description" th:text="${movie.description}"></p>
                         <p class="movie_price" th:text="${movie.showState}">￥</p>
                         <div class="theaterOption" id="theaterOption">
-                            <input required="required" multiple="multiple" list="b_list" id="theater"  lay-verify="required" onchange="gradeChange(this.options[this.options.selectedIndex].text)"/>
-                            <datalist id="b_list">
+                            <input required="required" multiple="multiple" list="theater_list" id="theater"  lay-verify="required" onchange="gradeChange(this.options[this.options.selectedIndex].text)"/>
+                            <datalist id="theater_list">
                                 <option value="" style="display: none"></option>
                                 <option th:each="theater:${movie.theaters}"  th:text="${theater.tName}"  ></option>
                             </datalist>

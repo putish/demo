@@ -4,10 +4,7 @@ import cn.zucc.demo.bean.Screen;
 import cn.zucc.demo.bean.Theater;
 import cn.zucc.demo.dao.TheaterDao;
 import cn.zucc.demo.enums.DeleteFlagEnum;
-import cn.zucc.demo.service.HallService;
-import cn.zucc.demo.service.MovieService;
-import cn.zucc.demo.service.ScheduleService;
-import cn.zucc.demo.service.ScreenService;
+import cn.zucc.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -34,6 +31,8 @@ public class TheatherTask {
     @Resource
     private MovieService movieService;
 
+    @Resource
+    private OrdersService ordersService;
 
     @Resource
     private ScheduleService scheduleService;
@@ -63,9 +62,14 @@ public class TheatherTask {
         System.out.println("影片检查完成");
     }
 
-    @Scheduled(cron = "0 0/10 0 * * ?")//每小时定时扫描
+    @Scheduled(cron = "0 0/50 0 * * ?")//每小时定时扫描
     private void screenTask(){
         screenService.screenCheckTask();
         System.out.println("播放场次检查完成");
+    }
+    @Scheduled(cron = "0 0/30 0 * * ?")//每小时定时扫描
+    private void orderTask(){
+        ordersService.ordersCheckTask();
+        System.out.println("订单检查完成");
     }
 }

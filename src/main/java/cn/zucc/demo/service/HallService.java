@@ -34,7 +34,7 @@ public interface HallService {
      * @param endCount 查询座位数结束
      * @return
      */
-    List<HallListVo> findList(Integer pageNum,Integer pageSize,Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId);
+    List<HallListVo> findList(Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId);
     /**
      * 播放厅下拉列表
      * @param tId 影院id

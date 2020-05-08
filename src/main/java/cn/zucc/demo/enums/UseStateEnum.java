@@ -42,6 +42,15 @@ public enum UseStateEnum implements BaseEnum<Integer,UseStateEnum>{
         }
         return "";
     }
+    public static Integer getValueByContent(String content){
+        List<UseStateEnum> list= Arrays.asList(UseStateEnum.class.getEnumConstants());
+        for (UseStateEnum stateEnum:list){
+            if (stateEnum.getContent()==content){
+                return stateEnum.getValue();
+            }
+        }
+        return null;
+    }
     public static void main(String[] args){
         System.out.println(UseStateEnum.getContentByValue(1));
     }

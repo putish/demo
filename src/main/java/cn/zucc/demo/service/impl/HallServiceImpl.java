@@ -89,7 +89,7 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    public List<HallListVo> findList(Integer pageNum, Integer pageSize,Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId) {
+    public List<HallListVo> findList(Integer useState, String screenCate, Integer startCount, Integer endCount, Long tId) {
 
         List<Hall> halls=hallDao.findList(useState,screenCate,startCount,endCount,tId);
         List<HallListVo> list=new ArrayList<>();

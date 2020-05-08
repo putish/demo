@@ -11,11 +11,13 @@ import java.util.List;
 
 public interface OrdersDao extends JpaRepository<Orders,Long> {
 
-    List<Orders> findByTIdAndOStatus(Long tId,Integer oStatuse);
+    /**
+     * 根据支付状态查询
+     * @param oStatus
+     * @return
+     */
 
-    List<Orders> findByTId(Long tId);
-
-
+    List<Orders> findByOStatus(Integer oStatus);
     /**
      * 订单列表
      * @param tId

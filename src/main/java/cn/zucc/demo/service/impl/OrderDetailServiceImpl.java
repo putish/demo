@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -111,7 +112,21 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public boolean unsubscribeDetail(Long odId) {
         OrderDetail orderDetail=orderDetailDao.findOne(odId);
         orderDetail.setOStatus(OStatusEnum.TUI_DING.getValue());
+        Screen screen=screenDao.findOne(orderDetail.getSId());
+        screen.setTicketCount(screen.getTicketCount()-1);//已售票数减一
+        screenDao.save(screen);
         orderDetailDao.save(orderDetail);
         return true;
+    }
+
+    @Override
+    public boolean payOrderDetail(Long odId) {
+        OrderDetail orderDetail=orderDetailDao.findOne(odId);
+        if (orderDetail.getOStatus().equals(OStatusEnum.YU_DINGH.getValue())) {
+            orderDetail.setOStatus(OStatusEnum.FINISH.getValue());
+            orderDetailDao.save(orderDetail);
+            return true;
+        }
+        return false;
     }
 }
