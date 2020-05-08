@@ -33,16 +33,10 @@ public class MovieServiceImpl implements MovieService {
     private ScreenDao screenDao;
 
     @Autowired
-    private OrderDetailDao orderDetailDao;
-
-    @Autowired
     private TheaterDao theaterDao;
 
     @Autowired
     private CatergoryDao catergoryDao;
-
-    @Autowired
-    private ScreenService screenService;
 
     @Override
     public List<MovieListVo> findList(Long tId, Integer showState, Long cId,String sortBy,String mName) {
@@ -143,11 +137,13 @@ public class MovieServiceImpl implements MovieService {
         List<Movie> list=movieDao.findByTIdAndDeleteFlag(tId,DeleteFlagEnum.UN_DELETE.getValue());
         List<MovieOptionVo> optionVos=new ArrayList<>();
 
-        for (Movie movie:list){
-            MovieOptionVo optionVo=new MovieOptionVo();
-            optionVo.setMId(movie.getMId());
-            optionVo.setMName(movie.getMName());
-            optionVos.add(optionVo);
+        for (Movie movie:list) {
+            if (movie.getShowState().equals(ShowStateEnum.WILL_SHOW.getValue()) || movie.getShowState().equals(ShowStateEnum.IN_SHOW.getValue())) {
+                MovieOptionVo optionVo = new MovieOptionVo();
+                optionVo.setMId(movie.getMId());
+                optionVo.setMName(movie.getMName());
+                optionVos.add(optionVo);
+            }
         }
         return optionVos;
     }

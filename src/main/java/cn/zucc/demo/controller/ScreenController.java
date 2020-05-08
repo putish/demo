@@ -5,13 +5,12 @@ import cn.zucc.demo.data.RootData;
 import cn.zucc.demo.enums.OStatusEnum;
 import cn.zucc.demo.enums.ShowStateEnum;
 import cn.zucc.demo.mapping.ResultMapping;
+import cn.zucc.demo.service.HallService;
 import cn.zucc.demo.service.MovieService;
 import cn.zucc.demo.service.ScreenService;
 import cn.zucc.demo.util.DateUtil;
 import cn.zucc.demo.util.ResultUtil;
-import cn.zucc.demo.vo.MovieDetailVo;
-import cn.zucc.demo.vo.MovieListVo;
-import cn.zucc.demo.vo.ScreenListVo;
+import cn.zucc.demo.vo.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -38,6 +37,8 @@ public class ScreenController {
     @Resource
     private MovieService movieService;
 
+    @Resource
+    private HallService hallService;
     /**
      * 订票列表
      * @param mId 影院id
@@ -72,6 +73,10 @@ public class ScreenController {
 
         List<ScreenListVo> list = screenService.screenList(mId, hId, !StringUtils.isEmpty(showState)?null: ShowStateEnum.getValueByContent(showState), null, null, tId);
         model.addAttribute("list",list);
+        List<MovieOptionVo> movieOptionVos=movieService.optionList(tId);
+        List< HallOptionVo> hallOptionVos=hallService.optionList(tId);
+        model.addAttribute("movieOption",movieOptionVos);
+        model.addAttribute("hallOption",hallOptionVos);
         return "screen";
     }
     @GetMapping("/")
@@ -85,6 +90,7 @@ public class ScreenController {
 
     }
     @GetMapping("/schedual")
+    @ResponseBody
     public void schedual(){
         screenService.screenSchedule(Long.valueOf(1));
     }

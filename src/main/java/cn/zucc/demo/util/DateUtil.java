@@ -101,9 +101,23 @@ public class DateUtil {
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND,0);
+
         return calendar.getTime();
     }
-
+    /**
+     * 获得当天零时零分零秒
+     * @return
+     */
+    public static Date initDateByDay(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND,0);
+        return calendar.getTime();
+    }
     /**
      * 黄金时间开场
      * @return
@@ -114,6 +128,7 @@ public class DateUtil {
         calendar.set(Calendar.HOUR_OF_DAY, 18);
         calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND,0);
         return calendar.getTime();
     }
 
@@ -162,7 +177,7 @@ public class DateUtil {
     public static Date getOpenHours(Date thedate,String dateString){
         String[] date=dateString.split(":");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(DateUtil.getEndTime(thedate,60*24));
+        calendar.setTime(thedate);
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(date[0]));
         calendar.set(Calendar.MINUTE, Integer.parseInt(date[1]));
         calendar.set(Calendar.SECOND, 0);

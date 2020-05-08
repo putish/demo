@@ -19,9 +19,6 @@ function closemodal() {
 function chooseSeats(e)  {
     sId=e.name;
 
-    var json={
-        hId:hId
-    };
     $.ajax({
         type : 'GET',
         dataType : 'json',
@@ -44,6 +41,7 @@ function chooseSeats(e)  {
             }
             row=row+1;
             col=col+1;
+
             var seatModal= document.getElementById('seatModal');
             var seats =document.getElementById('seats');
             for (var i = 0; i  < row; i++) {//座位表数组
@@ -79,7 +77,7 @@ function chooseSeats(e)  {
                 $('#seats').append(string);
             }
 
-            seats.style.width = "(col* 38 + 160)"+ "px";
+            seats.style.width = "(col* 38)"+ "px";
             seatModal.style.display="block";
         }
     });
@@ -133,7 +131,6 @@ function addOrders() {
         contentType:"application/json;charset=utf-8",
         data: JSON.stringify(json),
         success: function (data) {
-            viewmodel.text = "数据请求成功，已渲染";
         }
     });
     document.getElementById("seatModal").style.display = "none";
@@ -143,38 +140,5 @@ function addOrders() {
     sId=null;
 }
 window.onload=function (){
-    today.onmouseover=function () {
-        tdsche.style.display="block";
-        tmsche.style.display="none";
-        aftche.style.display="none";
-        today.style.color="red";
-        today.style.fontSize="27px";
-        tommorrow.style.color="black";
-        tommorrow.style.fontSize="25px";
-        aftertomm.style.color="black";
-        aftertomm.style.fontSize="25px";
-    };
-    tommorrow.onmouseover=function () {
-        tdsche.style.display="none";
-        tmsche.style.display="block";
-        aftche.style.display="none";
-        tommorrow.style.color="red";
-        tommorrow.style.fontSize="27px";
-        today.style.color="black";
-        today.style.fontSize="25px";
-        aftertomm.style.color="black";
-        aftertomm.style.fontSize="25px";
-    };
-    aftertomm.onmouseover=function () {
-        tdsche.style.display="none";
-        tmsche.style.display="none";
-        aftche.style.display="block";
-        aftertomm.style.color="red";
-        aftertomm.style.fontSize="27px";
-        today.style.color="black";
-        today.style.fontSize="25px";
-        tommorrow.style.color="black";
-        tommorrow.style.fontSize="25px"
-    };
 
-}
+};

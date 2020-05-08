@@ -61,10 +61,10 @@ public class OrdersController {
     }
     @ResponseBody
     @PostMapping( "/pay" )
-    public String payOrders(@RequestParam(value = "oId", defaultValue = "0") Long oId, HttpSession session ) {
+    public RootData payOrders(@RequestParam(value = "oId", defaultValue = "0") Long oId, HttpSession session ) {
         Long uId= (Long) session.getAttribute("uId");
         ordersService.payOrders(oId,uId);
-        return "ordersList";
+        return ResultUtil.success("支付成功");
     }
     @ResponseBody
     @PostMapping( "/unsubscribe" )

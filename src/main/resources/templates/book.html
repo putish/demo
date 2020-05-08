@@ -5,9 +5,10 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="maximum-scale=3.0,minimum-scale=0.3,user-scalable=1,initial-scale=0.5"/>
     <link type="text/css" rel="styleSheet"  href="/css/book.css" />
-    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
     <link href="/css/bootstrap-combined.min.css" rel="stylesheet"/>
     <link href="/css/layoutit.css" rel="stylesheet"/>
+    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
+
     <script src="/js/book.js"></script>
 
     <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
@@ -42,18 +43,51 @@
                         <div class="tabbable" id="tabs-375867">
                             <ul class="nav nav-tabs">
 
-                                <li class="active">
-                                    <a href="#firstDay" data-toggle="tab" th:text="${#dates.format(tdlist.get(0).getStartTime(),'MM月dd日')}"></a>
-                                </li>
+<!--                                <li class="active">-->
+<!--                                    <a href="#firstDay" data-toggle="tab" th:text="${#dates.format(tdlist.get(0).getStartTime(),'MM月dd日')}"></a>-->
+<!--                                </li>-->
                                 <li>
-                                    <a href="#secondDay" data-toggle="tab" >05月06日</a>
+                                    <a href="#secondDay" data-toggle="tab" th:text="${#dates.format(tmlist.get(0).getStartTime(),'MM月dd日')}">05月06日</a>
                                 </li>
                                 <li>
                                     <a href="#thirdDay" data-toggle="tab" th:text="${#dates.format(aftlist.get(0).getStartTime(),'MM月dd日')}"></a>
                                 </li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane active" id="firstDay" >
+<!--                                <div class="tab-pane active" id="firstDay" >-->
+<!--                                    <table class="table">-->
+<!--                                        <thead>-->
+<!--                                        <tr>-->
+<!--                                            <th>-->
+<!--                                                影片名称-->
+<!--                                            </th>-->
+<!--                                            <th>-->
+<!--                                                播放厅名称-->
+<!--                                            </th>-->
+<!--                                            <th>-->
+<!--                                                时间-->
+<!--                                            </th>-->
+<!--                                            <th>-->
+<!--                                                价格-->
+<!--                                            </th>-->
+<!--                                            <th>-->
+<!--                                            </th>-->
+<!--                                        </tr>-->
+<!--                                        </thead>-->
+<!--                                        <tbody>-->
+<!--                                            <tr th:each="tdscreen:${tdlist}">-->
+<!--                                                <td th:text="${tdscreen.mName}"></td>-->
+<!--                                                <td th:text="${tdscreen.hName}"></td>-->
+<!--                                                <td th:text=" ${#dates.format(tdscreen.startTime,'HH:mm')}+'-'+${#dates.format(tdscreen.endTime,'HH:mm')}"></td>-->
+<!--                                                <td th:text="${tdscreen.price}+' ￥'"></td>-->
+<!--                                                <td>-->
+<!--                                                    <button th:name="${tdscreen.sId}" onclick="chooseSeats(this)">加购</button>-->
+<!--                                                </td>-->
+<!--                                            </tr>-->
+<!--                                        </tbody>-->
+<!--                                    </table>-->
+<!--                                </div>-->
+                                <div class="tab-pane active" id="secondDay" >
                                     <table class="table">
                                         <thead>
                                         <tr>
@@ -69,24 +103,23 @@
                                             <th>
                                                 价格
                                             </th>
-                                            <th>
-                                            </th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="tdscreen:${tdlist}">
-                                            <td th:text="${tdscreen.mName}"></td>
-                                            <td th:text="${tdscreen.hName}"></td>
-                                            <td th:text=" ${#dates.format(tdscreen.startTime,'HH:mm')}+'-'+${#dates.format(tdscreen.endTime,'HH:mm')}"></td>
-                                            <td th:text="${tdscreen.price}+' ￥'"></td>
-                                            <td>
-                                                <button th:name="${tdscreen.sId}" onclick="chooseSeats(this)">加购</button>
-                                            </td>
-                                        </tr>
+                                            <tr th:each="tmscreen:${tmlist}">
+                                                <td th:text="${tmscreen.mName}"></td>
+                                                <td th:text="${tmscreen.hName}"></td>
+                                                <td th:text=" ${#dates.format(tmscreen.startTime,'HH:mm')}+'-'+${#dates.format(tmscreen.endTime,'HH:mm')}"></td>
+                                                <td th:text="${tmscreen.price}+' ￥'"></td>
+                                                <td>
+                                                    <button th:name="${tmscreen.sId}" onclick="chooseSeats(this)">加购</button>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="tab-pane active" id="secondDay" th:each="tmscreen:${tmlist}">
+                                <div class="tab-pane active" id="thirdDay" >
                                     <table class="table">
                                         <thead>
                                         <tr>
@@ -102,53 +135,19 @@
                                             <th>
                                                 价格
                                             </th>
-                                            <th>
-                                            </th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td th:text="${tmscreen.mName}"></td>
-                                            <td th:text="${tmscreen.hName}"></td>
-                                            <td th:text=" ${#dates.format(tmscreen.startTime,'HH:mm')}+'-'+${#dates.format(tmscreen.endTime,'HH:mm')}"></td>
-                                            <td th:text="${tmscreen.price}+' ￥'"></td>
-                                            <td>
-                                                <button th:name="${tmscreen.sId}" onclick="chooseSeats(this)">加购</button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane active" id="thirdDay" th:each="aftscreen:${aftlist}">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>
-                                                影片名称
-                                            </th>
-                                            <th>
-                                                播放厅名称
-                                            </th>
-                                            <th>
-                                                时间
-                                            </th>
-                                            <th>
-                                                价格
-                                            </th>
-                                            <th>
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td th:text="${aftscreen.mName}"></td>
-                                            <td th:text="${aftscreen.hName}"></td>
-                                            <td th:text=" ${#dates.format(aftscreen.startTime,'HH:mm')}+'-'+${#dates.format(aftscreen.endTime,'HH:mm')}"></td>
-                                            <td th:text="${aftscreen.price}+' ￥'"></td>
-                                            <td>
-                                                <button th:name="${aftscreen.sId}" onclick="chooseSeats(this)">加购</button>
-                                            </td>
-                                        </tr>
+                                            <tr th:each="aftscreen:${aftlist}">
+                                                <td th:text="${aftscreen.mName}"></td>
+                                                <td th:text="${aftscreen.hName}"></td>
+                                                <td th:text=" ${#dates.format(aftscreen.startTime,'HH:mm')}+'-'+${#dates.format(aftscreen.endTime,'HH:mm')}"></td>
+                                                <td th:text="${aftscreen.price}+' ￥'"></td>
+
+                                                <td>
+                                                    <button th:name="${aftscreen.sId}" onclick="chooseSeats(this)">加购</button>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

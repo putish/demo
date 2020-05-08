@@ -33,7 +33,16 @@
                                         <option value="上映"></option>
                                         <option value="下架"></option>
                                     </datalist>
-
+                                    <span>影片：</span>
+                                    <select  name="mId" lay-verify="required">
+                                        <option value="" style="display: none"></option>
+                                        <option th:each="movie:${movieOption}"  th:text="${movie.mName}" th:value="${movie.mId}"  ></option>
+                                    </select>
+                                    <span>播放厅：</span>
+                                    <select  name="hId" lay-verify="required">
+                                        <option value="" style="display: none"></option>
+                                        <option th:each="hall:${hallOption}"  th:text="${hall.hName}" th:value="${hall.hId}"  ></option>
+                                    </select>
                                     <button type="submit" class="btn">查找</button>
                                 </form>
                             </div>
@@ -52,7 +61,9 @@
                         <th>价格</th>
                         <th>上映时间</th>
                         <th>散场时间</th>
-<!--                        <th class="action">操作</th>-->
+                        <th>id</th>
+
+                        <!--                        <th class="action">操作</th>-->
                     </tr>
                     </thead>
                     <tbody>
@@ -64,7 +75,9 @@
                         <td th:text="${screen.price}"></td>
                         <td th:text="${screen.startTime}"></td>
                         <td th:text="${screen.endTime}"></td>
-<!--                        <td class="action">-->
+                        <td th:text="${screen.sId}"></td>
+
+                        <!--                        <td class="action">-->
 <!--                            <input type="button" th:name="${screen.sId}"   value="编辑" onclick="editScreen(this)" />-->
 <!--                            <input type="button" th:name="${screen.sId}" value="删除" onclick="deleteScreen(this)"/>-->
 <!--                            <input type="button" th:name="${screen.sId}" value="排片" />-->

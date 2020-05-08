@@ -193,7 +193,7 @@ public class ScreenServiceImpl implements ScreenService {
 
         List<Movie> advance=new ArrayList<>();
         for (Movie movie:willMovies){
-            if(movie.getShowTime().equals(DateUtil.getEndTime(today,10*60*24))){//距离上映日期只有十日
+            if(DateUtil.initDateByDay(movie.getShowTime()).compareTo(DateUtil.getEndTime(today,10*60*24))==0){//距离上映日期只有十日
                 movie.setShowState(ShowStateEnum.WILL_SHOW.getValue());//设为预售
                 movieDao.save(movie);
                 advance.add(movie);
@@ -401,14 +401,17 @@ public class ScreenServiceImpl implements ScreenService {
         }
         Theater theater=theaterDao.findOne(tId);
         List<Integer> GoldSeats = new ArrayList<>();//黄金时间剩余排片量；
+        List<MovieSort> sorts=new ArrayList<>();
+
         for(MovieSort movieSort:movieSorts){
             GoldSeats.add(movieSort.getGoldSeatCount());
+            sorts.add(movieSort);
         }
         MovieSort movieSort;
         int hallIndex=0,circl=0;
-        while (movieSorts.size() != 0&&circl<2) {
-            for (int index=0;index<movieSorts.size();index++) {
-                movieSort=movieSorts.get(index);
+        while (sorts.size() != 0&&circl<2) {
+            for (int index=0;index<sorts.size();index++) {
+                movieSort=sorts.get(index);
                 Screen screen = null;
                 while (DateUtil.getEndTime( endHallDate.get(hallIndex), movieSort.getDuration()+theater.getIntervalTime()).after(endGold)) {//散场时间不能超过营业时间截止
                     if(hallIndex<halls.size()-1) {
@@ -426,7 +429,7 @@ public class ScreenServiceImpl implements ScreenService {
 
                 if ((GoldSeats.get(index)-halls.get(hallIndex).getSeatCount())<0) {
                     GoldSeats.remove(index);
-                    movieSorts.remove(index);//黄金时间段排片量完成
+                    sorts.remove(index);//黄金时间段排片量完成
                     index--;
                 }else {
                     GoldSeats.set(index,GoldSeats.get(index)-halls.get(index).getSeatCount());
@@ -437,7 +440,7 @@ public class ScreenServiceImpl implements ScreenService {
                 }else {
                     hallIndex=0;
                 }
-
+                circl=0;
             }
         }
     }
@@ -454,14 +457,17 @@ public class ScreenServiceImpl implements ScreenService {
             endStartHallDate.add(DateUtil.getSpareTime(startGold,theater.getIntervalTime()));//黄金时间减去间隔时间即位播放厅散场时间
         }
         List<Integer> UnGoldSeats = new ArrayList<>();//非黄金时间剩余排片量；
+        List<MovieSort> sorts=new ArrayList<>();
+
         for(MovieSort movieSort:movieSorts){
             UnGoldSeats.add(movieSort.getUnGoldSeatCount());
+            sorts.add(movieSort);
         }
         MovieSort movieSort;
         int hallIndex=0,circl=0;
-        while (movieSorts.size() != 0) {
-            for (int index=0;index<movieSorts.size();index++) {
-                movieSort=movieSorts.get(index);
+        while (sorts.size() != 0) {
+            for (int index=0;index<sorts.size();index++) {
+                movieSort=sorts.get(index);
                 Screen screen = null;
                 while (DateUtil.getStartTime( endStartHallDate.get(hallIndex), movieSort.getDuration()+theater.getIntervalTime()).before(startTime)) {//开场时间不能超过营业开始时间
                     if(hallIndex<halls.size()-1) {
@@ -474,11 +480,11 @@ public class ScreenServiceImpl implements ScreenService {
                         return;
                     }
                 }
-                screen = addScreen(movieSort.getMId(), halls.get(hallIndex).getHId(), DateUtil.getEndTime( endStartHallDate.get(hallIndex), movieSort.getDuration()),
+                screen = addScreen(movieSort.getMId(), halls.get(hallIndex).getHId(), DateUtil.getStartTime( endStartHallDate.get(hallIndex), movieSort.getDuration()),
                         movieSort.getPrice(),movieSort.getScreenCate(), movieSort.getTId());
                     if (UnGoldSeats.get(index) - halls.get(hallIndex).getSeatCount()<0) {
                         UnGoldSeats.remove(index);
-                        movieSorts.remove(index);//非黄金时间段排片量完成
+                        sorts.remove(index);//非黄金时间段排片量完成
                         index--;
                     }else {
                         UnGoldSeats.set(index,UnGoldSeats.get(index) - halls.get(hallIndex).getSeatCount());
@@ -490,7 +496,7 @@ public class ScreenServiceImpl implements ScreenService {
                 }else {
                     hallIndex=0;
                 }
-
+                circl=0;
             }
         }
 
