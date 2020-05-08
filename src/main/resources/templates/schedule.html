@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
+    <link href="/css/bootstrap-combined.min.css" rel="stylesheet"/>
+    <link href="/css/layoutit.css" rel="stylesheet"/>
+    <link type="text/css" rel="styleSheet"  href="/css/movie.css" />
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/schedule.js"></script>
+
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div id="loutinav" th:include="commom::commonNav"></div>
+
+            <div class="span10">
+                <div class="row-fluid">
+                    <div class="span10">
+                        <div class="row-fluid">
+                            <div class="span4">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <button class="btn" type="button" onclick="addSchedule()" value="增加" >新增</button>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>第一排片量</th>
+                        <th>第二排片量</th>
+                        <th>第三排片量</th>
+                        <th>屏幕类别</th>
+                        <th>票价</th>
+                        <th class="action">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="Schedule:${list}">
+                        <td th:text="${Schedule.fCount}"></td>
+                        <td th:text="${Schedule.sCount}"></td>
+                        <td th:text="${Schedule.tCount}"></td>
+                        <td th:text="${Schedule.screenCate}"></td>
+                        <td th:text="${Schedule.price}"></td>
+                        <td th:text="${Schedule.mId}" name="mId" style="display: none"></td>
+
+                        <td class="action">
+                            <input type="button" th:name="${Schedule.scId}" value="编辑" onclick="editSchedule(this)" />
+                            <input type="button" th:name="${Schedule.scId}" value="删除" onclick="deleteSchedule(this)"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="modal-fade"  id="addModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="addModal" id="addModalClose" aria-hidden="true">
+                                    &times;
+                                </button >
+                                <h4 class="modal-title">
+                                    排片表
+                                </h4>
+                            </div>
+                            <div ms-controller="addmodal" class="modal-body" id="addbody">
+
+                                <form class="form-horizontal">
+                                    <div class="control-group">
+                                        <label class="control-label" for="fCount">第一排片量：</label>
+                                        <div class="controls">
+                                            <input id="fCount" name="fCount" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="sCount">第二排片量：</label>
+                                        <div class="controls">
+                                            <input id="sCount" name="sCount" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="tCount">第三排片量：</label>
+                                        <div class="controls">
+                                            <input id="tCount" name="tCount" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="screenCate">类别：</label>
+                                        <div class="controls">
+                                            <input id="screenCate" name="screenCate" list="screenCate_list" type="text" />
+                                            <datalist id="screenCate_list">
+                                                <option value="IMAX"></option>
+                                                <option value="2D"></option>
+                                                <option value="3D"></option>
+                                            </datalist>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="price">票价：</label>
+                                        <div class="controls">
+                                            <input id="price" name="price" type="text" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer" >
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <button type="button" id="createMovie" onclick="toaddSchedule()" class="btn btn-primary">
+                                            新增排片表
+                                        </button>
+                                        <button type="button" id="editMovie" onclick="toeditSchedule()" class="btn btn-primary">
+                                            编辑排片表
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</body>
+</html>
