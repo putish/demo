@@ -56,13 +56,18 @@
                         <p class="movie_description" th:text="${movie.description}"></p>
                         <p class="movie_price" th:text="${movie.showState}">￥</p>
                         <div class="theaterOption" id="theaterOption">
-                            <input required="required" multiple="multiple" list="theater_list" id="theater"  lay-verify="required" onchange="gradeChange(this.options[this.options.selectedIndex].text)"/>
-                            <datalist id="theater_list">
+                            <select  name="cId" lay-verify="required" onchange="gradeChange(this.options[this.options.selectedIndex])">
                                 <option value="" style="display: none"></option>
-                                <option th:each="theater:${movie.theaters}"  th:text="${theater.tName}"  ></option>
-                            </datalist>
+                                <option th:each="theater:${movie.theaters}"  th:text="${theater.tName}"  th:value="${theater.tId}"   ></option>
+                            </select>
+
+<!--                            <input required="required" multiple="multiple" list="theater_list" id="theater"  lay-verify="required" onchange="gradeChange(this.options[this.options.selectedIndex].text)"/>-->
+<!--                            <datalist id="theater_list">-->
+<!--                                <option value="" style="display: none"></option>-->
+<!--                                <option th:each="theater:${movie.theaters}"  th:text="${theater.tName}"  th:value="${theater.tId}" ></option>-->
+<!--                            </datalist>-->
                         </div>
-                        <a th:href="'/screen/book?mId='+${movie.mId}+'&amp;tId='+${movie.tId}" ><button>选座购票</button></a>
+                        <a th:href="'/screen/book?mId='+${movie.mId}+'&amp;tId='+1" id="href"><button>选座购票</button></a>
                     </div>
 
             </li>
@@ -70,9 +75,22 @@
     </div>
 
 </body>
-<script>
-    document.getElementById('theater').onclick = function (){
-        console.log(document.getElementById('theater').text)
-    }
+<script type="text/javascript">
+        var tName;
+
+        function gradeChange(tx) {
+
+            // var href = echarts.init(document.getElementById(href));
+            var href=document.getElementById(href);
+            tName=tx.text;
+            alert(href.getAttribute("href"));
+            alert(href.getAttribute("href")+tName);
+            href.setAttribute("href",href.getAttribute("href")+tName);
+
+        }
+
+    // document.getElementById('theater').onclick = function (){
+    //     console.log(document.getElementById('theater').text)
+    // }
 </script>
 </html>

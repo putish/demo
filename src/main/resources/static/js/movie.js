@@ -145,8 +145,14 @@ function editMovie(e){
                 director.value= movieDetail["director"];
                 document.getElementById("editMovie").style.display="block";
                 document.getElementById("createMovie").style.display="none";
-                if (movieDetail["showState"] == 3) {
-                    showTime.attr("readonly", "true");//上映后上映时间不可编辑
+                // alert(movieDetail["showState"]);
+                if (movieDetail["showState"] == 2) {
+                    mName.setAttribute(  "disabled", "false");
+                    description.setAttribute(  "disabled", "false");
+                    duration.setAttribute(  "disabled", "false");
+                    actor.setAttribute(  "disabled", "false");
+                    director.setAttribute(  "disabled", "false");
+                    showTime.setAttribute(  "disabled", "false");//上映后上映时间不可编辑
                 }
 
             }else{

@@ -36,5 +36,8 @@ public class AddTheaterRequest {
     //    vip折扣力度
     private BigDecimal vipDiscount;
 
+    private String startTime;
+
+    private String endTime;
     private String pwd;
 }

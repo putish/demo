@@ -49,7 +49,7 @@ public interface ScreenDao extends JpaRepository<Screen, Long> {
      */
     @Query(nativeQuery = true,value = "SELECT * FROM screen WHERE screen.delete_flag=1 AND (screen.m_id=?1 OR ?1 is null) " +
             "AND (screen.h_id=?2 OR ?2 is null) AND screen.t_id=?3  AND (screen.show_state=?4 OR ?4 is null) And (screen.start_time >?5 OR ?5 is null)  " +
-            "And (screen.end_time <?6 OR ?6 is null) ")
+            "And (screen.end_time <?6 OR ?6 is null) ORDER BY start_time")
     List<Screen> findList(Long mId, Long hId, Long tId, Integer showState, Date startTime, Date endTime);
 
     /**

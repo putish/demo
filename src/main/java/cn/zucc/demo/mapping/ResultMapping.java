@@ -29,6 +29,7 @@ public enum  ResultMapping {
     FALUT_ENDTIME(16,"下架时间在三日内"),
     REPEAT_USERNAME(12,"用户名重复"),
     SOLD_OUT(18,"影片已经下架"),
+    IS_PAY(19,"已经支付"),
     REPEAT_CATERGORY(17,"类别名称重复");
 
     private Integer code;

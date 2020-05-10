@@ -87,19 +87,15 @@ function chooseSeats(e)  {
 
 }
 function chooseSeat(index) {
-    {
+
         var indexCol = index % col;//根据下标得到列数
         var indexRow = (index - indexCol) / col;//根据下标得到行数
 
         if (seatArray[indexRow][indexCol] == 1) {
             document.getElementsByTagName("img")[index+1].setAttribute("src","/img/seat_selected.png");
-            seatArray[indexRow][indexCol] = 0;//更新自己选定的数组位置状态
-        } else if (seatArray[indexRow][indexCol] == 0) {
-            document.getElementsByTagName("img")[index+1].setAttribute("src","/img/seat_sale.png");
-            seatArray[indexRow][indexCol] = 1;//更新自己选定的数组位置状态
+            seatArray[indexRow][indexCol] = 2;//更新自己选定的数组位置状态
+     }
 
-        }
-    }
 
 }
 function addOrders() {
@@ -107,9 +103,10 @@ function addOrders() {
     var seatVos=[];
     for(var i=0;i< row;i++){
         for (var j=0;j< col;j++){
-            if (seatArray[i][j] == 0){
+            if (seatArray[i][j] == 2){
                 for (var x=0;x<seatlist.length;x++) {
                     if(seatlist[x][1]==i&&seatlist[x][2]==j){
+                        // alert(i+" "+j);
                         var seat={};
                         seat["sId"]=sId;
                         seat["sdId"]=seatlist[x][0];

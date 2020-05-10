@@ -50,7 +50,7 @@ public class TheaterController {
      */
     @PostMapping("/toregister")
     public String addTheater(@RequestBody AddTheaterRequest addTheaterRequest) throws Exception {
-        theaterService.addTheater(addTheaterRequest);
+        theaterService. addTheater(addTheaterRequest);
         return  "forward:/theater/";//跳转到登录界面
     }
 

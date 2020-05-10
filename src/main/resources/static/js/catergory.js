@@ -61,7 +61,6 @@ function toeditCatergory() {
        cName:cname,
        cId:cId
    };
-    alert(cname);
     $.ajax({
         dataType:'json',
         type: "post",
