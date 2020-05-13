@@ -40,7 +40,7 @@ public interface ScreenDao extends JpaRepository<Screen, Long> {
     /**
      * 播放场次列表
      * @param mId 影院id
-     * @param hId
+     @param mId 播放厅id
      * @param showState 播放状态
      * @param startTime 查询起始时间
      * @param endTime 查询结束时间

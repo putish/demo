@@ -10,7 +10,7 @@ public interface SeatDetailService {
     /**
      * 添加座位
      * @param seatVo
-     * @param hId
+     @param mId 播放厅id
      * @param tId 影院id
      * @return
      */
@@ -26,7 +26,7 @@ public interface SeatDetailService {
 
     /**
      * 座位列表
-     * @param hId
+     @param mId 播放厅id
      * @param tId 影院id
      * @return
      */

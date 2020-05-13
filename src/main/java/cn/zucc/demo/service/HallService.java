@@ -19,7 +19,7 @@ public interface HallService {
 
     /**
      *删除播放厅
-     * @param hId
+     @param mId 播放厅id
      * @param tId 影院id
      * @return
      */
@@ -43,7 +43,7 @@ public interface HallService {
     List<HallOptionVo> optionList(Long tId);
     /**
      *播放厅详情
-     * @param hId
+     @param mId 播放厅id
      * @param tId 影院id
      * @return
      */
@@ -59,7 +59,7 @@ public interface HallService {
 
      /**
      * 获得座位表
-     * @param hId
+     @param mId 播放厅id
      * @return
      */
     List<BookSeatVo> getSeat( Long tId, Long sId);
@@ -71,7 +71,7 @@ public interface HallService {
 
     /**
      * 播放厅时刻表
-     * @param hId
+     @param mId 播放厅id
      * @return
      */
     List<HallTimeTableVo> getHallSreenList(Long hId, Long tId);

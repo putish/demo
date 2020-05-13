@@ -38,10 +38,20 @@
                                     </datalist>
                                     <button type="submit" class="btn">查找</button>
                                 </form>
+                                <div class="accordion-group">
+                                    <div class="accordion-heading">
+                                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion-438209" href="#accordion-element-256618">选项卡 #1</a>
+                                    </div>
+                                    <div id="accordion-element-256618" class="accordion-body collapse">
+                                        <div class="accordion-inner">
+                                            功能块...
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="accordion" id="accordion-416609">
                                     <div class="accordion-group" th:each="order:${list}" method="get">
                                         <div class="accordion-heading">
-                                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion-416609" href="#accordion-element-439987">选项卡 #1</a>
+                                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion-416609" href="'#accordion-element-'+${order.oId}">选项卡 #1</a>
                                             <div class="span6">
                                                 <p th:text="'支付状态：'+${order.oStatus}" id="otatus"></p>
                                                 <p th:text="'影片名称：'+${order.title}"></p>
@@ -58,7 +68,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="accordion-element-439987" class="accordion-body collapse">
+                                        <div id="'accordion-element-'+${order.oId}" class="accordion-body collapse">
                                             <div class="accordion-inner">
                                                 <div class="accordion-inner" th:each="detail:${order.list}">
                                                     <li th:text="'播放厅：'+${detail.hName}"></li>

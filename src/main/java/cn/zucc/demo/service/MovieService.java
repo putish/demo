@@ -60,6 +60,12 @@ public interface MovieService {
     boolean deleteMovie(Long mId,Long tId);
 
     /**
+     * 新增播放厅影片下拉框
+     * @param tId
+     * @return
+     */
+    List<MovieOptionVo> ScreenMovieOption(Long tId);
+    /**
      * 影片定时检查
      */
     void movieCheckTask();

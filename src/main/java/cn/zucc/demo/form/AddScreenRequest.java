@@ -1,9 +1,12 @@
 package cn.zucc.demo.form;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -13,15 +16,19 @@ import java.util.Date;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddScreenRequest {
+//    播放场次id
+    private Long sId;
 //    影片id
-    private String mId;
+    private Long mId;
     //    影院id
-    private String hId;
-    //    票数
-    private Integer ticketCount;
+    private Long hId;
     //    放映时间
-    @CreatedDate
-    private Date startTime;
+    private String startTime;
 //    散场时间
+    private String screenCate;
+//    价格
+    private BigDecimal price;
 }

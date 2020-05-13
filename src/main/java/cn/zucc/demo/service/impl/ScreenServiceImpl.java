@@ -55,11 +55,13 @@ public class ScreenServiceImpl implements ScreenService {
     public Screen addScreen(Long mId, Long hId, Date startTime,BigDecimal price, String screenCate,Long tId) {
         if(startTime.after(new Date())) {
             Movie movie=movieDao.findOne(mId);
-            if(movie.getShowState()!=ShowStateEnum.SOLD_OUT.getValue()){
+            if(!ShowStateEnum.SOLD_OUT.getValue().equals(movie.getShowState())){
                 Theater theater=theaterDao.findOne(tId);
                 Date endTime=DateUtil.getEndTime(startTime,movie.getDuration());//影片时长加上间隔时间
                 Date spareTime=DateUtil.getSpareTime(endTime,theater.getIntervalTime());
-
+                if (startTime.after(movie.getEndTime())){//上映时间在影片下架时间之后
+                    return null;
+                }
                 if (screenDao.findList(null,hId,tId,null,startTime,spareTime).size()==0) {//该时间段播放厅无放映场次
                     Screen screen = new Screen();
                     screen.setDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
@@ -93,7 +95,7 @@ public class ScreenServiceImpl implements ScreenService {
     @Transactional
     public boolean deleteScreen(Long sId, Long tId) {
         Screen screen=screenDao.findOne(sId);
-        if(screen.getDeleteFlag()==DeleteFlagEnum.IS_DELETE.getValue()){
+        if(DeleteFlagEnum.IS_DELETE.getValue().equals(screen.getDeleteFlag())){
             throw new TheaterException(ResultMapping.NO_SCREEN);
         }
         if (screen.getTicketCount()==0){
@@ -108,43 +110,43 @@ public class ScreenServiceImpl implements ScreenService {
 
     @Override
     @Transactional
-    public boolean editScreen(Long sId,Long mId, Long hId,BigDecimal price, String screenCate, Date startTime, Long tId) {
+    public boolean editScreen(Long sId,Long mId, Long hId, Date startTime, BigDecimal price, String screenCate, Long tId) {
         Screen screen = screenDao.findOne(sId);
-        if (screen.getDeleteFlag() == DeleteFlagEnum.IS_DELETE.getValue()) {//播放场次不存在
-            throw new TheaterException(ResultMapping.NO_SCREEN);
-        }
-        if (screen.getTicketCount() == 0) {
-            if (!startTime.after(new Date())) {
-                screen.setHId(hId);
-                screen.setMId(mId);
-                Movie movie = movieDao.findOne(mId);
-                if(movie.getShowState()!=3){
-                    Theater theater=theaterDao.findOne(tId);
-                    Date endTime=DateUtil.getEndTime(startTime,movie.getDuration());//影片时长加上间隔时间
-                    Date spareTime=DateUtil.getSpareTime(endTime,theater.getIntervalTime());
-
-                    if (screenDao.findList(null,hId,tId,ShowStateEnum.WILL_SHOW.getValue(),startTime,spareTime).size()==0) {//该时间段播放厅无放映场次
-                        screen.setStartTime(startTime);
-                        screen.setHId(hId);
-                        screen.setMId(mId);
-                        screen.setScreenCate(screenCate);
-                        screen.setPrice(price);
-                        screen.setTId(tId);
-                        screen.setEndTime(endTime);
-                        screenDao.save(screen);
-                        return true;
-                    }else {
-                        throw new TheaterException(ResultMapping.HAVE_SCREEN);
-                    }
-                } else {
-                    throw new TheaterException(ResultMapping.NO_MOVIE);
+        if(startTime.after(new Date())) {
+            Movie movie=movieDao.findOne(mId);
+            if(!ShowStateEnum.SOLD_OUT.getValue().equals(movie.getShowState())){
+                Theater theater=theaterDao.findOne(tId);
+                Date endTime=DateUtil.getEndTime(startTime,movie.getDuration());//影片时长加上间隔时间
+                Date spareTime=DateUtil.getSpareTime(endTime,theater.getIntervalTime());
+                if (startTime.after(movie.getEndTime())){//上映时间在影片下架时间之后
+                    return false;
                 }
-            } else {
-                throw new TheaterException(ResultMapping.FALUT_SHOWTIME);
+                if (screenDao.findList(null,hId,tId,null,startTime,spareTime).size()==0) {//该时间段播放厅无放映场次
+                    screen.setDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
+                    screen.setStartTime(startTime);
+                    screen.setHId(hId);
+                    screen.setMId(mId);
+                    screen.setShowState(ShowStateEnum.WILL_SHOW.getValue());//即将上映
+                    screen.setTicketCount(0);//已经售出票数
+                    screen.setScreenCate(screenCate);
+                    screen.setPrice(price);
+                    screen.setTId(tId);
+                    screen.setEndTime(endTime);
+                    screenDao.save(screen);
+                    return true;
+                }else {
+                    throw new TheaterException(ResultMapping.HAVE_SCREEN);
+                }
             }
-        } else {
-            throw new TheaterException(ResultMapping.HAVE_ORDER);
+            else {
+                throw new TheaterException(ResultMapping.NO_MOVIE);
+            }
+
         }
+        else {
+            throw new TheaterException(ResultMapping.FALUT_SHOWTIME);
+        }
+
     }
 
     @Override
@@ -426,21 +428,22 @@ public class ScreenServiceImpl implements ScreenService {
                 }
                 screen = addScreen(movieSort.getMId(), halls.get(hallIndex).getHId(), endHallDate.get(hallIndex),
                         movieSort.getPrice().add(BigDecimal.valueOf(5)),movieSort.getScreenCate(), movieSort.getTId());//黄金时间段票价上涨五元
-
-                if ((GoldSeats.get(index)-halls.get(hallIndex).getSeatCount())<0) {
-                    GoldSeats.remove(index);
-                    sorts.remove(index);//黄金时间段排片量完成
-                    index--;
-                }else {
-                    GoldSeats.set(index,GoldSeats.get(index)-halls.get(index).getSeatCount());
+                if(screen!=null) {
+                    if ((GoldSeats.get(index) - halls.get(hallIndex).getSeatCount()) < 0) {
+                        GoldSeats.remove(index);
+                        sorts.remove(index);//黄金时间段排片量完成
+                        index--;
+                    } else {
+                        GoldSeats.set(index, GoldSeats.get(index) - halls.get(index).getSeatCount());
+                    }
+                    endHallDate.set(hallIndex, DateUtil.getSpareTime(screen.getEndTime(), theater.getIntervalTime()));
+                    if (hallIndex < halls.size() - 1) {
+                        hallIndex++;
+                    } else {
+                        hallIndex = 0;
+                    }
+                    circl = 0;
                 }
-                endHallDate.set(hallIndex,DateUtil.getSpareTime(screen.getEndTime(),theater.getIntervalTime()));
-                if(hallIndex<halls.size()-1) {
-                    hallIndex++;
-                }else {
-                    hallIndex=0;
-                }
-                circl=0;
             }
         }
     }
@@ -482,21 +485,23 @@ public class ScreenServiceImpl implements ScreenService {
                 }
                 screen = addScreen(movieSort.getMId(), halls.get(hallIndex).getHId(), DateUtil.getStartTime( endStartHallDate.get(hallIndex), movieSort.getDuration()),
                         movieSort.getPrice(),movieSort.getScreenCate(), movieSort.getTId());
-                    if (UnGoldSeats.get(index) - halls.get(hallIndex).getSeatCount()<0) {
+                if(screen!=null) {
+                    if (UnGoldSeats.get(index) - halls.get(hallIndex).getSeatCount() < 0) {
                         UnGoldSeats.remove(index);
                         sorts.remove(index);//非黄金时间段排片量完成
                         index--;
-                    }else {
-                        UnGoldSeats.set(index,UnGoldSeats.get(index) - halls.get(hallIndex).getSeatCount());
+                    } else {
+                        UnGoldSeats.set(index, UnGoldSeats.get(index) - halls.get(hallIndex).getSeatCount());
                     }
 
-                endStartHallDate.set(hallIndex,DateUtil.getStartTime(screen.getStartTime(),theater.getIntervalTime()));
-                if(hallIndex<halls.size()-1) {
-                    hallIndex++;
-                }else {
-                    hallIndex=0;
+                    endStartHallDate.set(hallIndex, DateUtil.getStartTime(screen.getStartTime(), theater.getIntervalTime()));
+                    if (hallIndex < halls.size() - 1) {
+                        hallIndex++;
+                    } else {
+                        hallIndex = 0;
+                    }
+                    circl = 0;
                 }
-                circl=0;
             }
         }
 

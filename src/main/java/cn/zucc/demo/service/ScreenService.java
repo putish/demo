@@ -14,7 +14,7 @@ public interface ScreenService {
     /**
      *添加放映场次
      * @param mId 影院id
-     * @param hId
+     @param mId 播放厅id
      * @param startTime 放映时间
      * @param tId 影院id
      * @param price 价格
@@ -34,14 +34,14 @@ public interface ScreenService {
      *编辑放映场次
      * @param sId
      * @param mId 影院id
-     * @param hId
+     @param mId 播放厅id
      * @param startTime 放映时间
      * @param tId 影院id
      * @param price 价格
      * @param screenCate 屏幕类型
      * @return
      */
-    boolean editScreen(Long sId,Long mId, Long hId,BigDecimal price, String screenCate,Date startTime, Long tId);
+    boolean editScreen(Long sId,Long mId, Long hId, Date startTime, BigDecimal price, String screenCate, Long tId);
 
     /**
      * 放映场次详情
@@ -54,7 +54,7 @@ public interface ScreenService {
     /**
      * 播放场次列表
      * @param mId 影院id
-     * @param hId
+     @param mId 播放厅id
      * @param showState 放映状态
      * @param startTime 查询起始时间
      * @param endTime 查询结束时间

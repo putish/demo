@@ -95,7 +95,7 @@ public class HallController {
 
     /**
      * 删除播放厅
-     * @param hId
+     @param mId 播放厅id
      * @param session
      * @return
      */
@@ -147,7 +147,7 @@ public class HallController {
 
     /**
      * 播放厅详情
-     * @param hId
+     @param mId 播放厅id
      * @param session
      * @param model
      * @return

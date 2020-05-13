@@ -105,6 +105,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             vo.setEndTime(screen.getEndTime());
             vo.setXAxis(seatDetail.getXAxis());
             vo.setYAxis(seatDetail.getYAxis());
+            System.out.println(vo.getXAxis()+"排"+vo.getYAxis()+"座");
             list.add(vo);
         }
         return list;

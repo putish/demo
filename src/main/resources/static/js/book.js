@@ -68,9 +68,9 @@ function chooseSeats(e)  {
                     if (seatArray[i][j]==1){
                         string = string + '<li name="' + index + '"  onclick="chooseSeat('+index+')"><img src='+'/img/seat_sale.png '+'/></li>';
                     }else if (seatArray[i][j]==2){
-                        string = string + '<li name="' + index + '"  onclick="chooseSeat('+index+')"><img src='+'/img/seat_book.png '+'/></li>';
+                        string = string + '<li name="' + index + '"><img src='+'/img/seat_book.png '+'/></li>';
                     }else if (seatArray[i][j]==0){
-                        string = string + '<li name="' + index + '"  onclick="chooseSeat('+index+')"></li>';
+                        string = string + '<li name="' + index + '"  onclick="chooseSeat('+index+')"><img src='+'/img/no_seat.png '+'/></li>';
                     }
                 }
                 string = string + '</ul>';
@@ -93,8 +93,8 @@ function chooseSeat(index) {
 
         if (seatArray[indexRow][indexCol] == 1) {
             document.getElementsByTagName("img")[index+1].setAttribute("src","/img/seat_selected.png");
-            seatArray[indexRow][indexCol] = 0;//更新自己选定的数组位置状态
-        } else if (seatArray[indexRow][indexCol] == 0) {
+            seatArray[indexRow][indexCol] = 3;//更新自己选定的数组位置状态
+        } else if (seatArray[indexRow][indexCol] == 3) {
             document.getElementsByTagName("img")[index+1].setAttribute("src","/img/seat_sale.png");
             seatArray[indexRow][indexCol] = 1;//更新自己选定的数组位置状态
 
@@ -107,7 +107,7 @@ function addOrders() {
     var seatVos=[];
     for(var i=0;i< row;i++){
         for (var j=0;j< col;j++){
-            if (seatArray[i][j] == 0){
+            if (seatArray[i][j] == 3){
                 for (var x=0;x<seatlist.length;x++) {
                     if(seatlist[x][1]==i&&seatlist[x][2]==j){
                         var seat={};

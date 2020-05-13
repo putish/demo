@@ -44,12 +44,17 @@
                                         <option value="" style="display: none"></option>
                                         <option th:each="hall:${hallOption}"  th:text="${hall.hName}" th:value="${hall.hId}"  ></option>
                                     </select>
+                                    <span>放映时间：</span>
+                                    <input  name="startTime" class="input-medium search-query" type="text"/>
+                                    <span> - </span>
+                                    <input  name="endTime" class="input-medium search-query" type="text" />
                                     <button type="submit" class="btn">查找</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="span2">
+                        <button class="btn" type="button" onclick="addScreen()" value="增加" >新增</button>
                     </div>
                 </div>
                 <table class="table">
@@ -78,11 +83,10 @@
                         <td th:text="${screen.endTime}"></td>
                         <td th:text="${screen.sId}"></td>
 
-                        <!--                        <td class="action">-->
-<!--                            <input type="button" th:name="${screen.sId}"   value="编辑" onclick="editScreen(this)" />-->
-<!--                            <input type="button" th:name="${screen.sId}" value="删除" onclick="deleteScreen(this)"/>-->
-<!--                            <input type="button" th:name="${screen.sId}" value="排片" />-->
-<!--                        </td>-->
+                        <td class="action">
+                            <input type="button" th:name="${screen.sId}"   value="编辑" onclick="editScreen(this)" />
+                            <input type="button" th:name="${screen.sId}" value="删除" onclick="deleteScreen(this)"/>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -115,36 +119,39 @@
                                                     <div class="span8">
                                                         <form class="form-horizontal">
                                                             <div class="control-group">
-                                                                <label class="control-label" for="mName">影片：</label>
+                                                                <label class="control-label" for="mId">影片：</label>
                                                                 <div class="controls">
-                                                                    <input id="mName" name="mName" type="text" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="control-group">
-                                                                <label class="control-label" for="catergory">播放厅：</label>
-                                                                <div class="controls">
-                                                                    <select id="catergory" name="catergory" required="required" multiple="multiple" size="3" lay-verify="required">
+                                                                    <select id="mId" name="mId" required="required" multiple="multiple" size="3" lay-verify="required">
                                                                         <option value="" style="display: none"></option>
-                                                                        <option th:each="catergory:${options}"  th:text="${catergory.cName}" th:value="${catergory.cId}"  ></option>
+                                                                        <option th:each="movie:${movieSceenOption}"  th:text="${movie.mName}" th:value="${movie.mId}"  ></option>
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                             <div class="control-group">
-                                                                <label class="control-label" for="duration">屏幕类型：</label>
+                                                                <label class="control-label" for="mId">播放厅：</label>
                                                                 <div class="controls">
-                                                                    <input id="duration" name="duration" type="text" />
+                                                                    <select id="hId" name="hId" required="required" multiple="multiple" size="3" lay-verify="required">
+                                                                        <option value="" style="display: none"></option>
+                                                                        <option th:each="hall:${hallOption}"  th:text="${hall.hName}" th:value="${hall.hId}"  ></option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             <div class="control-group">
-                                                                <label class="control-label" for="director">价格：</label>
+                                                                <label class="control-label" for="screenCate">屏幕类型：</label>
                                                                 <div class="controls">
-                                                                    <input id="director" name="director" type="text"/>
+                                                                    <input id="screenCate" name="screenCate" type="text" />
                                                                 </div>
                                                             </div>
                                                             <div class="control-group">
-                                                                <label class="control-label" for="actor">开始时间：</label>
+                                                                <label class="control-label" for="price">价格：</label>
                                                                 <div class="controls">
-                                                                    <input id="actor" name="actor" type="text"/>
+                                                                    <input id="price" name="price" type="text"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="control-group">
+                                                                <label class="control-label" for="startTime">开始时间：</label>
+                                                                <div class="controls">
+                                                                    <input id="startTime" name="startTime" type="text"/>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -157,10 +164,10 @@
                                 <div class="modal-footer" >
                                     <div class="control-group">
                                         <div class="controls">
-                                            <button type="button" id="createMovie" onclick="toaddScreen()" class="btn btn-primary">
-                                                新增编辑放映场次
+                                            <button type="button" id="createScreen" onclick="toaddScreen()" class="btn btn-primary">
+                                                新增放映场次
                                             </button>
-                                            <button type="button" id="editMovie" onclick="toeditScreen()" class="btn btn-primary">
+                                            <button type="button" id="editScreen" onclick="toeditScreen()" class="btn btn-primary">
                                                 编辑放映场次
                                             </button>
                                         </div>

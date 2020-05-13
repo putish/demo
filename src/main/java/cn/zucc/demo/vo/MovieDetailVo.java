@@ -23,7 +23,9 @@ public class MovieDetailVo {
     //    时长
     private Integer duration;
     //    电影类别
-    private String catergory;
+    private Long ficId;
+    private Long secId;
+    private Long thcId;
     //    简介
     private String description;
 //    上映时间

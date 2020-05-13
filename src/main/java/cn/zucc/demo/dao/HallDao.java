@@ -27,7 +27,7 @@ public interface HallDao extends JpaRepository<Hall,Long> {
 
     /**
      *
-     * @param hId
+     @param mId 播放厅id
      * @param tId 影院id
      * @return
      */

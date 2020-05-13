@@ -145,6 +145,15 @@ function editMovie(e){
                 director.value= movieDetail["director"];
                 document.getElementById("editMovie").style.display="block";
                 document.getElementById("createMovie").style.display="none";
+                var catergory;
+                for(var i=0;i<catergorys.length;i++){
+                    if(i==0){
+                        catergory=catergorys[i];
+                    }
+                    else {
+                        catergory=catergory+","+catergorys[i];
+                    }
+                }
                 if (movieDetail["showState"] == 3) {
                     showTime.attr("readonly", "true");//上映后上映时间不可编辑
                 }
