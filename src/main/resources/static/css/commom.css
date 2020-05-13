@@ -52,6 +52,9 @@ body{
 .modal-header{
     padding: 9px 0px;
 }
+a{
+    color: black;
+}
 /*.modal-fade {*/
 /*    opacity: 0 ;*/
 /*    filter: alpha(opacity=0) ;//解决背景颜色加深问题*/
