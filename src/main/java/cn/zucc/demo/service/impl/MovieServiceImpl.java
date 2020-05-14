@@ -180,15 +180,6 @@ public class MovieServiceImpl implements MovieService {
         Movie movie=movieDao.findOne(mId);
         MovieDetailVo vo=new MovieDetailVo();
         BeanUtils.copyProperties(movie,vo);
-        String catergory=catergoryDao.findOne(movie.getFicId()).getCName();//类别转成字符串
-        if(movie.getSecId()!=null){
-            catergory=catergory+"/"+catergoryDao.findOne(movie.getSecId()).getCName();
-            if(movie.getThcId()!=null){
-                catergory=catergory+"/"+catergoryDao.findOne(movie.getThcId()).getCName();
-            }
-        }
-        vo.setCatergory(catergory);
-
         vo.setShowTime(DateUtil.toString(movie.getShowTime()));
         vo.setEndTime(DateUtil.toString(movie.getEndTime()));
         return vo;

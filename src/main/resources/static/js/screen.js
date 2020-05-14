@@ -124,4 +124,35 @@ window.onload=function (){
         var addModal = document.getElementById("addModal");
         addModal.style.display = "none";
     };
+};
+function batchDeleteScreen() {
+    var sId=[]
+    var sIds=document.getElementsByClassName("batchDelete");
+    for (var i=0;i<sIds.length;i++){
+        if (sIds[i].cheked) {
+            sId.push(sIds[i].name);
+        }
+    }
+    var json={
+        sId:sId,
+
+    };
+    $.ajax({
+        dataType:'json',
+        type: "post",
+        url: "/screen/batchDelete",//向后端请求数据的url
+        traditiona: true,
+        contentType:"application/json;charset=utf-8",
+        data: JSON.stringify(json),
+        success: function (data) {
+            document.getElementById("editScreen").style.display="none";
+            document.getElementById("createScreen").style.display="block";
+            window.location.reload();
+
+        },
+        error:function(xhr,state,errorThrown){
+            alert("编辑失败");
+        }
+
+    });
 }

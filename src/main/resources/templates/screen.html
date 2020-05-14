@@ -5,15 +5,23 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
+    <!--<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>-->
     <link href="/css/bootstrap-combined.min.css" rel="stylesheet"/>
     <link href="/css/layoutit.css" rel="stylesheet"/>
-    <link type="text/css" rel="styleSheet"  href="/css/movie.css" />
-    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
 
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="/js/movie.js"></script>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
 
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/moment-with-locales.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script src="/js/screen.js"></script>
+    <link type="text/css" rel="styleSheet"  href="/css/movie.css" />
+    <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
 
 </head>
 <body>
@@ -45,21 +53,36 @@
                                         <option th:each="hall:${hallOption}"  th:text="${hall.hName}" th:value="${hall.hId}"  ></option>
                                     </select>
                                     <span>放映时间：</span>
-                                    <input  name="startTime" class="input-medium search-query" type="text"/>
-                                    <span> - </span>
-                                    <input  name="endTime" class="input-medium search-query" type="text" />
+                                    <div class='input-group date' id='filter_startTime' name="startTime">
+                                        <input type='text' class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                    <span>-</span>
+                                    <div class='input-group date' id='filter_endTime' name="endTime">
+                                        <input type='text' class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
                                     <button type="submit" class="btn">查找</button>
+
+
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="span2">
                         <button class="btn" type="button" onclick="addScreen()" value="增加" >新增</button>
+                        <button class="btn" type="button" onclick="batchDeleteScreen()" value="增加" >新增</button>
+
                     </div>
                 </div>
                 <table class="table">
                     <thead>
                     <tr>
+                        <th>#</th>
                         <th>影片名称</th>
                         <th>播放厅名称</th>
                         <th>票数</th>
@@ -67,13 +90,13 @@
                         <th>价格</th>
                         <th>上映时间</th>
                         <th>散场时间</th>
-                        <th>id</th>
 
                         <!--                        <th class="action">操作</th>-->
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="screen:${list}">
+                        <td><input type="checkbox" class="batchDelete" th:name="${screen.sId}"></td>
                         <td th:text="${screen.mName}"></td>
                         <td th:text="${screen.hName}"></td>
                         <td th:text="${screen.ticketCount}"></td>
@@ -81,7 +104,6 @@
                         <td th:text="${screen.price}"></td>
                         <td th:text="${screen.startTime}"></td>
                         <td th:text="${screen.endTime}"></td>
-                        <td th:text="${screen.sId}"></td>
 
                         <td class="action">
                             <input type="button" th:name="${screen.sId}"   value="编辑" onclick="editScreen(this)" />
@@ -184,4 +206,18 @@
 
 
 </body>
+<script type="text/javascript">
+
+    $(function () {
+        $('#filter_startTime').datetimepicker({
+            format: 'YYYY-MM-DD',
+            locale: moment.locale('zh-cn')
+        });
+        $('#filter_endTime').datetimepicker({
+            format: 'YYYY-MM-DD hh:mm',
+            locale: moment.locale('zh-cn')
+        });
+    });
+
+</script>
 </html>
