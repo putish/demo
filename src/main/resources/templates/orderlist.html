@@ -11,47 +11,78 @@
     <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
     <link type="text/css" rel="styleSheet"  href="/css/movielist.css" />
     <script src="/js/ordersList.js"></script>
-
+    <style type="text/css">
+        .btn{
+            width: 60px;
+            height: 25px;
+        }
+        .container-fluid{
+            margin:0px 0px;
+        }
+        .orders{
+            margin: 80px 20px;
+        }
+        /*.orders .row-fluid{*/
+        /*    border:1px solid #2f4f4f;*/
+        /*}*/
+        .row-fluid{
+            width: 500px;
+        }
+        .form-search{
+            margin-left: 200px;
+        }
+    </style>
 </head>
 <body>
-<div id="loutinav" th:include="commom::commonNav"></div>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="row-fluid">
+                <div id="loutinav" th:include="commom::userNav"></div>
+                <div class="span9">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <form class="form-search" th:action="@{/orders/list}" method="get">
+                                <span>支付状态：</span>
+                                <input  name="oStatus" class="input-medium search-query" type="text" list="oStatus_list"/>
+                                <datalist id="oStatus_list">
+                                    <option value="支付完成"></option>
+                                    <option value="退订"></option>
+                                    <option value="预定"></option>
+                                </datalist>
+                                <button type="submit" class="btn">查找</button>
+                            </form>
+                            <div th:each="order:${list}" class="orders">
+                                <div class="row-fluid" >
+                                    <div class="span8 ">
+                                        <ol>
+                                            <li th:text="'支付状态：'+${order.oStatus}" id="oStatus"></li>
+                                            <li th:text="'影片名称：'+${order.title}"></li>
+                                            <li th:text="'用户名：'+${order.uName}">
+                                            </li>
+                                            <li>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                    <div class="span4">
 
+                                    </div>
+                                </div>
+                                <div class="row-fluid" th:each="detail:${order.list}">
+                                    <div class="span8">
+                                        <ol>
+                                            <li th:text="'播放厅：'+${detail.hName}"></li>
+                                            <li th:text="'座位：'+${detail.xAxis}+'排'+${detail.xAxis}+'座'"></li>
+                                            <li th:text="'票价：'+${detail.price}"></li>
+                                            <li th:text="'开场时间：'+${detail.startTime}"></li>
+                                        </ol>
+                                    </div>
 
-<div id="listul">
-    <div class="container-fluid">
-        <div class="span4">
-            <form class="form-search" th:action="@{/orders/theaterlist}" method="get">
-                <span>支付状态：</span>
-                <input  name="oStatus" class="input-medium search-query" type="text" list="oStatus_list"/>
-                <datalist id="oStatus_list">
-                    <option value="支付完成"></option>
-                    <option value="退订"></option>
-                    <option value="预定"></option>
-                </datalist>
-                <button type="submit" class="btn">查找</button>
-            </form>
-        </div>
-        <div class="row-fluid" th:each="order:${list}" method="get">
-            <div class="span12">
-                <div class="accordion" id="accordion-571885">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <p th:text="'支付状态：'+${order.oStatus}" id="otatus"></p>
-                            <p th:text="'影片名称：'+${order.title}"></p>
-                            <p th:text="'用户名：'+${order.uName}"></p>
-
-                        </div>
-                        <div id="accordion-element-622902" class="accordion-body in collapse">
-                            <div class="accordion-inner" th:each="detail:${order.list}">
-                                <li th:text="'播放厅：'+${detail.hName}"></li>
-                                <li th:text="'座位：'+${detail.xAxis}+'排'+${detail.xAxis}+'座'"></li>
-                                <li th:text="'票价：'+${detail.price}"></li>
-                                <li th:text="'开场时间：'+${detail.startTime}"></li>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

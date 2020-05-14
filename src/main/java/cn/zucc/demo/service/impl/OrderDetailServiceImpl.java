@@ -46,6 +46,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Autowired
     private OrdersService ordersService;
 
+    @Autowired
+    private OrdersDao ordersDao;
     @Override
     @Transactional
     public OrderDetail addOrderDetail(AddOrderDetailRequest addOrderDetailRequest,Long oId) {
@@ -70,18 +72,23 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     @Transactional
     public boolean deleteOrderDetail(Long odId) {
+
         OrderDetail orderDetail=orderDetailDao.findOne(odId);
         orderDetail.setDeleteFlag(DeleteFlagEnum.IS_DELETE.getValue());
-
-        Screen screen=screenDao.findOne(orderDetail.getSId());
-        screen.setTicketCount(screen.getTicketCount()-1);//已售票数减一
-        screenDao.save(screen);
-        List<OrderDetail> list=orderDetailDao.findList(orderDetail.getOId());
-        if (list.size()==0){
-            ordersService.ordersDelete(orderDetail.getOId());
+        Orders orders=ordersDao.findOne(orderDetail.getOId());
+        if(orders.getOStatus().equals(OStatusEnum.YU_DINGH.getValue())){
+            Screen screen=screenDao.findOne(orderDetail.getSId());
+            screen.setTicketCount(screen.getTicketCount()-1);//已售票数减一
+            screenDao.save(screen);
+            List<OrderDetail> list=orderDetailDao.findList(orderDetail.getOId());
+            if (list.size()==0){
+                ordersService.ordersDelete(orderDetail.getOId());
+            }
+            orderDetailDao.save(orderDetail);
+            return true;
+        }else {
+            throw new TheaterException(ResultMapping.IS_PAY);
         }
-        orderDetailDao.save(orderDetail);
-        return true;
     }
 
     @Override

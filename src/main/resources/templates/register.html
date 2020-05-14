@@ -11,7 +11,7 @@
     <style type="text/css">
         #theatherRegister{
             width: 550px;
-            height: 420px;
+            height: 460px;
             margin: 20px auto;
             display: none;
         }
@@ -103,9 +103,9 @@
 <body>
 
 
-    <div id="banner">
+<!--    <div id="banner">-->
 
-    </div>
+<!--    </div>-->
     <!--<div id="loutinav" >-->
         <!--<ul>-->
             <!--&lt;!&ndash;<li class="active"><span>享品质</span> </li>&ndash;&gt;-->
@@ -189,7 +189,7 @@
             <option value="0">用户</option>
             <option value="1">影院</option>
         </select>
-        <a th:href="'/theater/'">去登入</a>
+<!--        <a th:href="'/theater/'">去登入</a>-->
     </div>
 </body>
 <script type="text/javascript">
@@ -207,7 +207,6 @@
     function register() {
         var type = document.getElementById("type");
         if(type.value==1) {
-            alert("影院");
             var tName = $('#tName').val();
             var tLegalName = $('#tLegalName').val();
             var tLegalPhone = $('#tLegalPhone').val();
@@ -245,7 +244,7 @@
                     contentType: "application/json;charset=utf-8",
                     data: JSON.stringify(json),
                     success: function (data) {
-
+                        location.href="/theater";
                     }
                 });
             }
@@ -271,7 +270,7 @@
                         pwd: upwd
                     },
                     success: function (data) {
-
+                        location.href="/theater";
                     }
                 });
             }

@@ -53,7 +53,16 @@ public class ScreenServiceImpl implements ScreenService {
     @Override
     @Transactional
     public Screen addScreen(Long mId, Long hId, Date startTime,BigDecimal price, String screenCate,Long tId) {
+        Screen screen = new Screen();
         if(startTime.after(new Date())) {
+            screen.setShowState(ShowStateEnum.WILL_SHOW.getValue());//即将上映
+
+        }
+        else {
+            screen.setShowState(ShowStateEnum.SOLD_OUT.getValue());//即将上映
+
+//            throw new TheaterException(ResultMapping.FALUT_SHOWTIME);
+        }
             Movie movie=movieDao.findOne(mId);
             if(!ShowStateEnum.SOLD_OUT.getValue().equals(movie.getShowState())){
                 Theater theater=theaterDao.findOne(tId);
@@ -63,12 +72,12 @@ public class ScreenServiceImpl implements ScreenService {
                     return null;
                 }
                 if (screenDao.findList(null,hId,tId,null,startTime,spareTime).size()==0) {//该时间段播放厅无放映场次
-                    Screen screen = new Screen();
+//                    Screen screen = new Screen();
                     screen.setDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
                     screen.setStartTime(startTime);
                     screen.setHId(hId);
                     screen.setMId(mId);
-                    screen.setShowState(ShowStateEnum.WILL_SHOW.getValue());//即将上映
+//                    screen.setShowState(ShowStateEnum.WILL_SHOW.getValue());//即将上映
                     screen.setTicketCount(0);//已经售出票数
                     screen.setScreenCate(screenCate);
                     screen.setPrice(price);
@@ -83,11 +92,6 @@ public class ScreenServiceImpl implements ScreenService {
             else {
                 throw new TheaterException(ResultMapping.NO_MOVIE);
             }
-
-        }
-        else {
-            throw new TheaterException(ResultMapping.FALUT_SHOWTIME);
-        }
 
     }
 
@@ -201,13 +205,13 @@ public class ScreenServiceImpl implements ScreenService {
                 advance.add(movie);
             }
         }
-        for(int i=1;i<=3;i++) {//正在上映
-            Date tommorrow= DateUtil.getEndTime(today,60*24*i);//明日
+        for(int i=1;i<=3;i++) {//预售
+            Date tommorrow = DateUtil.getEndTime(today, 60 * 24 * (i-1));//明日
 
-            List<MovieSort> movieSorts = getSort(movies, tommorrow, i);
+            List<MovieSort> nowmovieSorts = getSort(movies, tommorrow, i);
 
-            createGoldScreen(movieSorts, halls, tId, tommorrow);//生成黄金时间段播放场次
-            createUnGoldScreen(movieSorts, halls, tId, tommorrow);//生成非黄金时间段播放场次
+            createGoldScreen(nowmovieSorts, halls, tId, tommorrow);//生成黄金时间段播放场次
+            createUnGoldScreen(nowmovieSorts, halls, tId, tommorrow);//生成非黄金时间段播放场次
         }
         today=DateUtil.getEndTime(today,9*60*24);
         for(int i=1;i<=3;i++) {//预售

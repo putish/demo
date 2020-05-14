@@ -37,6 +37,8 @@ public class TheaterServiceImpl implements TheaterService {
             }
             theater.setCreateTime(new Date());
             theater.setDeleteFlag(DeleteFlagEnum.UN_DELETE.getValue());
+            theater.setStartTime(request.getStartTime());
+            theater.setEndTime(request.getEndTime());
             theaterDao.save(theater);
             return true;
         }else {
