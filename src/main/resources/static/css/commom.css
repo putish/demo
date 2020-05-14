@@ -29,11 +29,12 @@ body{
     list-style-type:none;
 }
 .form-search{
-    width: 950px;
+    width: 970px;
 }
 
 .form-search input{
-    width: 45px;
+    width: 70px;
+    height: 30px;
     float: left;
     margin-right: 10px;
 }
@@ -42,8 +43,11 @@ body{
     float: left;
     margin-right: 10px;
 }
-.form-search span{
+.form-search label{
     float: left;
+}
+.form-search button{
+    margin-left: 20px;
 }
 .modal-content{
     width:100%;
@@ -54,6 +58,15 @@ body{
 }
 a{
     color: black;
+}
+.form-control{
+    width: 45px;
+}
+.form-search div{
+    float: left;
+}
+.modal-dialog{
+    margin: 0px 0px;
 }
 /*.modal-fade {*/
 /*    opacity: 0 ;*/

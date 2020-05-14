@@ -23,6 +23,14 @@
     <link type="text/css" rel="styleSheet"  href="/css/movie.css" />
     <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
 
+    <style type="text/css">
+        .modal-body{
+            height: 520px;
+        }
+        #movieId{
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -34,32 +42,32 @@
                     <div class="span10">
                         <div class="row-fluid">
                             <div class="span4">
-                                <form class="form-search" th:action="@{/screen/list}" method="get" id="filter">
-                                    <span>放映状态：</span>
+                                <form class="form-search" th:action="@{/screen/list}" method="get" >
+                                    <label>放映状态：</label>
                                     <input  name="showState" class="input-medium search-query" type="text" list="showState_list"/>
                                     <datalist id="showState_list">
                                         <option value="预售"></option>
                                         <option value="上映"></option>
                                         <option value="下架"></option>
                                     </datalist>
-                                    <span>影片：</span>
-                                    <select  name="mId" lay-verify="required">
+                                    <label>影片：</label>
+                                    <select  name="mId" lay-verify="required" >
                                         <option value="" style="display: none"></option>
                                         <option th:each="movie:${movieOption}"  th:text="${movie.mName}" th:value="${movie.mId}"  ></option>
                                     </select>
-                                    <span>播放厅：</span>
+                                    <label>播放厅：</label>
                                     <select  name="hId" lay-verify="required">
                                         <option value="" style="display: none"></option>
                                         <option th:each="hall:${hallOption}"  th:text="${hall.hName}" th:value="${hall.hId}"  ></option>
                                     </select>
-                                    <span>放映时间：</span>
+                                    <label>放映时间：</label>
                                     <div class='input-group date' id='filter_startTime' name="startTime">
                                         <input type='text' class="form-control" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                     </div>
-                                    <span>-</span>
+                                    <label>-</label>
                                     <div class='input-group date' id='filter_endTime' name="endTime">
                                         <input type='text' class="form-control" />
                                         <span class="input-group-addon">
@@ -75,7 +83,7 @@
                     </div>
                     <div class="span2">
                         <button class="btn" type="button" onclick="addScreen()" value="增加" >新增</button>
-                        <button class="btn" type="button" onclick="batchDeleteScreen()" value="增加" >新增</button>
+                        <button class="btn" type="button" onclick="batchDeleteScreen()" value="增加" >批量删除</button>
 
                     </div>
                 </div>
@@ -96,7 +104,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="screen:${list}">
-                        <td><input type="checkbox" class="batchDelete" th:name="${screen.sId}"></td>
+                        <td><input type="checkbox" class="batchDelete" th:name="${screen.sId}" /></td>
                         <td th:text="${screen.mName}"></td>
                         <td th:text="${screen.hName}"></td>
                         <td th:text="${screen.ticketCount}"></td>
@@ -120,7 +128,7 @@
                                     &times;
                                 </button >
                                 <h4 class="modal-title">
-                                    影映厅
+                                    播放场次
                                 </h4>
                             </div>
                             <div ms-controller="addmodal" class="modal-body" id="addbody">
@@ -129,21 +137,12 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="row-fluid">
-                                                    <div class="span4" id="img">
-                                                        <img id="preview"/>
-                                                        <div class="row-fluid">
-                                                            <div class="span6">
-                                                                <input class="btn" type="file" accept="image/*" name="file" id="file"/>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
                                                     <div class="span8">
                                                         <form class="form-horizontal">
-                                                            <div class="control-group">
+                                                            <div class="control-group" id="movieId">
                                                                 <label class="control-label" for="mId">影片：</label>
                                                                 <div class="controls">
-                                                                    <select id="mId" name="mId" required="required" multiple="multiple" size="3" lay-verify="required">
+                                                                    <select id="mId" name="mId" required="required" multiple="multiple" size="1" lay-verify="required">
                                                                         <option value="" style="display: none"></option>
                                                                         <option th:each="movie:${movieSceenOption}"  th:text="${movie.mName}" th:value="${movie.mId}"  ></option>
                                                                     </select>
@@ -152,7 +151,7 @@
                                                             <div class="control-group">
                                                                 <label class="control-label" for="mId">播放厅：</label>
                                                                 <div class="controls">
-                                                                    <select id="hId" name="hId" required="required" multiple="multiple" size="3" lay-verify="required">
+                                                                    <select id="hId" name="hId" required="required" multiple="multiple" size="1" lay-verify="required">
                                                                         <option value="" style="display: none"></option>
                                                                         <option th:each="hall:${hallOption}"  th:text="${hall.hName}" th:value="${hall.hId}"  ></option>
                                                                     </select>
@@ -172,8 +171,11 @@
                                                             </div>
                                                             <div class="control-group">
                                                                 <label class="control-label" for="startTime">开始时间：</label>
-                                                                <div class="controls">
-                                                                    <input id="startTime" name="startTime" type="text"/>
+                                                                <div class='input-group date' id='startTime' name="startTime">
+                                                                    <input type='text' class="form-control" />
+                                                                    <span class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                                    </span>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -186,10 +188,10 @@
                                 <div class="modal-footer" >
                                     <div class="control-group">
                                         <div class="controls">
-                                            <button type="button" id="createScreen" onclick="toaddScreen()" class="btn btn-primary">
+                                            <button type="button" id="createMovie" onclick="toaddScreen()" class="btn btn-primary">
                                                 新增放映场次
                                             </button>
-                                            <button type="button" id="editScreen" onclick="toeditScreen()" class="btn btn-primary">
+                                            <button type="button" id="editMovie" onclick="toeditScreen()" class="btn btn-primary">
                                                 编辑放映场次
                                             </button>
                                         </div>
@@ -214,6 +216,10 @@
             locale: moment.locale('zh-cn')
         });
         $('#filter_endTime').datetimepicker({
+            format: 'YYYY-MM-DD hh:mm',
+            locale: moment.locale('zh-cn')
+        });
+        $('#startTime').datetimepicker({
             format: 'YYYY-MM-DD hh:mm',
             locale: moment.locale('zh-cn')
         });

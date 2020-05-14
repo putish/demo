@@ -15,6 +15,7 @@
     <link type="text/css" rel="styleSheet"  href="/css/movie.css" />
     <link type="text/css" rel="styleSheet"  href="/css/commom.css" />
 
+
 </head>
 <body>
     <div class="container-fluid">
@@ -26,7 +27,7 @@
                     <div class="span10">
                         <div class="row-fluid">
                             <div class="span4">
-                                <form class="form-search" th:action="@{/movie/theaterlist}" method="get" id="filter">
+                                <form class="form-search" th:action="@{/movie/theaterlist}" method="get">
                                     <span>放映状态：</span>
                                     <input  name="showState" class="input-medium search-query" type="text" list="showState_list"/>
                                     <datalist id="showState_list">

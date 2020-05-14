@@ -39,8 +39,8 @@ function editScreen(e){
             if (detail["tickets"]!=0){
                 mId.setAttribute("disabled",false);
             }
-            document.getElementById("editScreen").style.display="block";
-            document.getElementById("createScreen").style.display="none";
+            document.getElementById("editMovie").style.display="block";
+            document.getElementById("createMovie").style.display="none";
 
         }
     });
@@ -99,8 +99,8 @@ function toeditScreen() {
         contentType:"application/json;charset=utf-8",
         data: JSON.stringify(json),
         success: function (data) {
-            document.getElementById("editScreen").style.display="none";
-            document.getElementById("createScreen").style.display="block";
+            document.getElementById("editMovie").style.display="none";
+            document.getElementById("createMovie").style.display="block";
             window.location.reload();
 
         },
@@ -109,8 +109,8 @@ function toeditScreen() {
         }
 
     });
-    document.getElementById("editScreen").style.display="none";
-    document.getElementById("createScreen").style.display="block";
+    document.getElementById("editMovie").style.display="none";
+    document.getElementById("createMovie").style.display="block";
     window.location.reload();
     sId=null;
 
@@ -146,7 +146,7 @@ function batchDeleteScreen() {
         data: JSON.stringify(json),
         success: function (data) {
             document.getElementById("editScreen").style.display="none";
-            document.getElementById("createScreen").style.display="block";
+            document.getElementById("createMovie").style.display="block";
             window.location.reload();
 
         },
